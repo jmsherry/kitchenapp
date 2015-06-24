@@ -1,0 +1,8 @@
+node_modules/
+client/bower_components/
+client/styles/css
+.idea/
+dist/
+.sass-cache/
+.bangular-refresh
+docs/
