@@ -1,0 +1,16 @@
+<div>
+  <h1>Profile View</h1>
+
+	<div class="form-group">
+		<img gravatar-src="'{{vm.user.email}}'" gravatar-size="100">
+		<p>To edit your avatar go to <a href="//www.gravatar.com" target="_self">gravatar.com</a></p>
+	</div>
+
+	<dl>
+		<dt>Email</dt>
+		<dd>{{vm.user.email}}</dd>
+		<dt>Budget</dt>
+		<dd>{{vm.user.budget | currency:'&pound;'}}</dd>
+	</dl>
+
+</div>
