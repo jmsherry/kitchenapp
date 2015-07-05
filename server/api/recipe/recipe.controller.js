@@ -14,9 +14,10 @@ function handleError (res, err) {
  * @param res
  */
 exports.create = function (req, res) {
+  console.log(req.headers);
+  console.log('req.body', req.body);
   Recipe.create(req.body, function (err, recipe) {
     if (err) { return handleError(res, err); }
-
     res.status(201).json({ recipe: recipe });
   });
 };
@@ -32,9 +33,9 @@ exports.getRecipes = function (req, res) {
   .populate('ingredients')
   .exec(function (err, recipes) {
     if (err) { return handleError(res, err); }
-    if (!recipes) { 
-      console.log('no recipes'); 
-      return res.json(401); 
+    if (!recipes) {
+      console.log('no recipes');
+      return res.json(401);
     }
     console.log(recipes);
     res.status(200).json(recipes);

@@ -10,12 +10,12 @@ var ObjectId = Schema.ObjectId;
 var RecipeSchema = new Schema({
   name: {type: String, required: true},
   description: {type: String, required: true},
-  imageURL: {type: String, validate: validators.isURL()},
+  imageURL: {type: String, validate: validators.isURL({skipEmpty: true})},
   ingredients: [{
       type: ObjectId,
       ref: 'Ingredient',
       required: true
-  }],
+  }]
 });
 
 /**
