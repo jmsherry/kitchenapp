@@ -1,3 +1,33 @@
 <div>
-  {{ vm.name }}
+  <h1>Welcome to KitchenApp</h1>
+  <h2>Purpose</h2>
+  <p>The idea behind kitchen app is to allow you to plan meals and shopping. By building meals and then placing them into the calendar, the system will allow you to:</p>
+  <ul>
+  	<li>Plan meals</li>
+  	<li>see what you have in your cupboards</li>
+  	<li>keep a shopping list</li>
+  </ul>
+  <p>...and you can even add your own meals and ingredients!</p>
+
+  <h2>How to use the app</h2>
+  <p>(Semantically running right to left on the main menu)</p>
+  <ul>
+	  <li><span class="bg-info">Ingredients</span> are the raw materials.</li>
+	  <li><span class="bg-info">Recipes</span> are the ideas for a meal.</li>
+	  <li><span class="bg-info">Shop</span> handles the purchasing of ingredients.</li>
+	  <li><span class="bg-info">Meals</span> signify the intent of taking ingredients to follow a recipe
+		  <ul>
+		  	<li>The <strong>Build Meals</strong> view allows you to <span class="bg-success">Add a Meal</span>:
+				<ul>
+					<li>If you have all the ingredients, then those ingredients are removed form your <span class="bg-success">Cupboard</span> and the meal then appears in your <span class="bg-success">Complete Meals</span> listing.</li>
+					<li>If you don't have the ingredients then the meal goes into the <span class="bg-success">Partial Meals</span> section and the ingredients you are missing appear on the <span class="bg-success">Shopping List</span>, whilst the ingredients you have are removed from your <span class="bg-success">Cupboard</span>.</li>
+				</ul>
+			</li>
+			<li>The <strong>Schedule Meals</strong> view allows you to see your upcoming meals and to place <span class="bg-success">Complete Meals</span> onto a food calendar</li>
+			<li>You can remove a meal from the calendar and the 'Build Meals' view at any time and the ingredients will be released back into your cupboard.</li>
+		  </ul>
+	  </li>
+  </ul>
+
+  <strong ng-if="!Auth.isLogged()">To begin, please register or sign in above...</strong>
 </div>

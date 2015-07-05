@@ -1,9 +1,10 @@
 'use strict';
 
-angular.module('ka2')
-  .config(function ($routeProvider) {
-    $routeProvider
-      .when('/', {
+angular.module('kitchenapp')
+  .config(function ($stateProvider) {
+    $stateProvider
+      .state('home', {
+      	url: '/',
         templateUrl: 'views/home/home.html',
         controller: 'HomeCtrl',
         controllerAs: 'vm'

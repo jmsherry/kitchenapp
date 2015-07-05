@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('ka2')
-  .controller('HomeCtrl', function () {
+angular.module('kitchenapp')
+  .controller('HomeCtrl', function (Auth) {
 
     var vm = this;
 
