@@ -1,0 +1,31 @@
+<div class="row">
+	<div class="col-md-12">
+  		<h1>My Meals</h1>
+  	</div>
+	<div class="meals-list inventory">
+		<div class="achieved-meals">
+			<h3>Complete Meals</h3>
+			<ul class="list-unstyled">
+				<li ng-repeat="meal in vm.completeMeals" class="meal bg-success">
+					<a href="#">{{meal.name}}</a>
+
+				</li>
+			</ul>
+		</div>
+		<div class="partial-meals">
+			<h3>Pending Meals</h3>
+			<ul class="list-unstyled">
+				<li ng-repeat="meal in vm.pendingMeals" class="meal">
+					<a href="#">{{meal.name}}</a>
+				</li>
+			</ul>
+		</div>
+		<div class="add-controls">
+			<select name="mealsAdder" ng-model="vm.chosenRecipe" ng-change="vm.createMeal()">
+				<option value="" ng-selected="true">Add a meal
+				<option ng-repeat="recipe in vm.recipes" value="{{recipe._id}}">{{recipe.name}}</option>
+			</select>
+			<!-- <button class="btn btn-primary" ng-click="vm.addMeal()"><span class="">Add meal</span></button> -->
+		</div>
+	</div>
+</div>
