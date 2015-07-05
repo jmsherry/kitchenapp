@@ -1,0 +1,5 @@
+<div>
+  <h1>Ingredients List</h1>
+  <strong ng-if="gridOptions.data.length === 0">There are no ingredients in memory. Please create a new one <a ui-sref="addIngredient">here</a></strong>
+  <div id="grid1" ui-grid="gridOptions" class="grid" ng-if="gridOptions.data.length > 0"></div>
+</div>
