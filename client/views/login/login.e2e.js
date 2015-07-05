@@ -3,6 +3,7 @@
     'use strict';
 
     var LoginPage = require('./login.page.js');
+    LoginPage = new LoginPage();
 
     describe('login route', function() {
 
@@ -10,13 +11,10 @@
 
         beforeEach(function() {
             browser.get('/login');
-            element(by.Id('username')).then(function(els){
-            	console.log(els.length);
-            });
         });
 
         it('should have one username text input', function(done) {
-            element.all(by.id('email')).then(function(inputs) {
+            LoginPage.email.then(function(inputs) {
                 expect(inputs.length).toBe(1);
                 usernameInput = inputs[0];
                 done();
@@ -24,7 +22,7 @@
         });
 
         it('should have tone password input', function(done) {
-            element.all(by.css('input[type=password]')).then(function(inputs) {
+            LoginPage.password.then(function(inputs) {
             	console.log(inputs);
                 expect(inputs.length).toBe(1);
                 passwordInput = inputs[0];
@@ -33,7 +31,7 @@
         });
 
         it('should have a submit button', function(done) {
-            element.all(by.css('button[type=submit]')).then(function(inputs) {
+            LoginPage.submitButton.then(function(inputs) {
             	console.log(inputs);
                 expect(inputs.length).toBe(1);
                 submitButton = inputs[0];
