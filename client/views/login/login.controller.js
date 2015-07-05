@@ -1,18 +1,17 @@
 'use strict';
 
-angular.module('ka2')
-  .controller('LoginCtrl', function ($location, Auth) {
+angular.module('kitchenapp')
+  .controller('LoginCtrl', LoginCtrl);
 
+  LoginCtrl.$inject = ['$location', 'Auth'];
+
+  function LoginCtrl($location, Auth) {
+console.log(arguments);
     var vm = this;
 
     angular.extend(vm, {
 
       name: 'LoginCtrl',
-
-      /**
-       * User credentials
-       */
-      user: { email: 'test@test.com', password: 'test' },
 
       /**
        * Login method
@@ -21,6 +20,8 @@ angular.module('ka2')
         Auth.login(vm.user)
           .then(function () {
             $location.path('/');
+            console.log(Auth.isLogged());
+
           })
           .catch(function (err) {
             vm.error = err;
@@ -29,4 +30,4 @@ angular.module('ka2')
 
     });
 
-  });
+  }

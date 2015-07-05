@@ -1,17 +1,35 @@
-<div>
-  {{ vm.name }}
-</div>
-
-<form ng-submit="vm.login()">
-  <input type="email"
-         ng-model="vm.user.email"
-         placeholder="email">
-  <input type="password"
-         ng-model="vm.user.password"
-         placeholder="password">
-  <button type="submit">
-    login
-  </button>
+<!-- <form novalidate  name="loginForm" ng-submit="vm.login()">
+  <formly-form model="vm.model" fields="vm.fields" form="vm.form">
+    <button type="submit" class="btn btn-default" ng-disabled="loginForm.$invalid">Submit</button>
+  </formly-form>
 </form>
+
+<pre ng-if="vm.error">{{ vm.error | json }}</pre> -->
+
+
+
+<form novalidate  name="loginForm" ng-submit="vm.login()">
+  <h1>Log In</h1>
+
+  <div class="form-group" ng-class="{ 'has-error' : loginForm.email.$invalid && !loginForm.email.$pristine }">
+    <label for="email">Email address</label>
+    <input type="text" name="email" id="email" placeholder="Enter an email address" ng-model="vm.user.email" ng-required="true" ng-minlength="2" ng-maxlength="30" class="form-control" autofocus="true">
+    <p ng-show="loginForm.email.$invalid && !loginForm.email.$pristine" class="help-block">A valid email is required.</p>
+    </div>
+  </div>
+
+
+
+  <div class="form-group" ng-class="{ 'has-error' : loginForm.password.$invalid && !loginForm.password.$pristine }">
+    <label for="password">Password</label>
+    <input type="password" name="password" id="password" placeholder="Enter a password" ng-model="vm.user.password" ng-required="true" ng-minlength="2" ng-maxlength="30" class="form-control">
+    <p ng-show="loginForm.password.$invalid && !loginForm.password.$pristine" class="help-block">Please enter a password.</p>
+    </div>
+  </div>
+
+
+  <button type="submit" class="btn btn-default" ng-disabled="loginForm.$invalid">Submit</button>
+
+  </form>
 
 <pre ng-if="vm.error">{{ vm.error | json }}</pre>
