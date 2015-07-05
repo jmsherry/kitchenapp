@@ -15,6 +15,7 @@ function handleError (res, err) {
  * @param res
  */
 exports.create = function (req, res) {
+  console.log('in');
   console.log(req.body);
   Ingredient.create(req.body, function (err, ingredient) {
     if (err) { return handleError(res, err); }
@@ -23,7 +24,7 @@ exports.create = function (req, res) {
 };
 
 /**
- * Returns a;; ingredients.
+ * Returns ingredients JSON array.
  *
  * @param req
  * @param res
