@@ -1,0 +1,13 @@
+<div class="row">
+	<div class="col-md-12">
+  		<h1>My Cupboard</h1>
+  	</div>
+  	<div class="col-md-12">
+  	<p ng-if="!vm.cupboardItems.length > 0">Your cupboard is empty!! Go to <a ui-sref="ingredients">ingredients</a> to register ingredients or <a ui-sref="shop">shop</a> to buy more.</p>
+  	</div>
+  	<ul class="list-unstyled">
+  		<li ng-repeat="item in vm.cupboardItems">{{item.name}}</li>
+  	</ul>
+
+
+</div>
