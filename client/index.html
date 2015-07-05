@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="ka2">
+<html ng-app="kitchenapp">
   <head>
 
     <base href="/">
@@ -16,6 +16,7 @@
     <!-- bower:css -->
     <link rel="stylesheet" href="bower_components/angular-ui-grid/ui-grid.css">
     <link rel="stylesheet" href="bower_components/fullcalendar/fullcalendar.css">
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
     <link rel="stylesheet" href="bower_components/angular-bootstrap-calendar/dist/css/angular-bootstrap-calendar.css">
     <link rel="stylesheet" href="bower_components/angular-toastr/dist/angular-toastr.css">
     <!-- endinject -->
@@ -29,9 +30,13 @@
   </head>
   <body>
 
-    <nav-bar></nav-bar>
+    <div class="container" id="main-content">
 
-    <div ui-view></div>
+        <nav-bar></nav-bar>
+
+        <div ui-view></div>
+
+    </div>
 
     <script src="socket.io/socket.io.js"></script>
 
@@ -67,14 +72,39 @@
 
     <!-- inject:js -->
     <script src="app.js"></script>
+    <script src="directives/gravatar-conf/gravatar.conf.js"></script>
+    <script src="directives/ingredient-form/ingredient-form.directive.js"></script>
     <script src="directives/nav-bar/nav-bar.directive.js"></script>
+    <script src="directives/recipe-form/recipe-form.directive.js"></script>
     <script src="services/auth/auth.js"></script>
+    <script src="services/cupboard/cupboard.js"></script>
+    <script src="services/ingredients/ingredients.js"></script>
+    <script src="services/meals/meals.js"></script>
+    <script src="services/recipes/recipes.js"></script>
+    <script src="services/shopping/shopping.js"></script>
     <script src="services/socket/socket.mock.js"></script>
     <script src="services/socket/socket.service.js"></script>
+    <script src="views/cupboard/cupboard.controller.js"></script>
+    <script src="views/cupboard/cupboard.js"></script>
+    <script src="views/food-calendar/food-calendar.controller.js"></script>
+    <script src="views/food-calendar/food-calendar.js"></script>
     <script src="views/home/home.controller.js"></script>
     <script src="views/home/home.js"></script>
+    <script src="views/ingredients/ingredients.add.controller.js"></script>
+    <script src="views/ingredients/ingredients.js"></script>
+    <script src="views/ingredients/ingredients.list.controller.js"></script>
     <script src="views/login/login.controller.js"></script>
     <script src="views/login/login.js"></script>
+    <script src="views/login/login.page.js"></script>
+    <script src="views/meals/meals.controller.js"></script>
+    <script src="views/meals/meals.js"></script>
+    <script src="views/profile/profile.controller.js"></script>
+    <script src="views/profile/profile.js"></script>
+    <script src="views/recipes/recipes.add.controller.js"></script>
+    <script src="views/recipes/recipes.js"></script>
+    <script src="views/recipes/recipes.list.controller.js"></script>
+    <script src="views/shop/shop.controller.js"></script>
+    <script src="views/shop/shop.js"></script>
     <script src="views/signup/signup.controller.js"></script>
     <script src="views/signup/signup.js"></script>
     <!-- endinject -->
