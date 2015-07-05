@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('ka2')
+angular.module('kitchenapp')
   .factory('Socket', function (socketFactory) {
 
     var ioSocket = io('', {

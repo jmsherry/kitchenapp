@@ -1,3 +1,198 @@
 body {
   font-family: sans-serif;
 }
+
+#main-content {
+  margin-top:50px;
+}
+
+//FORM STYLES
+
+textarea.ng-dirty.ng-valid,
+select.ng-dirty.ng-valid,
+input.ng-dirty.ng-valid { 
+  border: 1px solid green;
+}
+
+textarea.ng-dirty.ng-invalid,
+select.ng-dirty.ng-invalid,
+input.ng-dirty.ng-invalid {
+  border: 1px solid red;
+}
+
+
+/*
+.ng-pristine    {  }
+.ng-dirty       {  }
+.ng-invalid-required        {  }
+.ng-invalid-minlength       {  }
+.ng-valid-max-length        {  }*/
+
+/* Have to set height explicity on ui-view 
+to prevent collapsing during animation*/
+/*
+.ui-view-container {
+  position: relative;
+  height: 65px;
+}
+
+[ui-view].ng-enter, [ui-view].ng-leave {
+  position: absolute;
+  left: 0;
+  right: 0;
+  -webkit-transition:all .5s ease-in-out;
+    -moz-transition:all .5s ease-in-out;
+    -o-transition:all .5s ease-in-out;
+    transition:all .5s ease-in-out;
+}
+
+[ui-view].ng-enter {
+  opacity: 0;
+  -webkit-transform:scale3d(0.5, 0.5, 0.5);
+  -moz-transform:scale3d(0.5, 0.5, 0.5);
+  transform:scale3d(0.5, 0.5, 0.5);
+}
+
+[ui-view].ng-enter-active {
+  opacity: 1;
+  -webkit-transform:scale3d(0.8, 0.8, 0.8);
+  -moz-transform:scale3d(0.8, 0.8, 0.8);
+  transform:scale3d(0.8, 0.8, 0.8);
+}
+
+[ui-view].ng-leave {
+  opacity: 0; 
+}
+
+[ui-view].ng-leave-active {
+  opacity: 0;
+}
+*/
+
+.available-meal {
+  padding: 5px;
+  margin: 5px 0;
+  font-size: 1em;
+  &.ui-draggable {
+    &:hover {
+      cursor:pointer;
+    }
+  }
+}
+
+.fc-past {
+  color: #000;
+  background: #999;
+}
+
+.nav-tabs {
+    h2 {
+    display: inline-block;
+    font-weight: 200;
+    padding-bottom: 10px;
+    line-height: 50px;
+    font-size: 1.5em;
+  }
+  & > li {
+    width: 33.33%;
+    text-align: center;
+  }
+}
+
+.inventory {
+  text-align: center;
+  height: 400px;
+  background-color: #fdfdfd;
+  border:1px solid #eee;
+  border-top:0;
+  overflow: hidden;
+
+  & .meal {
+    border: 1px solid #000;
+    margin-bottom: 5px;
+    a {
+      display: block;
+      color: #000;
+      padding: 10px;
+    }
+  }
+
+  &.shopping-list {
+/*    background-color: #f2dede;
+    border: 1px solid #e2dede;*/
+  }
+  &.cupboard {
+ /*   background-color: #fcf8e3;
+    border: 1px solid #e2dede;*/
+  }
+  &.meals-list {
+   /* background-color: #d9edf7;
+    border: 1px solid #e2dede; */
+  }
+  .achieved-meals {
+    min-height:100px;
+    border-bottom: 5px dashed #000;
+    padding:5px 10px 15px;
+    h3 {
+      margin-bottom: 30px;
+    }
+    .meals {
+      border-width:2px;
+      background-color:#eee;
+      padding-bottom:10px;
+    }
+    .meal {
+
+    }
+  }
+}
+
+.partial-meals {
+  padding:0 10px;
+  h3 {
+      margin: 50px 0 30px;
+  }
+  button{
+
+  }
+}
+
+.shoppingList {
+  margin-top:10px;
+  li {
+    margin-bottom: 10px;
+    overflow: hidden;
+    border: 1px solid #ccc;
+    padding: 15px 0;
+    border-radius: 5px;
+    & .actions {
+      text-align: right;
+    }
+    & .description {
+      font-size: 1.5em;
+    }
+  }
+}
+
+form {
+  input, select, textarea {
+    width:100%;
+  }
+  .form-group {
+    label {
+      display: block;
+    }
+  }
+}
+
+select {
+  height:300;
+  option {
+    padding:5px;
+    &:hover, 
+    &:focus {
+      background-color: #eee;
+
+    }
+  }
+}
