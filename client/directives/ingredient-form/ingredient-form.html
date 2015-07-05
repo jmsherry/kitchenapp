@@ -1,0 +1,38 @@
+<form ng-submit="vm.addIngredient(this)" novalidate  name="ingredientForm">
+
+  <div class="form-group" ng-class="{ 'has-error' : ingredientForm.name.$invalid && !ingredientForm.name.$pristine }">
+  	<label for="ingredient_name">Name</label>
+  	<input type="text" name="name" id="ingredient_name" placeholder="Give it a name" ng-model="vm.newIngredient.name" ng-required="true" ng-minlength="2" ng-maxlength="30">
+    <p ng-show="ingredientForm.name.$invalid && !ingredientForm.name.$pristine" class="help-block">Your name is required.</p>
+    </div>
+  </div>
+
+  <div class="form-group" ng-class="{ 'has-error' : ingredientForm.description.$invalid && !ingredientForm.description.$pristine }">
+  	<label for="ingredient_description">Description</label>
+  	<textarea name="description" id="ingredient_description" placeholder="Add a description" ng-model="vm.newIngredient.description" ng-required="true" ng-minlength="2" ng-maxlength="100"></textarea>
+    <p ng-show="ingredientForm.description.$invalid && !ingredientForm.description.$pristine" class="help-block">A description is required.</p>
+  </div>
+
+  <div class="form-group" ng-class="{ 'has-error' : ingredientForm.mg_url.$invalid && !ingredientForm.mg_url.$pristine }">
+    <label for="ingredient_img_url">Image URL</label>
+    <input type="url" id="ingredient_img_url" name="img_url" placeholder="Provide a link to an image of the ingredient" ng-model="vm.newIngredient.imageURL">
+    <p ng-show="ingredientForm.mg_url.$invalid && !ingredientForm.mg_url.$pristine" class="help-block">Incorrect URL format.</p>
+  </div>
+
+  <div class="form-group" ng-class="{ 'has-error' : ingredientForm.price.$invalid && !ingredientForm.price.$pristine }">
+    <label for="ingredient_price">Price (in &pound;&apos;s)</label>
+    <input type="text" name="price" id="ingredient_price" placeholder="How much is it?" ng-model="vm.newIngredient.price" ng-required="true" ng-minlength="2" ng-maxlength="5">
+    <p ng-show="ingredientForm.price.$invalid && !ingredientForm.price.$pristine" class="help-block">A price is required.</p>
+  </div>
+
+  <div class="form-group" ng-class="{ 'has-error' : ingredientForm.quantity.$invalid && !ingredientForm.quantity.$pristine }">
+    <label for="ingredient_quantity">Quantity</label>
+    <input type="text" name="quantity" id="ingredient_quantity" placeholder="What quantity does it come in?" ng-model="vm.newIngredient.quantity" ng-required="true"  ng-maxlength="10">
+    <p ng-show="ingredientForm.quantity.$invalid && !ingredientForm.quantity.$pristine" class="help-block">A quantity is required.</p>
+  </div>
+
+  <div class="form-group">
+    <button type="submit" class="btn btn-primary" ng-disabled="ingredientForm.$invalid">Add</button>
+  </div>
+
+</form>
