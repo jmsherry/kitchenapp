@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('ka2', [
+angular.module('kitchenapp', [
   //Native services
   'ngCookies',
   'ngResource',
@@ -16,12 +16,12 @@ angular.module('ka2', [
   'ui.bootstrap',
   'restangular',
   'ui.gravatar',
-  'toastr'//,
+  'toastr',
   'formly', 
-  'formlyBootstrap'
-  'angularjs-dropdown-multiselect'
+  'formlyBootstrap'//,
+  //'angularjs-dropdown-multiselect'
 ])
-  .config(function ($routeProvider, $locationProvider, $httpProvider) {
+  .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, calendarConfigProvider) {
 
     $urlRouterProvider.otherwise('/');
     $locationProvider.html5Mode(true);
