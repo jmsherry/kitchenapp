@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('ka2')
+angular.module('kitchenapp')
   .service('Auth', function ($rootScope, $cookieStore, $q, $http) {
 
     var _user = {};
@@ -80,5 +80,40 @@ angular.module('ka2')
     this.getUser = function () {
       return _user;
     };
+
+    /**
+
+
+/**
+ * Update
+ *
+ * @param user
+ * @returns {promise}
+ */
+// this.updateUser = function updateUser(user) {
+//   var deferred = $q.defer();
+//   $http.put('/api/users', user)
+//     .then(function (res) {
+//       _user = res.data.user;
+//       $cookieStore.put('token', res.data.token);
+//       deferred.resolve();
+//     })
+//     .catch(function (err) {
+//       deferred.reject(err.data);
+//     });
+//   return deferred.promise;
+// };
+
+/**
+ * Checks if a user is logged in, and if not redirects them to the home view.
+ *
+ * @returns VOID
+ */
+
+this.checkAuthorised = function checkAuthorised(){
+  if(!_user.hasOwnProperty('email')){
+    $location.path('/');
+  }
+}
 
   });

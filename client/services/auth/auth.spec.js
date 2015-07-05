@@ -2,7 +2,7 @@
 
 describe('Service: Auth', function () {
 
-  beforeEach(module('ka2'));
+  beforeEach(module('kitchenapp'));
 
   var Auth,
     $httpBackend,
