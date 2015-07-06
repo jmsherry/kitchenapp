@@ -12,12 +12,13 @@ angular.module('kitchenapp', [
   'btford.socket-io',
   'ui.router',
   'ui.grid',
+  'ui.grid.selection',
   'mwl.calendar',
   'ui.bootstrap',
   'restangular',
   'ui.gravatar',
   'toastr',
-  'formly', 
+  'formly',
   'formlyBootstrap'//,
   //'angularjs-dropdown-multiselect'
 ])
