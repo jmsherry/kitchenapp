@@ -15,8 +15,13 @@ ShopCtrl.$inject = ['Shopping', 'Auth'];
     console.log(items);
 
     function buy(item){
-      console.log(item);
+      console.log('Buying ', item);
       Shopping.buy(item);
+    }
+
+    function remove(item){
+      console.log('Removing ', item);
+      Shopping.remove(item);
     }
 
 

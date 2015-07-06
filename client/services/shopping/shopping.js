@@ -33,7 +33,7 @@
 
     Shopping.prototype.init = function init() {
         console.log('shopping list init');
-        var user = this.getOwner(),
+        var self = this, user = self.getOwner(),
         shoppingList = user.shoppingList,
         fullList = [],
         ings;
@@ -45,21 +45,30 @@
             fullItem = _.find(ings, {_id: item._id});
             fullList.push(fullItem);
           });
-          this.setShoppingList(fullList);
+          self.setShoppingList(fullList);
         })
     };
 
     Shopping.prototype.get = function get() {
-        return this.getShoppingList();
+        var self = this;
+        return self.getShoppingList();
     };
 
     Shopping.prototype.buy = function buy(item) {
-        this.remove(item);
-        Cupboard.add(item).then(this.successCallback, this.errorCallback, this.notifyCallback);
+      var self = this;
+        self.remove(item);
+        Cupboard.add(item).then(self.successCallback, self.errorCallback, self.notifyCallback);
+    };
+
+    Shopping.prototype.bulkBuy = function bulkBuy(newIngs) {
+      var self = this;
+      $.each(newIngs, function(i, ing){
+        self.buy(ing);
+      });
     };
 
     Shopping.prototype.add = function add(newIng) {
-      var shoppingList = this.getShoppingList();
+      var self = this, shoppingList = self.getShoppingList();
         shoppingList.push(newIng);
     };
 
@@ -71,21 +80,18 @@
     };
 
     Shopping.prototype.save = function save(ing){
-      this.getResource.delete(ing, function(){
-        this.add(ing);
+      var self = this;
+      self.getResource.delete(ing, function(){
+        self.add(ing);
       });
     }
 
-    // Shopping.prototype.delete = function delete(ing){
-    //
-    // }
-
     Shopping.prototype.remove = function remove(item) {
-        var shoppingList = this.getShoppinglist(),
+        var self = this, shoppingList = self.getShoppingList(),
         i, length = shoppingList.length;
 
         for (i = 0; i < length; i += 1) {
-            if (shoppingListL[i]._id === item._id) {
+            if (shoppingList[i]._id === item._id) {
                 shoppingList.splice(i, 1);
                 break;
             }
