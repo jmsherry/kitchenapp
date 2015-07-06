@@ -10,7 +10,7 @@ body {
 
 textarea.ng-dirty.ng-valid,
 select.ng-dirty.ng-valid,
-input.ng-dirty.ng-valid { 
+input.ng-dirty.ng-valid {
   border: 1px solid green;
 }
 
@@ -28,7 +28,7 @@ input.ng-dirty.ng-invalid {
 .ng-invalid-minlength       {  }
 .ng-valid-max-length        {  }*/
 
-/* Have to set height explicity on ui-view 
+/* Have to set height explicity on ui-view
 to prevent collapsing during animation*/
 /*
 .ui-view-container {
@@ -61,7 +61,7 @@ to prevent collapsing during animation*/
 }
 
 [ui-view].ng-leave {
-  opacity: 0; 
+  opacity: 0;
 }
 
 [ui-view].ng-leave-active {
@@ -189,10 +189,13 @@ select {
   height:300;
   option {
     padding:5px;
-    &:hover, 
+    &:hover,
     &:focus {
       background-color: #eee;
 
     }
   }
 }
+ .controls {
+   padding: 10px 0 20px;
+ }
