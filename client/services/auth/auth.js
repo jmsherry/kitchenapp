@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('kitchenapp')
-  .service('Auth', function ($rootScope, $cookieStore, $q, $http) {
+  .service('Auth', function ($rootScope, $cookieStore, $q, $http, $location) {
 
     var _user = {};
 
@@ -60,6 +60,7 @@ angular.module('kitchenapp')
      */
     this.logout = function () {
       $cookieStore.remove('token');
+      $location.path('/');
       _user = {};
     };
 
