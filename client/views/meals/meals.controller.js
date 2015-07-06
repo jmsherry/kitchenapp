@@ -13,13 +13,18 @@ MealsCtrl.$inject = ['$scope', 'Meals', 'Auth', 'Recipes', '$modal', '$window', 
     user = Auth.getUser(),
     meals = Meals.get(),
     recipes = Recipes.get(),
-    chosenRecipe;
+    chosenRecipe = "";
 
     console.log('meals', meals);
     //	console.log(recipes);
 
     $q.when(recipes, function(newData){
     	vm.recipes = newData;
+    });
+
+    $q.when(meals, function(newData){
+      vm.completeMeals = newData.complete;
+      vm.pendingMeals = newData.pending;
     });
 
 
@@ -33,8 +38,6 @@ MealsCtrl.$inject = ['$scope', 'Meals', 'Auth', 'Recipes', '$modal', '$window', 
       name: 'MealsCtrl',
       createMeal: createMeal,
       recipes: recipes,
-      completeMeals: meals.complete,
-      pendingMeals: meals.pending,
       chosenRecipe: chosenRecipe
     });
 
