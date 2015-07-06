@@ -4,6 +4,7 @@ var config = require('../../config/environment');
 var Meal = require('./meal.model');
 
 function handleError (res, err) {
+  console.log(err);
   return res.status(500).send(err);
 }
 
@@ -45,7 +46,7 @@ exports.create = function (req, res) {
  */
 exports.getMeals = function (req, res) {
   Meal.find({})
-  .populate('ingredients')
+  .populate('ingredients.missing, ingredients.present')
   .exec(function (err, meals) {
     if (err) { return handleError(res, err); }
     if (!meals) {
