@@ -9,8 +9,8 @@ module.exports = function (app) {
   app.use('/api/ingredients', require('./api/ingredient'));
   app.use('/api/recipes', require('./api/recipe'));
   app.use('/api/meals', require('./api/meal'));
-  //app.use('/api/shopping', require('./api/shopping'));
-  //app.use('/api/cupboard', require('./api/cupboard'));
+  app.use('/api/shopping', require('./api/shopping'));
+  app.use('/api/cupboard', require('./api/cupboard'));
 
   // Auth
   app.use('/auth', require('./auth'));
