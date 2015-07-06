@@ -63,6 +63,23 @@
         shoppingList.push(newIng);
     };
 
+    Shopping.prototype.bulkAdd = function bulkAdd(newIngs) {
+      var self = this;
+      $.each(newIngs, function(i, ing){
+        self.add(ing);
+      });
+    };
+
+    Shopping.prototype.save = function save(ing){
+      this.getResource.delete(ing, function(){
+        this.add(ing);
+      });
+    }
+
+    // Shopping.prototype.delete = function delete(ing){
+    //
+    // }
+
     Shopping.prototype.remove = function remove(item) {
         var shoppingList = this.getShoppinglist(),
         i, length = shoppingList.length;

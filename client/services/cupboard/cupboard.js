@@ -54,11 +54,18 @@
 
         function CBSuccess () {
             this.setCupboard(this.getCupboard().push(ing));
-            this.toastr.success(ing.name + ' has been added');
+            this.toastr.success(ing.name + ' has been added to your cupboard');
         }
 
         this.getResource().save(ing, _.bind(CBSuccess, this, ing));
 
+    };
+
+    Cupboard.prototype.bulkAdd = function bulkAdd(newIngs) {
+      var self = this;
+      $.each(newIngs, function(i, ing){
+        self.add(ing);
+      });
     };
 
     Cupboard.prototype.remove = function remove (ing) {
@@ -66,7 +73,7 @@
             var cupboard = this.getCupboard();
 
             cupboard.splice(cupboard.indexOf(ing), 1);
-            this.toastr.success(ing.name + ' has been removed');
+            this.toastr.success(ing.name + ' has been removed from your cupboard');
         }
 
         this.getResource().remove(ing, _.bind(CBSuccess, this, ing));
@@ -103,5 +110,19 @@
         };
 
     };
+
+    Cupboard.prototype.save = function save(){
+      var resource, cupboard;
+      resource = this.getResource();
+      cupboard = this.getCupboard();
+      resource.save(cupboard, function(err, cup){
+        if(err){
+          toastr.error(err)
+        }
+        toastr.success('Cupboard Updated');
+        console.log(cup);
+        return cup;
+      })
+    }
 
 }());
