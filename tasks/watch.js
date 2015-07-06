@@ -49,6 +49,7 @@ module.exports = function () {
     '!client/views/**/*.scss',
     '!client/views/**/*.spec.js',
     '!client/views/**/*.e2e.js',
+    '!client/views/**/*.page.js',
     'client/directives',
     'client/directives/**/*.html',
     'client/directives/**/*.js',
