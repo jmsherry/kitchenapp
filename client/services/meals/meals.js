@@ -8,7 +8,10 @@ angular.module('kitchenapp')
 
     function Meals($rootScope, $cookieStore, $q, $http, $resource, toastr, Recipes, Cupboard, Shopping) {
 
-        var _meals = [],
+        var _meals = {
+          complete: [],
+          pending: []
+        },
         _resource = $resource('/api/meals');
 
          function init() {
@@ -31,7 +34,10 @@ angular.module('kitchenapp')
             _meals.then(function(data){
               console.log('in meals then', arguments);
               console.log('_meals before', _meals);
-              _meals = data;
+              var completeMeals = _.filter(data, {isComplete: true}),
+              pendingMeals = _.filter(data, {isComplete: false});
+              _meals.complete = completeMeals;
+              _meals.pending = pendingMeals;
               console.log('_meals after', _meals);
             });
 
@@ -70,7 +76,12 @@ angular.module('kitchenapp')
           var meals = this.get();
 
           $q.when(meals, function(meals){
-            meals.push(newMeal);
+            if(newMeal.isComplete){
+              meals.complete.push(newMeal);
+            } else {
+              meals.pending.push(newMeal);
+            }
+
             toastr.success(newMeal.name + " added!");
           });
         }
@@ -80,6 +91,7 @@ angular.module('kitchenapp')
           var recipe = Recipes.getRecipe(id);
           var mealObj = _.clone(recipe);
 
+          mealObj._id = null;
           mealObj.isComplete = false;
           mealObj.ingredients = Cupboard.process(mealObj.ingredients);
           mealObj.sheduledDate = null;
