@@ -7,7 +7,25 @@ var Schema = mongoose.Schema;
 var UserSchema = new Schema({
   email: String,
   passwordHash: String,
-  salt: String
+  salt: String,
+  cupboard: [
+    {
+        type: ObjectId,
+        ref: 'Ingredient'
+    }
+  ],
+  shopping: [
+    {
+        type: ObjectId,
+        ref: 'Ingredient'
+    }
+  ],
+  meals: [
+    {
+        type: ObjectId,
+        ref: 'Meal'
+    }
+  ]
 });
 
 /**
