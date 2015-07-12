@@ -8,8 +8,7 @@
 
     function Cupboard($q, $resource, Auth, Ingredients, toastr) {
 
-        var _cupboard = [],
-        _resource = $resource('/api/cupboard');
+        var _cupboard = [];
 
         this.getCupboard = function getCupboard () {
             return _cupboard;
@@ -19,27 +18,39 @@
             _cupboard = cupboard;
         };
 
-        this.getResource = function getResource () {
-            return _resource;
-        };
+        // this.getResource = function getResource () {
+        //     return _resource;
+        // };
 
         this.getOwner = function getOwner (){
           return Auth.getUser();
         };
 
         this.toastr = toastr;
+        this.$resource = $resource;
+
+        this.init();
 
     }
 
 
     Cupboard.prototype.init = function init() {
       console.log('cupboard init')
-        var user = this.getOwner();
-        this.setCupboard(user.cupboard);
+        var self = this, user = self.getOwner(), cupboard;
+
+        cupboard = self.$resource('/api/cupboard/:id', {id: user._id})
+        .get(function(){
+          self.setCupboard(cupboard);
+        });
+    };
+
+    Cupboard.prototype.populate = function populate(idsArray){
+      return Ingredients.populate(idsArray);
     };
 
     Cupboard.prototype.get = function get() {
-        return this.getCupboard();
+        var self = this;
+        return self.getCupboard();
     };
 
 
@@ -51,13 +62,18 @@
      *
      */
     Cupboard.prototype.add = function add (ing) {
+        var self = this, userid;
+
+        userid = self.getOwner()._id;
 
         function CBSuccess () {
-            this.setCupboard(this.getCupboard().push(ing));
-            this.toastr.success(ing.name + ' has been added to your cupboard');
+          var originalCupboard = self.getCupboard(),
+          newCupboard = originalCupboard.push(ing)
+            self.setCupboard(newCupboard);
+            self.toastr.success(ing.name + ' has been added to your cupboard');
         }
 
-        this.getResource().save(ing, _.bind(CBSuccess, this, ing));
+        self.$resource('/api/cupboard/').save({itemid: ing._id, userid: userid}, _.bind(CBSuccess, self, ing));
 
     };
 
@@ -69,14 +85,15 @@
     };
 
     Cupboard.prototype.remove = function remove (ing) {
+      var self = this;
         function CBSuccess () {
-            var cupboard = this.getCupboard();
+            var cupboard = self.getCupboard();
 
             cupboard.splice(cupboard.indexOf(ing), 1);
-            this.toastr.success(ing.name + ' has been removed from your cupboard');
+            self.toastr.success(ing.name + ' has been removed from your cupboard');
         }
 
-        this.getResource().remove(ing, _.bind(CBSuccess, this, ing));
+        self.$resource('/api/cupboard/').remove(ing, _.bind(CBSuccess, self, ing));
     };
 
     Cupboard.prototype.bulkRemove = function remove (ings) {
@@ -93,7 +110,7 @@
         var self = this,
             presentIngredients = [],
             missingIngredients = [],
-            cupboard = this.getCupboard();
+            cupboard = self.getCupboard();
 
         _.forEach(idsArray, function(thisIngID) {
             if (cupboard.indexOf(thisIngID) === -1) {
@@ -112,10 +129,9 @@
     };
 
     Cupboard.prototype.save = function save(){
-      var resource, cupboard;
-      resource = this.getResource();
-      cupboard = this.getCupboard();
-      resource.save(cupboard, function(err, cup){
+      var self, resource, cupboard;
+      cupboard = self.getCupboard();
+      self.$resource('/api/cupboard').save(cupboard, function(err, cup){
         if(err){
           toastr.error(err)
         }
@@ -123,6 +139,6 @@
         console.log(cup);
         return cup;
       })
-    }
+    };
 
 }());

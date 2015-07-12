@@ -8,6 +8,7 @@ var ObjectId = Schema.ObjectId;
 
 
 var mealSchema = new Schema({
+  owner: {type: ObjectId, ref: 'User'},
   name: {type: String, required: true},
   description: {type: String, required: true},
   imageURL: {type: String, validate: validators.isURL({skipEmpty: true})},
@@ -57,4 +58,4 @@ mealSchema.methods = {
 
 };
 
-module.exports = mongoose.model('meal', mealSchema);
+module.exports = mongoose.model('Meal', mealSchema);

@@ -22,9 +22,9 @@ MealsCtrl.$inject = ['$scope', 'Meals', 'Auth', 'Recipes', '$modal', '$window', 
     	vm.recipes = newData;
     });
 
-    $q.when(meals, function(newData){
-      vm.completeMeals = newData.complete;
-      vm.pendingMeals = newData.pending;
+    $q.when(meals, function(data){
+      vm.completeMeals = data.complete;
+      vm.pendingMeals = data.pending;
     });
 
 

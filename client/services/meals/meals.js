@@ -4,9 +4,9 @@
 angular.module('kitchenapp')
     .factory('Meals', Meals);
 
-    Meals.$inject = ['$rootScope', '$cookieStore', '$q', '$http', '$resource', 'toastr', 'Recipes', 'Cupboard', 'Shopping'];
+    Meals.$inject = ['$rootScope', '$cookieStore', '$q', '$resource', 'toastr', 'Recipes', 'Cupboard', 'Shopping'];
 
-    function Meals($rootScope, $cookieStore, $q, $http, $resource, toastr, Recipes, Cupboard, Shopping) {
+    function Meals($rootScope, $cookieStore, $q, $resource, toastr, Recipes, Cupboard, Shopping) {
 
         var _meals = {
           complete: [],
@@ -21,6 +21,12 @@ angular.module('kitchenapp')
 
             function successCB(data){
               console.log('in successCB', arguments);
+              var completeMeals = _.filter(data, {isComplete: true}),
+              pendingMeals = _.filter(data, {isComplete: false});
+              data = {
+                complete: completeMeals,
+                pending: pendingMeals
+              }
               $deferred.resolve(data);
               console.log('meals service loaded.', _meals, data);
             }
@@ -30,16 +36,6 @@ angular.module('kitchenapp')
               $deferred.reject(err);
               toastr.error('Failed to load meals!', 'Server Error ' + err.status + ' ' + err.data.message);
             }
-
-            _meals.then(function(data){
-              console.log('in meals then', arguments);
-              console.log('_meals before', _meals);
-              var completeMeals = _.filter(data, {isComplete: true}),
-              pendingMeals = _.filter(data, {isComplete: false});
-              _meals.complete = completeMeals;
-              _meals.pending = pendingMeals;
-              console.log('_meals after', _meals);
-            });
 
             _resource.query(successCB, errCB);
          }

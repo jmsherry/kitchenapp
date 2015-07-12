@@ -16,24 +16,9 @@ function handleError (res, err) {
  * @param res
  */
 exports.create = function (req, res) {
-  console.log(req.headers);
+  //console.log(req.headers);
   console.log('req.body', req.body);
-  var i, newMeal = req.body,
-  presentIngredients = newMeal.ingredients.present,
-  missingIngredients = newMeal.ingredients.missing,
-  presentLength = presentIngredients.length,
-  missingLength = missingIngredients.length;
-
-  for(i=0; i < presentLength; i+=1){
-    presentIngredients[i] = presentIngredients[i]._id;
-  }
-
-  for(i=0; i < missingLength; i+=1){
-    missingIngredients[i] = missingIngredients[i]._id;
-  }
-
-  console.log('newMeal: ', newMeal);
-  Meal.create(newMeal, function (err, meal) {
+  Meals.create(newMeal, function (err, meal) {
     if (err) { return handleError(res, err); }
     res.status(201).json({ meal: meal });
   });
@@ -46,10 +31,10 @@ exports.create = function (req, res) {
  * @param res
  */
 exports.getMeals = function (req, res) {
-  Meal.find({
+  Meals.find({
     owner: req.body._id
   })
-  .populate('ingredients.missing, ingredients.present')
+  .populate('contents')
   .exec(function (err, meals) {
     if (err) { return handleError(res, err); }
     if (!meals) {
@@ -59,4 +44,29 @@ exports.getMeals = function (req, res) {
     console.log(meals);
     res.status(200).json(meals);
   });
+};
+
+exports.getMeals = function (req, res) {
+  Meals.find({
+    owner: req.body._id
+  })
+  .populate('contents')
+  .exec(function (err, meals) {
+    if (err) { return handleError(res, err); }
+    if (!meals) {
+      console.log('no meals');
+      return res.json(401);
+    }
+    console.log(meals);
+    res.status(200).json(meals);
+  });
+};
+
+exports.remove = function (req, res) {
+  Meals.remove({
+    owner: req.body._id
+  }, function(err, removedModel){
+    if (err) { return handleError(res, err); }
+    res.status(200).json(removedModel);
+  })
 };

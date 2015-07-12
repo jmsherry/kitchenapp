@@ -3,17 +3,14 @@
 angular.module('kitchenapp')
   .controller('CupboardCtrl', CupboardCtrl);
 
-CupboardCtrl.$inject = ['Meals', 'Auth'];
+CupboardCtrl.$inject = ['Cupboard', 'Auth'];
 
-  function CupboardCtrl(Meals, Auth) {
+  function CupboardCtrl(Cupboard, Auth) {
 
   	Auth.checkAuthorised();
 
     var vm = this,
     user = Auth.getUser();
-
-    console.log(user);
-
 
 
     angular.extend(vm, {

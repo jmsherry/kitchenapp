@@ -2,13 +2,16 @@
 
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+var ObjectId = Schema.ObjectId;
 
-var IngredientSchema = new Schema({
-  name: {type: String, required: true},
-  description: {type: String, required: true},
-  imageURL: String,
-  quantity: {type: String, required: true},
-  price: {type: Number, required: true}
+var ShoppingSchema = new Schema({
+  owner: {type: ObjectId, ref: 'User'},
+  contents: [
+    {
+        type: ObjectId,
+        ref: 'Ingredient'
+    }
+  ]
 });
 
 /**
@@ -20,7 +23,7 @@ var IngredientSchema = new Schema({
  * Validations
  */
 
-// IngredientSchema
+// ShoppingSchema
 //   .path('title')
 //   .validate(function (value, respond) {
 //     var self = this;
@@ -38,8 +41,8 @@ var IngredientSchema = new Schema({
  * Methods
  */
 
-IngredientSchema.methods = {
+ShoppingSchema.methods = {
 
 };
 
-module.exports = mongoose.model('Ingredient', IngredientSchema);
+module.exports = mongoose.model('Shopping', ShoppingSchema);

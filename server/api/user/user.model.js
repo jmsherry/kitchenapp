@@ -3,29 +3,13 @@
 var crypto = require('crypto');
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+var ObjectId = Schema.ObjectId;
 
 var UserSchema = new Schema({
   email: String,
   passwordHash: String,
   salt: String,
-  cupboard: [
-    {
-        type: ObjectId,
-        ref: 'Ingredient'
-    }
-  ],
-  shopping: [
-    {
-        type: ObjectId,
-        ref: 'Ingredient'
-    }
-  ],
-  meals: [
-    {
-        type: ObjectId,
-        ref: 'Meal'
-    }
-  ]
+  budget: Number
 });
 
 /**
