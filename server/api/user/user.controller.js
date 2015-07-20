@@ -5,7 +5,7 @@ var jwt = require('jsonwebtoken');
 var User = require('./user.model');
 var Cupboard = require('./../cupboard/cupboard.model');
 var Shopping = require('./../shopping/shopping.model');
-var Meals = require('./../meal/meals.model');
+var Meals = require('./../meal/mealsList.model');
 
 function handleError (res, err) {
   return res.status(500).send(err);
@@ -21,17 +21,17 @@ exports.create = function (req, res) {
   User.create(req.body, function (err, user) {
     if (err) { return handleError(res, err); }
 
-    Cupboard.create(req.body, function (err, cupboard) {
+    Cupboard.create({owner: user._id}, function (err, cupboard) {
       if (err) { return handleError(res, err); }
-      console.log('Cuboard created for user: ');
+      console.log('Cuboard created for user: ', req.body);
 
-      Shopping.create(req.body, function (err, shopping) {
+      Shopping.create({owner: user._id}, function (err, shopping) {
         if (err) { return handleError(res, err); }
-        console.log('Shopping created for user: ');
+        console.log('Shopping created for user: ', req.body);
 
-        Meals.create(req.body, function (err, meal) {
+        Meals.create({owner: user._id}, function (err, meal) {
           if (err) { return handleError(res, err); }
-          console.log('Meal created for user: ');
+          console.log('MealList created for user: ', req.body);
 
           var token = jwt.sign(
             { _id: user._id },
