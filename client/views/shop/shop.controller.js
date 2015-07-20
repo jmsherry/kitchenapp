@@ -3,9 +3,9 @@
 angular.module('kitchenapp')
   .controller('ShopCtrl', ShopCtrl);
 
-ShopCtrl.$inject = ['Shopping', 'Auth'];
+ShopCtrl.$inject = ['Shopping', 'Auth', '$q'];
 
-  function ShopCtrl(Shopping, Auth) {
+  function ShopCtrl(Shopping, Auth, $q) {
 
     Auth.checkAuthorised();
 
@@ -24,11 +24,14 @@ ShopCtrl.$inject = ['Shopping', 'Auth'];
       Shopping.remove(item);
     }
 
+    $q.when(items, function(data){
+      vm.items = data;
+    });
 
     angular.extend(vm, {
-      name: 'InventoryCtrl',
+      name: 'ShopCtrl',
       buy: buy,
-      items: items
+      remove: remove
     });
 
   }

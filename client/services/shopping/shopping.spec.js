@@ -38,9 +38,9 @@ describe('Service: Shoppinglist', function() {
 
     beforeEach(inject(function() {
       spyOn(Auth, "getUser").and.returnValue({
-        recipes: {pending: [{_id: '1', isComplete: false}, {_id: '2', isComplete: false}, {_id: '3', isComplete: false}], 
+        recipes: {pending: [{_id: '1', isComplete: false}, {_id: '2', isComplete: false}, {_id: '3', isComplete: false}],
         complete: [{_id: 5, isComplete: true}]}
-      });  
+      });
     }));
 
     it('is a registered service', function() {
@@ -116,8 +116,8 @@ describe('Service: Shoppinglist', function() {
       });
 
       it('takes a parameter object and adds it to the array of recipes', function(){
-        var testObj = {_id: '3', isComplete: false}, 
-        testObjComp = {_id: '5', isComplete: true}, 
+        var testObj = {_id: '3', isComplete: false},
+        testObjComp = {_id: '5', isComplete: true},
         recipes = Recipes.get();
 
         //For pending
@@ -151,8 +151,8 @@ describe('Service: Shoppinglist', function() {
         spyOn(Auth, 'updateUser');
 
         var user = Auth.getUser(),
-        testObj = {_id: '4', isComplete: false}, 
-        testObjComp = {_id: '5', isComplete: true}, 
+        testObj = {_id: '4', isComplete: false},
+        testObjComp = {_id: '5', isComplete: true},
         recipes = Recipes.get();
 
         expect(user).not.toBeUndefined();

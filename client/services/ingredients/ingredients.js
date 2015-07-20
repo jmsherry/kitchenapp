@@ -75,14 +75,13 @@ angular.module('kitchenapp')
         }
 
         function populate(idsArray){
+          //if(idsArray.length === 0){return []};
           var populated = [], self = this, ings = self.get();
 
-          $q.when(ings, function(ingsArray){
-            $.each(idsArray, function(id){
-              var ing = _.find(ingsArray, {_id: id});
+            $.each(idsArray, function(i, id){
+              var ing = _.find(ings, {_id: id});
               populated.push(ing);
             });
-          });
 
           return populated;
         }

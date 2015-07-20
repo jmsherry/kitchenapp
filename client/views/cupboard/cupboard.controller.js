@@ -3,19 +3,21 @@
 angular.module('kitchenapp')
   .controller('CupboardCtrl', CupboardCtrl);
 
-CupboardCtrl.$inject = ['Cupboard', 'Auth'];
+CupboardCtrl.$inject = ['Cupboard', 'Auth', '$q'];
 
-  function CupboardCtrl(Cupboard, Auth) {
+  function CupboardCtrl(Cupboard, Auth, $q) {
 
   	Auth.checkAuthorised();
 
     var vm = this,
-    user = Auth.getUser();
+    cupboard = Cupboard.get();
 
+    $q.when(cupboard, function(data){
+      vm.items = data;
+    });
 
     angular.extend(vm, {
-      name: 'CupboardCtrl',
-      cupboardItems: user.cupboard
+      name: 'CupboardCtrl'
     });
 
   }

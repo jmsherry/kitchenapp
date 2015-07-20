@@ -4,33 +4,79 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var ObjectId = mongoose.Schema.Types.ObjectId;
-//var User = require('./../user/user.model');
+var User = require('./../user/user.model');
 var Cupboard = require('./cupboard.model');
 
 function handleError (res, err) {
+  console.log(err);
   return res.sendStatus(500).send(err);
 }
 
 /**
- * Adds a new ingredient to the user's cupboard.
+ * Adds a new item to the user's cupboard.
  *
  * @param req
  * @param res
  */
-exports.addItemToCupboard = function addItemToCupboard(req, res) {
+exports.addToCupboard = function addToCupboard(req, res) {
 
   console.log('addItemToCupboard req.body ', req.body);
 
-  Cupboard.findOneAndUpdate(
-    {"owner": req.body.userid},
-    {$push: {'cupboard': req.body.itemid}},
-    {safe: true, upsert: true},
-    function(err, Model){
-      console.log(err, Model);
+  Cupboard.update(
+    {"owner": req.params.userid},
+    {$push: {'cupboard': req.body.item}},
+    {safe: true, upsert: true, multi: true},
+    function(err, item){
+      console.log(err, item);
       if(err){
         handleError(res, err);
       }
-      return res.status(201).json(Model);
+      return res.status(201).json(item);
+    }
+  );
+
+};
+
+/**
+ * Return the users cuboard.
+ *
+ * @param req
+ * @param res
+ */
+exports.getCupboard = function getCupboard(req, res) {
+  console.log('In getCupboard req.params', req.params);
+  Cupboard.findOne({owner: req.params.userId},
+  function(err, cupboard){
+    if(err){
+      handleError(res, err);
+    }
+    if(!cupboard){
+      return res.status(404).json({});
+    }
+    return res.status(200).json(cupboard);
+  });
+};
+
+/**
+ * Updates an item to the user's cupboard.
+ *
+ * @param req
+ * @param res
+ */
+exports.updateCupboard = function updateCupboard(req, res) {
+
+  console.log('updateCupboard req.body ', req.body);
+
+  Cupboard.update(
+    {"owner": req.params.userid},
+    {$push: {'cupboard': req.body.item}},
+    {safe: true, upsert: true, multi: true},
+    function(err, resp){
+      console.log(err, resp);
+      if(err){
+        handleError(res, err);
+      }
+      return res.status(201).json(resp);
     }
   );
 
@@ -42,37 +88,47 @@ exports.addItemToCupboard = function addItemToCupboard(req, res) {
  * @param req
  * @param res
  */
-exports.removeItemFromCupboard = function removeItemFromCupboard(req, res) {
-  console.log('req.body', req.body);
-  Cupboard.findOneAndUpdate(
-    {"owner": req.body.userid},
-    {$pull: {'contents': req.body.itemid}},
+exports.removeFromCupboard = function removeFromCupboard(req, res) {
+  console.log('removeFromCupboard req.body', req.body);
+  Cupboard.update(
+    {"owner": req.params.userid},
+    {$pull: {'contents': req.body.item}},
     //{safe: true, upsert: true},
-    function(err, Model){
-      console.log(err, Model);
+    function(err, item){
+      console.log(err, item);
       if(err){
         handleError(res, err);
       }
-      return res.status(200).json(Model);
+      if(!item){
+        return res.status(404).json({message: req.body.item.name + " not found in cupboard"});
+      }
+      return res.status(200).json(item);
     }
   );
 };
 
+
+
 /**
- * Return the users cuboard. // Maybe not necessary...
+ * Return an item from the users cuboard.
  *
  * @param req
  * @param res
  */
-exports.getCupboard = function getCupboard(req, res) {
-  console.log('req.params', req.params);
-  Cupboard.findOne({owner: req.params.userId},
-  function(err, cupboard){
-    if(err){
-      handleError(res, err);
-    }
-    return res.status(200).json(cupboard);
-  });
-};
+// exports.getCupboardItem = function getCupboardItem(req, res) {
+//   console.log('getCupboardItem req.params', req.params);
+//   Cupboard.findOne({
+//     owner: req.params.userId
+//   }, function(err, cup){
+//     if(err){
+//       handleError(res, err);
+//     }
+//
+//     if(!cup){
+//       return res.status(404).json({});
+//     }
+//     return res.status(200).json(item);
+//   });
+// };
 
 }());

@@ -75,6 +75,7 @@ function IngredientsCtrl(Ingredients, $scope, $q, $log, uiGridConstants, Shoppin
       selectedIngs = _.pluck(selectedIngs, 'entity');
       console.log(selectedIngs);
       Cupboard.bulkAdd(selectedIngs);
+      //Cupboard.add(selectedIngs);
     }
 
     function addToShopping(){
@@ -83,6 +84,7 @@ function IngredientsCtrl(Ingredients, $scope, $q, $log, uiGridConstants, Shoppin
       selectedIngs = _.pluck(selectedIngs, 'entity');
       console.log(selectedIngs);
       Shopping.bulkAdd(selectedIngs);
+      //Shopping.add(selectedIngs);
     }
 
     function clear(){

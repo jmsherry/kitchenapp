@@ -1,113 +1,259 @@
-(function(){
+(function () {
     'use strict';
 
     angular.module('kitchenapp')
         .service('Shopping', Shopping);
 
-    Shopping.$inject = ['$q', '$resource', 'Auth', 'Cupboard', 'toastr', 'Ingredients'];
+    Shopping.$inject = ['$q', '$resource', 'Auth', 'Ingredients', 'toastr', 'Cupboard'];
 
-    function Shopping($q, $resource, Auth, Cupboard, toastr, Ingredients) {
+    function Shopping($q, $resource, Auth, Ingredients, toastr, Cupboard) {
 
-        var _SL = [],
-            _resource = $resource('/api/shopping');
+        this.deferred = $q.defer();
+        var _shopping = this.deferred.promise;
 
-            this.getShoppingList = function getShoppingList () {
-                return _SL;
-            };
+        this.getShopping = function getShopping() {
+            return _shopping;
+        };
 
-            this.setShoppingList = function setShoppingList (shoppingList) {
-                _SL = shoppingList;
-            };
+        this.setShopping = function setShopping(shopping) {
+            _shopping = shopping;
+        };
 
-            this.getResource = function getResource () {
-                return _resource;
-            };
+        this.getOwner = function getOwner() {
+            return Auth.getUser();
+        };
 
-            this.getOwner = function getOwner (){
-              return Auth.getUser();
-            };
+        this.toastr = toastr;
+        this.$resource = $resource;
+        this.Ingredients = Ingredients;
+        this.$q = $q;
+        this.Cupboard = Cupboard;
 
-            this.toastr = toastr;
+        this.init();
 
     }
+
+    /**
+     * init
+     *
+     * Gets the shopping from server and saves to local
+     *
+     **/
 
     Shopping.prototype.init = function init() {
-        console.log('shopping list init');
-        var self = this, user = self.getOwner(),
-        shoppingList = user.shoppingList,
-        fullList = [],
-        ings;
+        console.log('shopping init')
+        var self = this,
+            user = self.getOwner(),
+            shopping;
 
-        ings = Ingredients.get();
-        $q.when(ings, function(){
-          $.each(shoppingList, function(i, item){
-            var fullItem;
-            fullItem = _.find(ings, {_id: item._id});
-            fullList.push(fullItem);
-          });
-          self.setShoppingList(fullList);
-        })
+        shopping = self.$resource('/api/users/:userid/shopping', {
+                userid: user._id
+            })
+            .get(function (shopping) {
+                console.log(arguments);
+                var fullContents = self.populate(shopping.contents);
+                self.deferred.resolve(fullContents);
+            });
     };
 
+    Shopping.prototype.populate = function populate(idsArray) {
+        var self = this;
+        return self.Ingredients.populate(idsArray);
+    };
+
+    /**
+     * get
+     *
+     * Returns a local version of the Shopping
+     *
+     **/
     Shopping.prototype.get = function get() {
         var self = this;
-        return self.getShoppingList();
+        return self.getShopping();
     };
 
-    Shopping.prototype.buy = function buy(item) {
-      var self = this;
-        self.remove(item);
-        Cupboard.add(item).then(self.successCallback, self.errorCallback, self.notifyCallback);
-    };
 
-    Shopping.prototype.bulkBuy = function bulkBuy(newIngs) {
-      var self = this;
-      $.each(newIngs, function(i, ing){
-        self.buy(ing);
-      });
-    };
+    /**
+     * add
+     *
+     * @param ingredient item{}
+     * Adds an ingredient to the ingredients array
+     *
+     */
+    Shopping.prototype.add = function add(item) {
+        var self = this,
+            userid;
 
-    Shopping.prototype.add = function add(newIng) {
-      var self = this, shoppingList = self.getShoppingList();
-        shoppingList.push(newIng);
-    };
+        userid = self.getOwner()._id;
 
-    Shopping.prototype.bulkAdd = function bulkAdd(newIngs) {
-      var self = this;
-      $.each(newIngs, function(i, ing){
-        self.add(ing);
-      });
-    };
-
-    Shopping.prototype.save = function save(ing){
-      var self = this;
-      self.getResource.delete(ing, function(){
-        self.add(ing);
-      });
-    }
-
-    Shopping.prototype.remove = function remove(item) {
-        var self = this, shoppingList = self.getShoppingList(),
-        i, length = shoppingList.length;
-
-        for (i = 0; i < length; i += 1) {
-            if (shoppingList[i]._id === item._id) {
-                shoppingList.splice(i, 1);
-                break;
-            }
+        function CBSuccess() {
+            self.addLocal(item);
         }
 
+        self.$resource('/api/users/:userid/shopping', {
+                userid: userid
+            })
+            .save({
+                item: item
+            }, _.bind(CBSuccess, self, item));
+
     };
 
-    Shopping.prototype.successCallback = function successCallback(msg) {
-        toastr.success(msg);
+    Shopping.prototype.bulkAdd = function bulkAdd(items) {
+      var self = this;
+      $.each(items, function(i, item){
+        self.add(item);
+      });
     };
 
-    Shopping.prototype.errorCallback = function errorCallback(msg) {
-        toastr.error(msg);
+    /**
+     * update
+     *
+     * @param ingredient item {}
+     * Updates an ingredient in the ingredients user's array
+     *
+     */
+
+    Shopping.prototype.update = function update(item) {
+        var self = this,
+            userid;
+
+        userid = self.getOwner()._id;
+
+        function CBSuccess() {
+            self.updateLocal(item);
+        }
+
+        self.$resource('/api/users/:userid/shopping', {
+                userid: userid
+            }, {
+                update: {
+                    method: 'PUT',
+                    isArray: true
+                }
+            })
+            .update({
+                item: item
+            }, _.bind(CBSuccess, self, item));
+
     };
 
-    Shopping.prototype.notifyCallback = function notifyCallback(msg) {
-        toastr.info(msg);
+    /**
+     * remove
+     *
+     * @param ingredient {}
+     * Removes an ingredient from the ingredients array
+     *
+     */
+
+    Shopping.prototype.remove = function remove(item) {
+        console.log('IN Shopping remove: ', item);
+        var self = this,
+            userid;
+
+        userid = self.getOwner()._id;
+
+        function CBSuccess() {
+            console.log('removed shopping item, removing locally', item);
+            self.removeLocal(item);
+        }
+
+        self.$resource('/api/users/:userid/shopping/:itemid', {
+            userid: userid,
+            itemid: item._id
+        }).remove(_.bind(CBSuccess, self, item));
+
     };
+
+    Shopping.prototype.bulkRemove = function bulkRemove (items) {
+      var self = this;
+      _.forEach(items, function(item){
+        self.remove(item);
+      });
+
+      return items;
+    };
+
+
+    Shopping.prototype.process = function process(idsArray) {
+        var self = this,
+            presentIngredients = [],
+            missingIngredients = [],
+            shopping = self.getShopping();
+
+        _.forEach(idsArray, function (thisIngID) {
+            if (shopping.contents.indexOf(thisIngID) === -1) {
+                missingIngredients.push(thisIngID);
+            } else {
+                presentIngredients.push(thisIngID);
+            }
+        });
+
+
+        return {
+            present: presentIngredients,
+            missing: missingIngredients
+        };
+
+    };
+
+    Shopping.prototype.addLocal = function addLocal(item) {
+        var self = this,
+            shopping;
+
+        shopping = self.getShopping();
+
+        this.$q.when(shopping, function (data) {
+            data.push(item);
+            self.setShopping(data);
+            self.toastr.success(item[0].name + ' has been added to your shopping');
+        });
+
+    };
+
+    Shopping.prototype.updateLocal = function updateLocal(item) {
+        var self = this,
+            shopping, oldItem;
+
+        shopping = self.getShopping();
+
+        this.$q.when(shopping, function (data) {
+            oldItem = _.find(data, {
+                _id: item._id
+            });
+            oldItem = item;
+
+            self.setShopping(data);
+            self.toastr.success(item[0].name + ' has been added to your shopping');
+        });
+    };
+
+    Shopping.prototype.removeLocal = function removeLocal(item) {
+        var self = this,
+            shopping;
+
+        shopping = self.getShopping();
+
+        this.$q.when(shopping, function (data) {
+            data.splice(data.indexOf(item), 1);
+            self.toastr.success(item.name + ' has been removed from your shopping');
+        });
+
+    };
+
+
+    /**
+     * buy
+     *
+     * @param ingredient item{}
+     * Buys an ingredient to the ingredients array
+     *
+     */
+    Shopping.prototype.buy = function buy(item) {
+        var self = this,
+            user = Auth.getUser(); //add budgeting logic next
+
+        self.Shopping.add(item);
+    };
+
 }());

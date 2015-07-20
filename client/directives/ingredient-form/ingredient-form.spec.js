@@ -45,7 +45,7 @@ describe('Directive: nav-bar', function () {
     $httpBackend = _$httpBackend_;
     $compile = _$compile_;
     $rootScope = _$rootScope_;
-    
+
 
     $scope = $rootScope.$new();
     element = angular.element('<editIngredientForm></editIngredientForm>');
@@ -61,6 +61,6 @@ describe('Directive: nav-bar', function () {
     $httpBackend.verifyNoOutstandingRequest();
   });
 
-  
+
 
 });

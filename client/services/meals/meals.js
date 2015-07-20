@@ -4,20 +4,21 @@
 angular.module('kitchenapp')
     .factory('Meals', Meals);
 
-    Meals.$inject = ['$rootScope', '$cookieStore', '$q', '$resource', 'toastr', 'Recipes', 'Cupboard', 'Shopping'];
+    Meals.$inject = ['$rootScope', '$cookieStore', '$q', '$resource', 'toastr', 'Auth', 'Recipes', 'Cupboard', 'Shopping'];
 
-    function Meals($rootScope, $cookieStore, $q, $resource, toastr, Recipes, Cupboard, Shopping) {
+    function Meals($rootScope, $cookieStore, $q, $resource, toastr, Auth, Recipes, Cupboard, Shopping) {
 
         var _meals = {
           complete: [],
           pending: []
-        },
-        _resource = $resource('/api/meals');
+        };
 
          function init() {
           console.log('firing init');
-          var $deferred = $q.defer();
-          _meals = $deferred.promise;
+          var $deferred = $q.defer(),
+          user = Auth.getUser();
+
+          _meals = $deferred.promise
 
             function successCB(data){
               console.log('in successCB', arguments);
@@ -26,7 +27,7 @@ angular.module('kitchenapp')
               data = {
                 complete: completeMeals,
                 pending: pendingMeals
-              }
+              };
               $deferred.resolve(data);
               console.log('meals service loaded.', _meals, data);
             }
@@ -37,7 +38,7 @@ angular.module('kitchenapp')
               toastr.error('Failed to load meals!', 'Server Error ' + err.status + ' ' + err.data.message);
             }
 
-            _resource.query(successCB, errCB);
+            $resource('/api/users/:userid/meals', {userid: user._id}).query(successCB, errCB);
          }
 
         function get() {
@@ -62,7 +63,7 @@ angular.module('kitchenapp')
             }
 
 
-            _resource.save(newMeal, _.bind(successCB, self), _.bind(errCB, self));
+            $resource.save('/api/users/:userid/meals', newMeal, _.bind(successCB, self), _.bind(errCB, self));
 
         }
 
@@ -84,14 +85,18 @@ angular.module('kitchenapp')
 
         // Turns a recipe id into a meal object
         function createMealObject(id){
-          var recipe = Recipes.getRecipe(id);
-          var mealObj = _.clone(recipe);
+          var recipe = Recipes.getRecipe(id),
+          mealObj = Object.create(recipe),
+          ingredients = Cupboard.process(mealObj.ingredients);
+          console.log('Ingredients for new meal', ingredients);
 
-          mealObj._id = null;
-          mealObj.isComplete = false;
-          mealObj.ingredients = Cupboard.process(mealObj.ingredients);
-          mealObj.sheduledDate = null;
-          mealObj.recipe = id;
+          mealObj = angular.extend(mealObj, {
+            id: null,
+            isComplete: false,
+            ingredients: ingredients,
+            sheduledDate: null,
+            recipe: id
+          });
 
           if(mealObj.ingredients.missing.length === 0){
             mealObj.isComplete = true;
@@ -104,7 +109,7 @@ angular.module('kitchenapp')
           var self = this, meal, ingredients;
           meal = self.createMealObject(id),
           ingredients = meal.ingredients;
-          Cupboard.bulkRemove(ingredients.present);
+          Cupboard.remove(ingredients.present);
           Shopping.add(ingredients.missing);
           self.save(meal);
         }

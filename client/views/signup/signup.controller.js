@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('kitchenapp')
-  .controller('SignupCtrl', function ($location, Auth) {
+  .controller('SignupCtrl', function ($location, Auth, toastr) {
 
     var vm = this;
 
@@ -98,6 +98,9 @@ angular.module('kitchenapp')
             $location.path('/');
           })
           .catch(function (err) {
+            if(err.errors && error.errors.email && error.errors.email.property && error.errors.email.property.type === "user defined"){
+              toastr.error('That email is already registerd with us.')
+            }
             vm.error = err;
           });
       }
