@@ -21,6 +21,7 @@ exports.create = function (req, res) {
   User.create(req.body, function (err, user) {
     if (err) { return handleError(res, err); }
 
+    req.body._id = null;
     Cupboard.create({owner: user._id}, function (err, cupboard) {
       if (err) { return handleError(res, err); }
       console.log('Cuboard created for user: ', req.body);
