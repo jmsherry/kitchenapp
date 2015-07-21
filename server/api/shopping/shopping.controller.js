@@ -16,13 +16,13 @@ function handleError (res, err) {
  * @param res
  */
 exports.addToShoppingList = function addToShoppingList(req, res) {
-  console.log('in addToShoppingList req.params', req.params);
+  console.log('in addToShoppingList \nreq.params', req.params, '\nreq.body: ', req.body);
 	ShoppingList.findOneAndUpdate(
-    {"owner": req.params.userid},
-    {$push: {'contents': req.body.item._id}},
+    {"owner": req._params.userid},
+    {$push: {'contents': ObjectId(req.body.item._id)}},
     {safe: true, upsert: true, multi: true},
     function(err, item){
-      console.log(err, item);
+      console.log('addToShoppingList results', err, item);
       if(err){
         handleError(res, err);
       }
@@ -31,30 +31,31 @@ exports.addToShoppingList = function addToShoppingList(req, res) {
   );
 };
 
-/**
- * Updates an ingredient in the user's shopping list.
- *
- * @param req
- * @param res
- */
-exports.updateShoppingList = function updateShoppingList(req, res) {
-	ShoppingList.findOneAndUpdate(
-    {"owner": req.params.userid},
-    {$push: {'contents': req.body.item}},
-    {safe: true, upsert: false, multi: true},
-    function(err, item){
-      console.log(err, item);
-      if(err){
-        handleError(res, err);
-      }
-      if (!item ){
-        console.log('no SL item to update');
-        return res.status(404).json({});
-      }
-      return res.status(200).json(item);
-    }
-  );
-};
+// /**
+//  * Updates an ingredient in the user's shopping list.
+//  *
+//  * @param req
+//  * @param res
+//  */
+// exports.updateShoppingList = function updateShoppingList(req, res) {
+//   console.log('in updateShoppingList \nreq.params', req.params, '\nreq.body: ', req.body);
+// 	ShoppingList.findOneAndUpdate(
+//     {"owner": req._params.userid},
+//     {$push: {'contents': req.body.item}},
+//     {safe: true, upsert: false, multi: true},
+//     function(err, item){
+//       console.log('updateShoppingList results', err, item);
+//       if(err){
+//         handleError(res, err);
+//       }
+//       if (!item ){
+//         console.log('no SL item to update');
+//         return res.status(404).json({});
+//       }
+//       return res.status(200).json(item);
+//     }
+//   );
+// };
 
 /**
  * Removes an ingredient from the user's shopping list.
@@ -63,12 +64,12 @@ exports.updateShoppingList = function updateShoppingList(req, res) {
  * @param res
  */
 exports.removeFromShoppingList = function removeFromShoppingList(req, res) {
-	console.log('in removeFromShoppingList req.params', req.params);
+	console.log('in removeFromShoppingList \nreq.params', req.params, '\nreq.body: ', req.body);
 	ShoppingList.findOneAndUpdate(
-    {"owner": req.params.userid},
-    {$pull: {'contents': {_id: req.params.itemid}}},
+    {"owner": req._params.userid},
+    {$pull: {'contents': ObjectId(req.params.itemid)}},
     function(err, item){
-      //console.log(err, Model);
+      console.log('removeFromShoppingList results', err, item);
       if(err){
         handleError(res, err);
       }
@@ -88,17 +89,18 @@ exports.removeFromShoppingList = function removeFromShoppingList(req, res) {
  * @param res
  */
 exports.getShoppingList = function getShoppingList(req, res) {
-	console.log('req.params', req.params);
+  console.log('in getShoppingList \nreq', req._params);
+	//console.log('in getShoppingList \nreq.params', req.params, '\nreq.body: ', req.body);
   ShoppingList.findOne(
-    {"owner": req.params.userid},
+    {"owner": req._params.userid},
     function(err, shoppingList){
-      //console.log(err, shoppingList);
+      console.log('getShoppingList results', err, shoppingList);
       if(err){
         handleError(res, err);
       }
       if (!shoppingList) {
-        console.log('no SL item to remove');
-        return res.status(404).json({});
+        console.log('no SL found');
+        return res.status(404).send(null);
       }
       return res.status(200).json(shoppingList);
     }
@@ -112,15 +114,15 @@ exports.getShoppingList = function getShoppingList(req, res) {
  * @param res
  */
 exports.getShoppingListItem = function getShoppingListItem(req, res) {
-  console.log('getShoppingListItem req.params');
+  console.log('in getShoppingListItem \nreq.params', req.params, '\nreq.body: ', req.body);
   ShoppingList.findOne(
-    {"owner": req.params.userid},
+    {"owner": req._params.userid},
     function(err, shoppingList){
       if(err){
         handleError(res, err);
       }
-      console.log('get SL item args: ', arguments);
-      var item = _.find(shoppingList, {itemid: req.params.itemid})
+      console.log('getShoppingListItem results', err, shoppingList);
+      var item = _.find(shoppingList.contents, {itemid: req.params.itemid})
       return res.status(200).json(item);
     }
   );

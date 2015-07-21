@@ -20,18 +20,18 @@ function handleError (res, err) {
  */
 exports.addToCupboard = function addToCupboard(req, res) {
 
-  console.log('addItemToCupboard req.body ', req.body);
+  console.log('in addToCupboard \nreq.params',  req.params, '\nreq._params', req._params,  '\nreq.body: ', req.body);
 
-  Cupboard.update(
-    {"owner": req.params.userid},
-    {$push: {'cupboard': req.body.item}},
-    {safe: true, upsert: true, multi: true},
-    function(err, item){
-      console.log(err, item);
+  Cupboard.findOneAndUpdate(
+    {"owner": req._params.userid},
+    {$push: {'contents': ObjectId(req.body.item._id)}},
+    {safe: true, upsert: true},
+    function(err, cupboard){
+      console.log('in addToCupboard results', err, cupboard);
       if(err){
         handleError(res, err);
       }
-      return res.status(201).json(item);
+      return res.status(201).json(cupboard);
     }
   );
 
@@ -44,9 +44,12 @@ exports.addToCupboard = function addToCupboard(req, res) {
  * @param res
  */
 exports.getCupboard = function getCupboard(req, res) {
-  console.log('In getCupboard req.params', req.params);
-  Cupboard.findOne({owner: req.params.userId},
+  console.log('in getCupboard \nreq.params', req.params, '\nreq._params', req._params,  '\nreq.body: ', req.body);
+  Cupboard.findOneAndUpdate(
+    {'owner': req._params.userid},
+    {},
   function(err, cupboard){
+    console.log('in getCupboard results', err, cupboard);
     if(err){
       handleError(res, err);
     }
@@ -63,24 +66,24 @@ exports.getCupboard = function getCupboard(req, res) {
  * @param req
  * @param res
  */
-exports.updateCupboard = function updateCupboard(req, res) {
-
-  console.log('updateCupboard req.body ', req.body);
-
-  Cupboard.update(
-    {"owner": req.params.userid},
-    {$push: {'cupboard': req.body.item}},
-    {safe: true, upsert: true, multi: true},
-    function(err, resp){
-      console.log(err, resp);
-      if(err){
-        handleError(res, err);
-      }
-      return res.status(201).json(resp);
-    }
-  );
-
-};
+// exports.updateCupboard = function updateCupboard(req, res) {
+//
+//   console.log('in updateCupboard \nreq.params', req.params, '\nreq._params', req._params,  '\nreq.body: ', req.body);
+//
+//   Cupboard.findOneAndUpdate(
+//     {"owner": req._params.userid},
+//     {$push: {'contents': req.body.item}},
+//     {safe: true, upsert: true},
+//     function(err, cupboard){
+//       console.log('in updateCupboard results', err, cupboard);
+//       if(err){
+//         handleError(res, err);
+//       }
+//       return res.status(200).json(cupboard);
+//     }
+//   );
+//
+// };
 
 /**
  * Removes an ingredient from the user's cupboard.
@@ -89,11 +92,10 @@ exports.updateCupboard = function updateCupboard(req, res) {
  * @param res
  */
 exports.removeFromCupboard = function removeFromCupboard(req, res) {
-  console.log('removeFromCupboard req.body', req.body);
-  Cupboard.update(
-    {"owner": req.params.userid},
-    {$pull: {'contents': req.body.item}},
-    //{safe: true, upsert: true},
+  console.log('in removeFromCupboard \nreq.params', req.params, '\nreq._params', req._params, '\nreq.body: ', req.body);
+  Cupboard.findOneAndUpdate(
+    {"owner": req._params.userid},
+    {$pull: {'contents': ObjectId(req.body.item._id)}},
     function(err, item){
       console.log(err, item);
       if(err){
@@ -118,7 +120,7 @@ exports.removeFromCupboard = function removeFromCupboard(req, res) {
 // exports.getCupboardItem = function getCupboardItem(req, res) {
 //   console.log('getCupboardItem req.params', req.params);
 //   Cupboard.findOne({
-//     owner: req.params.userId
+//     "owner": req._params.userid
 //   }, function(err, cup){
 //     if(err){
 //       handleError(res, err);
