@@ -206,7 +206,7 @@
         this.$q.when(shopping, function (data) {
             data.push(item);
             self.setShopping(data);
-            self.toastr.success(item[0].name + ' has been added to your shopping');
+            self.toastr.success(item.name + ' has been added to your shopping');
         });
 
     };
