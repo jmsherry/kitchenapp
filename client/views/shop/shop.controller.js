@@ -25,7 +25,7 @@ ShopCtrl.$inject = ['Shopping', 'Auth', '$q'];
     }
 
     $q.when(items, function(data){
-      vm.items = data;
+      vm.items = data.contents;
     });
 
     angular.extend(vm, {

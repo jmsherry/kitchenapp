@@ -2,16 +2,12 @@
 
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+//var CupboardItemSchema = require('./cupboardItem.model.js');
 var ObjectId = Schema.ObjectId;
 
 var ShoppingSchema = new Schema({
   owner: {type: ObjectId, ref: 'User'},
-  contents: [
-    {
-        type: ObjectId,
-        ref: 'Ingredient'
-    }
-  ]
+  contents: []
 });
 
 /**

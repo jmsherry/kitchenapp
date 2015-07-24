@@ -2,12 +2,10 @@
 
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-//var CupboardItemSchema = require('./cupboardItem.model.js');
 var ObjectId = Schema.ObjectId;
 
-var CupboardSchema = new Schema({
-  owner: {type: ObjectId, ref: 'User'},
-  contents: []
+var CupboardItemSchema = new Schema({
+  ingredient: {type: ObjectId, ref: 'Ingredient'}
 });
 
 /**
@@ -19,7 +17,7 @@ var CupboardSchema = new Schema({
  * Validations
  */
 
-// CupboardSchema
+// CupboardItemSchema
 //   .path('title')
 //   .validate(function (value, respond) {
 //     var self = this;
@@ -37,8 +35,8 @@ var CupboardSchema = new Schema({
  * Methods
  */
 
-CupboardSchema.methods = {
+CupboardItemSchema.methods = {
 
 };
 
-module.exports = mongoose.model('Cupboard', CupboardSchema);
+module.exports = mongoose.model('CupboardItem', CupboardItemSchema);

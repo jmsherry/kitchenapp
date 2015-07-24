@@ -13,7 +13,8 @@ CupboardCtrl.$inject = ['Cupboard', 'Auth', '$q'];
     cupboard = Cupboard.get();
 
     $q.when(cupboard, function(data){
-      vm.items = data;
+      console.log('HERERERERE', data);
+      vm.items = data.contents;
     });
 
     angular.extend(vm, {

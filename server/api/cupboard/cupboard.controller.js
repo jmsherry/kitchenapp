@@ -3,9 +3,10 @@
 'use strict';
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var ObjectId = mongoose.Schema.Types.ObjectId;
+var ObjectId = mongoose.Types.ObjectId;
 var User = require('./../user/user.model');
 var Cupboard = require('./cupboard.model');
+var CupboardItem = require('./cupboardItem.model');
 
 function handleError (res, err) {
   console.log(err);
@@ -22,10 +23,16 @@ exports.addToCupboard = function addToCupboard(req, res) {
 
   console.log('in addToCupboard \nreq.params',  req.params, '\nreq._params', req._params,  '\nreq.body: ', req.body);
 
+  var item = new CupboardItem({
+    ingredient: req.body.item._id
+  });
+
+  console.log(item);
+
   Cupboard.findOneAndUpdate(
     {"owner": req._params.userid},
-    {$push: {'contents': ObjectId(req.body.item._id)}},
-    {safe: true, upsert: true},
+    {$push: {'contents': item}},
+    {safe: false, upsert: true},
     function(err, cupboard){
       console.log('in addToCupboard results', err, cupboard);
       if(err){
@@ -45,9 +52,8 @@ exports.addToCupboard = function addToCupboard(req, res) {
  */
 exports.getCupboard = function getCupboard(req, res) {
   console.log('in getCupboard \nreq.params', req.params, '\nreq._params', req._params,  '\nreq.body: ', req.body);
-  Cupboard.findOneAndUpdate(
+  Cupboard.findOne(
     {'owner': req._params.userid},
-    {},
   function(err, cupboard){
     console.log('in getCupboard results', err, cupboard);
     if(err){
@@ -95,7 +101,8 @@ exports.removeFromCupboard = function removeFromCupboard(req, res) {
   console.log('in removeFromCupboard \nreq.params', req.params, '\nreq._params', req._params, '\nreq.body: ', req.body);
   Cupboard.findOneAndUpdate(
     {"owner": req._params.userid},
-    {$pull: {'contents': ObjectId(req.body.item._id)}},
+    {$pull: {'contents': {ingredient: ObjectId(req.body.item._id)}}},
+    {safe: true},
     function(err, item){
       console.log(err, item);
       if(err){

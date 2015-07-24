@@ -1,17 +1,17 @@
 <div class="row">
 	<div class="col-md-12">
-  		<h1>Shop View</h1>
-  	</div>
-  	<div class="col-md-12">
-  	<p ng-if="!vm.items.length">You have no items on your list. Add <a ui-sref="meals">meals</a> to generate a shopping list.</p>
-	  	<ul class="list-unstyled shoppingList">
-	  		<li ng-repeat="item in vm.items track by $index">
-	  			<div class="col-md-10 description">{{item.name}}</div>
-	  			<div class="col-md-2 actions">
-	  				<button type="button" class="btn btn-primary" ng-click="vm.buy(item)">Buy</button>
-						<button type="button" class="btn btn-default" ng-click="vm.remove(item)">Remove</button>
-	  			</div>
-	  		</li>
-	  	</ul>
-  	</div>
+		<h1>Shop View</h1>
+	</div>
+	<div class="col-md-12">
+	<p ng-if="!vm.items.length">You have no items on your list. Add <a ui-sref="meals">meals</a> to generate a shopping list.</p>
+  	<ul class="list-unstyled shoppingList">
+  		<li ng-repeat="item in vm.items track by $index">
+  			<div class="col-md-10 description">{{item.ingredient.name}}</div>
+  			<div class="col-md-2 actions">
+  				<button type="button" class="btn btn-primary" ng-click="vm.buy(item)">Buy</button>
+					<button type="button" class="btn btn-default" ng-click="vm.remove(item)">Remove</button>
+  			</div>
+  		</li>
+  	</ul>
+	</div>
 </div>

@@ -2,8 +2,9 @@
 
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var ObjectId = mongoose.Schema.Types.ObjectId;
+var ObjectId = mongoose.Types.ObjectId;
 var ShoppingList = require('./shopping.model');
+var ShoppingItem = require('./shoppingItem.model');
 
 function handleError (res, err) {
   return res.sendStatus(500).send(err);
@@ -17,9 +18,14 @@ function handleError (res, err) {
  */
 exports.addToShoppingList = function addToShoppingList(req, res) {
   console.log('in addToShoppingList \nreq.params', req.params, '\nreq.body: ', req.body);
+
+  var item = new ShoppingItem({
+    ingredient: req.body.item._id
+  });
+
 	ShoppingList.findOneAndUpdate(
     {"owner": req._params.userid},
-    {$push: {'contents': ObjectId(req.body.item._id)}},
+    {$push: {'contents': item}},
     {safe: true, upsert: true, multi: true},
     function(err, item){
       console.log('addToShoppingList results', err, item);
@@ -67,17 +73,18 @@ exports.removeFromShoppingList = function removeFromShoppingList(req, res) {
 	console.log('in removeFromShoppingList \nreq.params', req.params, '\nreq.body: ', req.body);
 	ShoppingList.findOneAndUpdate(
     {"owner": req._params.userid},
-    {$pull: {'contents': ObjectId(req.params.itemid)}},
-    function(err, item){
-      console.log('removeFromShoppingList results', err, item);
+    {$pull: {'contents': {_id: new ObjectId(req.params.itemid)}}},
+    {safe: true},
+    function(err, SL){
+      console.log('removeFromShoppingList results', err, SL);
       if(err){
         handleError(res, err);
       }
-      if (!item) {
+      if (!SL) {
         console.log('no SL item to remove');
         return res.status(404).json({});
       }
-      return res.status(200).json(item);
+      return res.status(200).json(SL);
     }
   );
 };

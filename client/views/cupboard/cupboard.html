@@ -3,11 +3,14 @@
   		<h1>My Cupboard</h1>
   	</div>
   	<div class="col-md-12">
-  	<p ng-if="!vm.cupboardItems.length > 0">Your cupboard is empty!! Go to <a ui-sref="ingredients">ingredients</a> to register ingredients or <a ui-sref="shop">shop</a> to buy more.</p>
+  	<p ng-if="!vm.items.length > 0">Your cupboard is empty!! Go to <a ui-sref="ingredients">ingredients</a> to register ingredients or <a ui-sref="shop">shop</a> to buy more.</p>
   	</div>
-  	<ul class="list-unstyled">
-  		<li ng-repeat="item in vm.items track by $index">{{item.name}}</li>
-  	</ul>
-
+		<div class="col-md-12">
+	  	<ul class="list-unstyled shoppingList">
+	  		<li ng-repeat="item in vm.items track by $index">
+					<div class="col-md-12 description">{{item.ingredient.name}}</div>
+				</li>
+	  	</ul>
+	</div>
 
 </div>

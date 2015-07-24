@@ -86,12 +86,19 @@ angular.module('kitchenapp')
           return populated;
         }
 
+        function getById(id){
+          var self = this,
+          ings = self.get();
+          return _.find(ings, {'_id': id});
+        }
+
         init();
 
         return {
           _ings: _ingredients,
           init: init,
           get: get,
+          getById: getById,
           add: add,
           save: save,
           populate: populate

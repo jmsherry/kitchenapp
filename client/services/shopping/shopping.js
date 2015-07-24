@@ -50,15 +50,18 @@
                 userid: user._id
             })
             .get(function (shopping) {
-                console.log(arguments);
-                var fullContents = self.populate(shopping.contents);
-                self.deferred.resolve(fullContents);
+              var contents = self.populate(shopping.contents);
+              shopping.contents = contents;
+              self.deferred.resolve(shopping);
             });
     };
 
-    Shopping.prototype.populate = function populate(idsArray) {
-        var self = this;
-        return self.Ingredients.populate(idsArray);
+    Shopping.prototype.populate = function populate(items){
+      var self = this, i, len = items.length;
+      for (i = 0; i < len; i+=1) {
+        items[i].ingredient = self.Ingredients.getById(items[i].ingredient);
+      }
+      return items;
     };
 
     /**
@@ -229,14 +232,14 @@
     };
 
     Shopping.prototype.removeLocal = function removeLocal(item) {
-        var self = this,
-            shopping;
+        var self = this, shopping;
 
         shopping = self.getShopping();
 
         this.$q.when(shopping, function (data) {
-            data.splice(data.indexOf(item), 1);
-            self.toastr.success(item.name + ' has been removed from your shopping');
+            var items = data.contents;
+            items.splice(items.indexOf(item), 1);
+            self.toastr.success(item.ingredient.name + ' has been removed from your shopping');
         });
 
     };

@@ -49,14 +49,18 @@
         cupboard = self.$resource('/api/users/:userid/cupboard', {userid: user._id})
         .get(function(cupboard){
           console.log(arguments);
-          var fullContents = self.populate(cupboard.contents);
-          self.deferred.resolve(fullContents);
+          var contents = self.populate(cupboard.contents);
+          cupboard.contents = contents;
+          self.deferred.resolve(cupboard);
         });
     };
 
-    Cupboard.prototype.populate = function populate(idsArray){
-      var self = this;
-      return self.Ingredients.populate(idsArray);
+    Cupboard.prototype.populate = function populate(items){
+      var self = this, i, len = items.length;
+      for (i = 0; i < len; i+=1) {
+        items[i].ingredient = self.Ingredients.getById(items[i].ingredient);
+      }
+      return items;
     };
 
     /**
