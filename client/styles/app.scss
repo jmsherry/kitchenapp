@@ -157,6 +157,7 @@ to prevent collapsing during animation*/
   }
 }
 
+.cupboardList,
 .shoppingList {
   margin-top:10px;
   li {
@@ -173,6 +174,10 @@ to prevent collapsing during animation*/
     }
   }
 }
+
+// .cupboardList li .actions {
+//   display:none;
+// }
 
 form {
   input, select, textarea {

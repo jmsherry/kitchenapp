@@ -28,6 +28,7 @@
         this.Ingredients = Ingredients;
         this.$q = $q;
         this.Cupboard = Cupboard;
+        this.Auth = Auth;
 
         this.init();
 
@@ -83,13 +84,15 @@
      * Adds an ingredient to the ingredients array
      *
      */
-    Shopping.prototype.add = function add(item) {
+    Shopping.prototype.add = function add(ing) {
         var self = this,
             userid;
 
+        delete(ing.$$hashKey);
         userid = self.getOwner()._id;
 
-        function CBSuccess() {
+        function CBSuccess(ing, item) {
+            item.ingredient = ing
             self.addLocal(item);
         }
 
@@ -97,8 +100,8 @@
                 userid: userid
             })
             .save({
-                item: item
-            }, _.bind(CBSuccess, self, item));
+                ing: ing
+            }, _.bind(CBSuccess, self, ing));
 
     };
 
@@ -117,29 +120,29 @@
      *
      */
 
-    Shopping.prototype.update = function update(item) {
-        var self = this,
-            userid;
-
-        userid = self.getOwner()._id;
-
-        function CBSuccess() {
-            self.updateLocal(item);
-        }
-
-        self.$resource('/api/users/:userid/shopping', {
-                userid: userid
-            }, {
-                update: {
-                    method: 'PUT',
-                    isArray: true
-                }
-            })
-            .update({
-                item: item
-            }, _.bind(CBSuccess, self, item));
-
-    };
+    // Shopping.prototype.update = function update(item) {
+    //     var self = this,
+    //         userid;
+    //
+    //     userid = self.getOwner()._id;
+    //
+    //     function CBSuccess() {
+    //         self.updateLocal(item);
+    //     }
+    //
+    //     self.$resource('/api/users/:userid/shopping', {
+    //             userid: userid
+    //         }, {
+    //             update: {
+    //                 method: 'PUT',
+    //                 isArray: true
+    //             }
+    //         })
+    //         .update({
+    //             item: item
+    //         }, _.bind(CBSuccess, self, item));
+    //
+    // };
 
     /**
      * remove
@@ -207,29 +210,31 @@
         shopping = self.getShopping();
 
         this.$q.when(shopping, function (data) {
-            data.push(item);
+            var items = data.contents;
+            items.push(item);
             self.setShopping(data);
-            self.toastr.success(item.name + ' has been added to your shopping');
+            self.toastr.success(item.ingredient.name + ' has been added to your shopping');
         });
 
     };
 
-    Shopping.prototype.updateLocal = function updateLocal(item) {
-        var self = this,
-            shopping, oldItem;
-
-        shopping = self.getShopping();
-
-        this.$q.when(shopping, function (data) {
-            oldItem = _.find(data, {
-                _id: item._id
-            });
-            oldItem = item;
-
-            self.setShopping(data);
-            self.toastr.success(item[0].name + ' has been added to your shopping');
-        });
-    };
+    // Shopping.prototype.updateLocal = function updateLocal(item) {
+    //     var self = this,
+    //         shopping, oldItem;
+    //
+    //     shopping = self.getShopping();
+    //
+    //     this.$q.when(shopping, function (data) {
+    //       var items = data.contents;
+    //         oldItem = _.find(data, {
+    //             _id: item._id
+    //         });
+    //         oldItem = item;
+    //
+    //         self.setShopping(data);
+    //         self.toastr.success(item.ingredient.name + ' has been added to your shopping');
+    //     });
+    // };
 
     Shopping.prototype.removeLocal = function removeLocal(item) {
         var self = this, shopping;
@@ -239,6 +244,7 @@
         this.$q.when(shopping, function (data) {
             var items = data.contents;
             items.splice(items.indexOf(item), 1);
+            self.setShopping(data);
             self.toastr.success(item.ingredient.name + ' has been removed from your shopping');
         });
 
@@ -254,9 +260,9 @@
      */
     Shopping.prototype.buy = function buy(item) {
         var self = this,
-            user = Auth.getUser(); //add budgeting logic next
-
-        self.Shopping.add(item);
+            user = self.Auth.getUser(); //add budgeting logic next
+            console.log('buying', item);
+        self.Cupboard.add(item);
     };
 
 }());

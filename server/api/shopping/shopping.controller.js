@@ -20,15 +20,15 @@ exports.addToShoppingList = function addToShoppingList(req, res) {
   console.log('in addToShoppingList \nreq.params', req.params, '\nreq.body: ', req.body);
 
   var item = new ShoppingItem({
-    ingredient: req.body.item._id
+    ingredient: req.body.ing._id
   });
 
 	ShoppingList.findOneAndUpdate(
     {"owner": req._params.userid},
     {$push: {'contents': item}},
     {safe: true, upsert: true, multi: true},
-    function(err, item){
-      console.log('addToShoppingList results', err, item);
+    function(err, SL){
+      console.log('addToShoppingList results', arguments);
       if(err){
         handleError(res, err);
       }
@@ -76,7 +76,7 @@ exports.removeFromShoppingList = function removeFromShoppingList(req, res) {
     {$pull: {'contents': {_id: new ObjectId(req.params.itemid)}}},
     {safe: true},
     function(err, SL){
-      console.log('removeFromShoppingList results', err, SL);
+      console.log('removeFromShoppingList results', arguments);
       if(err){
         handleError(res, err);
       }

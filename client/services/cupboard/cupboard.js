@@ -12,15 +12,11 @@
         var _cupboard = this.deferred.promise;
 
         this.getCupboard = function getCupboard () {
-          //$q.when(_cupboard, function(){
               return _cupboard;
-          //});
         };
 
         this.setCupboard = function setCupboard (cupboard) {
-          //  $q.when(_cupboard, function(){
               _cupboard = cupboard;
-            //});
         };
 
         this.getOwner = function getOwner (){
@@ -82,24 +78,25 @@
      * Adds an ingredient to the ingredients array
      *
      */
-    Cupboard.prototype.add = function add (item) {
+    Cupboard.prototype.add = function add(ing) {
         var self = this, userid;
 
         userid = self.getOwner()._id;
 
-        function CBSuccess() {
+        function CBSuccess(ing, item) {
+          item.ingredient = ing;
           self.addLocal(item)
         }
 
         self.$resource('/api/users/:userid/cupboard', {userid: userid})
-        .save({item: item}, _.bind(CBSuccess, self, item));
+        .save({ing: ing}, _.bind(CBSuccess, self, ing));
 
     };
 
-    Cupboard.prototype.bulkAdd = function bulkAdd(items) {
+    Cupboard.prototype.bulkAdd = function bulkAdd(ings) {
       var self = this;
-      $.each(items, function(i, item){
-        self.add(item);
+      $.each(ings, function(i, ing){
+        self.add(ing);
       });
     };
 
@@ -122,16 +119,20 @@
 
       userid = self.getOwner()._id;
 
-      function CBSuccess() {
-        self.removeLocal(item)
+      function CBSuccess(item) {
+          console.log('removed cupboard item, removing locally', item);
+          self.removeLocal(item);
       }
 
-      function CBError() {
-        self.toastr.error('could not add '+ item.name + ' to cupboard');
+      function CBError(item) {
+        self.toastr.error('could not remove '+ item.name + ' from cupboard');
       }
 
-      self.$resource('/api/users/:userid/cupboard', {userid: userid})
-      .remove({item: item}, _.bind(CBSuccess, self, item), _.bind(CBError, self, item));
+      self.$resource('/api/users/:userid/cupboard/:itemid', {
+          userid: userid,
+          itemid: item._id
+      })
+      .remove(_.bind(CBSuccess, self, item), _.bind(CBError, self, item));
 
     };
 
@@ -172,32 +173,35 @@
 
       cupboard = self.getCupboard();
       this.$q.when(cupboard, function (data) {
-        var newCupboard = data.push(item);
-        self.setCupboard(newCupboard);
-        self.toastr.success(item.name + ' has been added to your cupboard');
+        var items = data.contents;
+        items.push(item);
+        self.setCupboard(data);
+        self.toastr.success(item.ingredient.name + ' has been added to your cupboard');
       });
     };
 
-    Cupboard.prototype.updateLocal = function updateLocal(item){
-      var self = this, cupboard, oldItem;
-
-      cupboard = self.getCupboard();
-      this.$q.when(cupboard, function (data) {
-        oldItem = _.find(cupboard, {_id: item._id});
-        oldItem = item;
-
-        self.setCupboard(cupboard);
-        self.toastr.success(item.name + ' has been updated in your cupboard');
-      });
-    };
+    // Cupboard.prototype.updateLocal = function updateLocal(item){
+    //   var self = this, cupboard, oldItem;
+    //
+    //   cupboard = self.getCupboard();
+    //   this.$q.when(cupboard, function (data) {
+    //     oldItem = _.find(data, {_id: item._id});
+    //     oldItem = item;
+    //
+    //     self.setCupboard(data);
+    //     self.toastr.success(item.ingredient.name + ' has been updated in your cupboard');
+    //   });
+    // };
 
     Cupboard.prototype.removeLocal = function removeLocal(item){
       var self = this, cupboard;
 
       cupboard = self.getCupboard();
       this.$q.when(cupboard, function (data) {
-        cupboard.splice(cupboard.contents.indexOf(item), 1);
-        self.toastr.success(item.name + ' has been removed from your cupboard');
+	      var items = data.contents;
+        items.splice(items.indexOf(item), 1);
+        self.setCupboard(data);
+        self.toastr.success(item.ingredient.name + ' has been removed from your cupboard');
       });
     };
 

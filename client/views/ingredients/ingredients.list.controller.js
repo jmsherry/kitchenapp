@@ -33,21 +33,6 @@ function IngredientsCtrl(Ingredients, $scope, $q, $log, uiGridConstants, Shoppin
 
     $scope.gridOptions.multiSelect = true;
 
-    $scope.setSelectable = function() {
-      $scope.gridApi.selection.clearSelectedRows();
-
-      $scope.gridOptions.isRowSelectable = function(row){
-        if(row.entity.age > 30){
-          return false;
-        } else {
-          return true;
-        }
-      };
-      $scope.gridApi.core.notifyDataChange(uiGridConstants.dataChange.OPTIONS);
-
-      $scope.gridOptions.data[0].age = 31;
-      $scope.gridApi.core.notifyDataChange(uiGridConstants.dataChange.EDIT);
-    };
 
     $scope.gridOptions.onRegisterApi = function(gridApi){
       //set gridApi on scope
@@ -69,13 +54,15 @@ function IngredientsCtrl(Ingredients, $scope, $q, $log, uiGridConstants, Shoppin
 			$scope.gridOptions.data = newData;
 		});
 
-    function addToCupboard(){
+    function addToCupboard(e){
       var selectedIngs = $scope.gridApi.selection.getSelectedGridRows();
       console.log(selectedIngs);
       selectedIngs = _.pluck(selectedIngs, 'entity');
       console.log(selectedIngs);
       Cupboard.bulkAdd(selectedIngs);
       //Cupboard.add(selectedIngs);
+      console.log(e);
+      $('button').blur();
     }
 
     function addToShopping(){
@@ -85,10 +72,12 @@ function IngredientsCtrl(Ingredients, $scope, $q, $log, uiGridConstants, Shoppin
       console.log(selectedIngs);
       Shopping.bulkAdd(selectedIngs);
       //Shopping.add(selectedIngs);
+      $('button').blur();
     }
 
     function clear(){
       $scope.gridApi.selection.clearSelectedRows();
+      $('button').blur();
     }
 
 

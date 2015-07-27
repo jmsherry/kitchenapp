@@ -24,10 +24,10 @@ exports.addToCupboard = function addToCupboard(req, res) {
   console.log('in addToCupboard \nreq.params',  req.params, '\nreq._params', req._params,  '\nreq.body: ', req.body);
 
   var item = new CupboardItem({
-    ingredient: req.body.item._id
+    ingredient: req.body.ing._id
   });
 
-  console.log(item);
+  console.log('item: ', item);
 
   Cupboard.findOneAndUpdate(
     {"owner": req._params.userid},
@@ -38,7 +38,8 @@ exports.addToCupboard = function addToCupboard(req, res) {
       if(err){
         handleError(res, err);
       }
-      return res.status(201).json(cupboard);
+      console.log('sent item: ', item);
+      return res.status(201).json(item);
     }
   );
 
@@ -101,17 +102,17 @@ exports.removeFromCupboard = function removeFromCupboard(req, res) {
   console.log('in removeFromCupboard \nreq.params', req.params, '\nreq._params', req._params, '\nreq.body: ', req.body);
   Cupboard.findOneAndUpdate(
     {"owner": req._params.userid},
-    {$pull: {'contents': {ingredient: ObjectId(req.body.item._id)}}},
+    {$pull: {'contents': {_id: new ObjectId(req.params.itemid)}}},
     {safe: true},
-    function(err, item){
-      console.log(err, item);
+    function(err, cupboard){
+      console.log(err, cupboard);
       if(err){
         handleError(res, err);
       }
-      if(!item){
-        return res.status(404).json({message: req.body.item.name + " not found in cupboard"});
+      if(!cupboard){
+        return res.status(404).json({message: req.params.itemid + " not found in cupboard"});
       }
-      return res.status(200).json(item);
+      return res.status(200).json(cupboard);
     }
   );
 };

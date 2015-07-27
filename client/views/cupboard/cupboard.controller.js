@@ -17,8 +17,19 @@ CupboardCtrl.$inject = ['Cupboard', 'Auth', '$q'];
       vm.items = data.contents;
     });
 
+    function remove(item){
+      Cupboard.remove(item)
+    }
+
+    function toggleEdit(){
+      vm.editing = !vm.editing;
+    }
+
     angular.extend(vm, {
-      name: 'CupboardCtrl'
+      name: 'CupboardCtrl',
+      editing: false,
+      remove: remove,
+      toggleEdit: toggleEdit
     });
 
   }
