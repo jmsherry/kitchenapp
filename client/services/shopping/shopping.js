@@ -212,7 +212,7 @@
         this.$q.when(shopping, function (data) {
             var items = data.contents;
             items.push(item);
-            self.setShopping(data);
+            //self.setShopping(data);
             self.toastr.success(item.ingredient.name + ' has been added to your shopping');
         });
 
@@ -244,7 +244,7 @@
         this.$q.when(shopping, function (data) {
             var items = data.contents;
             items.splice(items.indexOf(item), 1);
-            self.setShopping(data);
+            //self.setShopping(data);
             self.toastr.success(item.ingredient.name + ' has been removed from your shopping');
         });
 
@@ -262,7 +262,8 @@
         var self = this,
             user = self.Auth.getUser(); //add budgeting logic next
             console.log('buying', item);
-        self.Cupboard.add(item);
+        self.Cupboard.add(item.ingredient);
+        self.remove(item);
     };
 
 }());

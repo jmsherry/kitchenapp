@@ -175,7 +175,7 @@
       this.$q.when(cupboard, function (data) {
         var items = data.contents;
         items.push(item);
-        self.setCupboard(data);
+        //self.setCupboard(data);
         self.toastr.success(item.ingredient.name + ' has been added to your cupboard');
       });
     };
@@ -200,7 +200,7 @@
       this.$q.when(cupboard, function (data) {
 	      var items = data.contents;
         items.splice(items.indexOf(item), 1);
-        self.setCupboard(data);
+        //self.setCupboard(data);
         self.toastr.success(item.ingredient.name + ' has been removed from your cupboard');
       });
     };
