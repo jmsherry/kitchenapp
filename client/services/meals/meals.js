@@ -22,8 +22,9 @@ angular.module('kitchenapp')
 
             function successCB(data){
               console.log('in successCB', arguments);
-              var completeMeals = _.filter(data, {isComplete: true}),
-              pendingMeals = _.filter(data, {isComplete: false});
+
+              var meals = data.contents, completeMeals = _.filter(meals, {isComplete: true}),
+              pendingMeals = _.filter(meals, {isComplete: false});
               data = {
                 complete: completeMeals,
                 pending: pendingMeals
@@ -92,8 +93,6 @@ angular.module('kitchenapp')
           console.log('Ingredients for new meal', ingredients);
 
           mealObj = angular.extend(mealObj, {
-            id: null,
-            _id: null,
             isComplete: false,
             ingredients: ingredients,
             sheduledDate: null,
