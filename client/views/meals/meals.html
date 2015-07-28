@@ -18,7 +18,7 @@
 					<a href="#">{{meal.name}}</a>
 					<p>Missing ingredients:</p>
 					<ul>
-	         <li ng-repeat="ing in meal.ingredients">
+	         <li ng-repeat="ing in meal.ingredients.missing">
 	           {{ing.name}}
 	         </li>
 	       </ul>
