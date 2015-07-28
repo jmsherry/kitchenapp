@@ -37,7 +37,8 @@ angular.module('kitchenapp', [
     });
 
     angular.extend(toastrConfig, {
-      timeOut: 1500
+      timeOut: 1500,
+      positionClass: 'toast-bottom-right'
     });
 
   })
