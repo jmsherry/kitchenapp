@@ -15,12 +15,8 @@ angular.module('kitchenapp', [
   'ui.grid.selection',
   'mwl.calendar',
   'ui.bootstrap',
-  'restangular',
   'ui.gravatar',
-  'toastr',
-  'formly',
-  'formlyBootstrap'//,
-  //'angularjs-dropdown-multiselect'
+  'toastr'
 ])
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, calendarConfigProvider, toastrConfig) {
 
