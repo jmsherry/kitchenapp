@@ -18,8 +18,8 @@ MealsCtrl.$inject = ['$scope', 'Meals', 'Auth', 'Recipes', '$modal', '$window', 
     console.log('meals', meals);
     //	console.log(recipes);
 
-    $q.when(recipes, function(newData){
-    	vm.recipes = newData;
+    $q.when(recipes, function(data){
+    	vm.recipes = data;
     });
 
     $q.when(meals, function(data){
@@ -29,14 +29,21 @@ MealsCtrl.$inject = ['$scope', 'Meals', 'Auth', 'Recipes', '$modal', '$window', 
 
 
     function createMeal(){
+      console.log(vm.chosenRecipe);
     	Meals.create(vm.chosenRecipe);
     	vm.chosenRecipe = "";
+    }
+
+    function removeMeal(id){
+      console.log('removeMeal', id);
+      Meals.remove(id);
     }
 
 
     angular.extend(vm, {
       name: 'MealsCtrl',
       createMeal: createMeal,
+      removeMeal: removeMeal,
       recipes: recipes,
       chosenRecipe: chosenRecipe
     });

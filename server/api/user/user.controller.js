@@ -5,7 +5,7 @@ var jwt = require('jsonwebtoken');
 var User = require('./user.model');
 var Cupboard = require('./../cupboard/cupboard.model');
 var Shopping = require('./../shopping/shopping.model');
-var Meals = require('./../meal/mealsList.model');
+var Meals = require('./../meal/meal.model');
 
 function handleError (res, err) {
   return res.status(500).send(err);

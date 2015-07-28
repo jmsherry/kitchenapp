@@ -146,33 +146,36 @@
     };
 
 
-    Cupboard.prototype.process = function process (idsArray) {
+    Cupboard.prototype.process = function process(idsArray) {
         var self = this,
+        deferred = self.$q.defer(),
             presentIngredients = [],
             missingIngredients = [],
             cupboard = self.getCupboard();
 
-        _.forEach(idsArray, function(thisIngID) {
-            if (cupboard.contents.indexOf(thisIngID) === -1) {
-                missingIngredients.push(thisIngID);
-            } else {
-                presentIngredients.push(thisIngID);
-            }
+        self.$q.when(cupboard, function(data){
+          _.forEach(idsArray, function(thisIngID) {
+              if (data.contents.indexOf(thisIngID) === -1) {
+                  missingIngredients.push(thisIngID);
+              } else {
+                  presentIngredients.push(thisIngID);
+              }
+          });
+
+          deferred.resolve({
+            present: presentIngredients,
+            missing: missingIngredients
+          });
+
         });
-
-
-        return {
-          present: presentIngredients,
-          missing: missingIngredients
-        };
-
+        return deferred.promise;
     };
 
     Cupboard.prototype.addLocal = function addLocal(item){
       var self = this, cupboard;
 
       cupboard = self.getCupboard();
-      this.$q.when(cupboard, function (data) {
+      self.$q.when(cupboard, function (data) {
         var items = data.contents;
         items.push(item);
         //self.setCupboard(data);
@@ -197,7 +200,7 @@
       var self = this, cupboard;
 
       cupboard = self.getCupboard();
-      this.$q.when(cupboard, function (data) {
+      self.$q.when(cupboard, function (data) {
 	      var items = data.contents;
         items.splice(items.indexOf(item), 1);
         //self.setCupboard(data);

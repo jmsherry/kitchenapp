@@ -16,6 +16,12 @@
 			<ul class="list-unstyled">
 				<li ng-repeat="meal in vm.pendingMeals" class="meal">
 					<a href="#">{{meal.name}}</a>
+					<p>Missing ingredients:</p>
+					<ul>
+	         <li ng-repeat="ing in meal.ingredients">
+	           {{ing.name}}
+	         </li>
+	       </ul>
 				</li>
 			</ul>
 		</div>
