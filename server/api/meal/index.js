@@ -6,9 +6,9 @@ var controller = require('./meal.controller');
 
 
 router.get('/', controller.getMeals);
-router.get('/:itemid', controller.getMeal);
+router.get('/:mealid', controller.getMeal);
 router.post('/', controller.addToMeals);
-router.put('/:itemid', controller.updateMeal);
-router.delete('/:itemid', controller.removeFromMeals);
+router.put('/:mealid', controller.updateMeal);
+router.delete('/:mealid', controller.removeFromMeals);
 
 module.exports = router;

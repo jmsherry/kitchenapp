@@ -100,7 +100,7 @@ exports.removeFromMeals = function removeFromMeals(req, res) {
   console.log('in removeFromMeal \nreq.params', req.params, '\nreq._params', req._params, '\nreq.body: ', req.body);
   Meal.findOneAndUpdate(
     {"owner": req._params.userid},
-    {$pull: {'contents': {_id: new ObjectId(req.params.itemid)}}},
+    {$pull: {'contents': {_id: new ObjectId(req.params.mealid)}}},
     {safe: true},
     function(err, meal){
       console.log(err, meal);
@@ -108,7 +108,7 @@ exports.removeFromMeals = function removeFromMeals(req, res) {
         handleError(res, err);
       }
       if(!meal){
-        return res.status(404).json({message: req.params.itemid + " not found in meal"});
+        return res.status(404).json({message: req.params.mealid + " not found in meal"});
       }
       return res.status(200).json(meal);
     }
@@ -127,15 +127,17 @@ exports.getMeal = function getMeal(req, res) {
   console.log('getMealItem req.params', req.params);
   Meal.findOne({
     "owner": req._params.userid
-  }, function(err, cup){
+  }, function(err, ML){
     if(err){
       handleError(res, err);
     }
 
+    var meal = _.find(ML.contents, {_id: req.params.mealid});
+
     if(!cup){
       return res.status(404).json({});
     }
-    return res.status(200).json(item);
+    return res.status(200).json(meal);
   });
 };
 
