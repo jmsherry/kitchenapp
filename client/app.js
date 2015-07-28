@@ -22,7 +22,7 @@ angular.module('kitchenapp', [
   'formlyBootstrap'//,
   //'angularjs-dropdown-multiselect'
 ])
-  .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, calendarConfigProvider) {
+  .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, calendarConfigProvider, toastrConfig) {
 
     $urlRouterProvider.otherwise('/');
     $locationProvider.html5Mode(true);
@@ -34,6 +34,10 @@ angular.module('kitchenapp', [
 
     calendarConfigProvider.configureTitleFormats({
       day: 'ddd D MMM' //this will configure the day view title to be shorter
+    });
+
+    angular.extend(toastrConfig, {
+      timeOut: 1500
     });
 
   })
