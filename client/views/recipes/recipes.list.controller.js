@@ -26,9 +26,9 @@ angular.module('kitchenapp')
 	    	rowTemplate: rowTemplate,
 	    	data: data,
 		    columnDefs: [
-		      { name: 'name', type: 'string' },
-		      { name: 'description', type: 'string' },
-		      { name: 'ingredients', type: 'string' }
+		      { name: 'Name', field: 'name', type: 'string' },
+		      { name: 'Description', field: 'description', type: 'string' },
+		      { name: 'Ingredients', field: 'ingredientString', type: 'string' }
 		    ]
 		};
 
@@ -36,11 +36,14 @@ angular.module('kitchenapp')
 			//console.log(newData[0]);
 
 			_.each(newData, function(recipe){
-				var ingredientsString = "";
-				var ingredientsArray = _.pluck(recipe.ingredients, 'name');
+				var ingredientsString = "", ingredientsArray;
+        if(typeof recipe.ingredients[0] === 'string'){
+          recipe.ingredients = Ingredients.populate(recipe.ingredients);
+        }
+				ingredientsArray = _.pluck(recipe.ingredients, 'name');
 				ingredientsString = ingredientsArray.join(", ");
 				console.log(ingredientsString);
-				recipe.ingredients = ingredientsString;
+				recipe.ingredientString = ingredientsString;
 			});
 
 			$scope.gridOptions.data = newData;
