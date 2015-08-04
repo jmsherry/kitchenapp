@@ -3,20 +3,26 @@
 angular.module('kitchenapp')
   .controller('FoodCalendarCtrl', FoodCalendarCtrl);
 
-  FoodCalendarCtrl.$inject = ['$scope', '$modal', 'Meals', 'Auth'];
+  FoodCalendarCtrl.$inject = ['$scope', '$modal', 'Meals', 'Auth', '$log', '$q'];
 
 
-  function FoodCalendarCtrl($scope, $modal, Meals, Auth) {
+  function FoodCalendarCtrl($scope, $modal, Meals, Auth, $log, $q) {
 
   Auth.checkAuthorised();
 
-	var meals = Meals.get(),
-	completeMeals = _.filter(meals, 'starts_at', ''),
-	placedMeals = _.reject(meals, 'starts_at', '');
+	var meals, completeMeals, placedMeals;
 
-	console.log("meals: ", meals);
-	console.log("completeMeals: ", completeMeals);
-	console.log("placedMeals: ", placedMeals);
+  meals = Meals.get();
+  $q.when(meals, function(data){
+    var mls = data.complete;
+    completeMeals = _.filter(mls, 'starts_at', ''),
+    placedMeals = _.reject(mls, 'starts_at', '');
+
+
+  	$log.log("meals data: ", data);
+    $log.log("mls", mls);
+  	$log.log("completeMeals: ", completeMeals);
+  	$log.log("placedMeals: ", placedMeals);
 
     //These variables MUST be set as a minimum for the calendar to work
     $scope.calendarView = 'month';
@@ -28,7 +34,7 @@ angular.module('kitchenapp')
 
     function showModal(action, event) {
       $modal.open({
-        templateUrl: 'views/meals/food-calendar-modal.html',
+        templateUrl: './views/meals/food-calendar-modal.html',
         controller: function($scope, $modalInstance) {
           $scope.$modalInstance = $modalInstance;
           $scope.action = action;
@@ -38,8 +44,9 @@ angular.module('kitchenapp')
     }
 
     $scope.eventClicked = function() {
-    	console.log('event clicked');
-      showModal('Clicked', event);
+    	$log.log('event clicked');
+      $log.log($event);
+      //showModal('Clicked', event);
       $event.preventDefault();
       $event.stopPropagation();
     };
@@ -52,13 +59,13 @@ angular.module('kitchenapp')
       showModal('Deleted', event);
     };
 
-    $scope.calclickalert = function(){
-    	console.log('day clicked');
-    	console.log(arguments);
-    	showModal('Clicked', event);
-      // $event.preventDefault();
-      // $event.stopPropagation();
-    };
+    // $scope.calclickalert = function(){
+    // 	$log.log('day clicked');
+    // 	$log.log(arguments);
+    // 	showModal('Clicked', event);
+    //   // $event.preventDefault();
+    //   // $event.stopPropagation();
+    // };
 
     $scope.setCalendarToToday = function() {
       $scope.calendarDay = new Date();
@@ -70,6 +77,6 @@ angular.module('kitchenapp')
 
       event[field] = !event[field];
     };
-console.log($scope);
 
+});
   }
