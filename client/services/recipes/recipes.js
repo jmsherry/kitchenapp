@@ -12,7 +12,7 @@ angular.module('kitchenapp')
         _resource = $resource('/api/recipes');
 
          function init() {
-          console.log('firing init');
+          console.log('recipes init');
           var $deferred = $q.defer();
           _recipes = $deferred.promise;
 
