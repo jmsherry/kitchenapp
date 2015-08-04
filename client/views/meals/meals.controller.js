@@ -3,9 +3,9 @@
 angular.module('kitchenapp')
   .controller('MealsCtrl', MealsCtrl);
 
-MealsCtrl.$inject = ['$scope', 'Meals', 'Auth', 'Recipes', '$modal', '$window', '$q'];
+MealsCtrl.$inject = ['$scope', 'Meals', 'Auth', 'Recipes', '$modal', '$window', '$q', '$log'];
 
-  function MealsCtrl($scope, Meals, Auth, Recipes, $modal, $window, $q) {
+  function MealsCtrl($scope, Meals, Auth, Recipes, $modal, $window, $q, $log) {
 
   	Auth.checkAuthorised();
 
@@ -15,14 +15,14 @@ MealsCtrl.$inject = ['$scope', 'Meals', 'Auth', 'Recipes', '$modal', '$window', 
     recipes = Recipes.get(),
     chosenRecipe = "";
 
-    console.log('meals', meals);
-    //	console.log(recipes);
 
     $q.when(recipes, function(data){
+      $log.log('recipes', data);
     	vm.recipes = data;
     });
 
     $q.when(meals, function(data){
+      $log.log('meals', data);
       vm.completeMeals = data.complete;
       vm.pendingMeals = data.pending;
     });
@@ -34,9 +34,13 @@ MealsCtrl.$inject = ['$scope', 'Meals', 'Auth', 'Recipes', '$modal', '$window', 
     	vm.chosenRecipe = "";
     }
 
-    function removeMeal(id){
-      console.log('removeMeal', id);
-      Meals.remove(id);
+    function removeMeal(meal){
+      console.log('removeMeal', meal);
+      Meals.remove(meal);
+    }
+
+    function placeMeal(meal){
+      console.log('placeMeal', meal);
     }
 
 
@@ -44,6 +48,7 @@ MealsCtrl.$inject = ['$scope', 'Meals', 'Auth', 'Recipes', '$modal', '$window', 
       name: 'MealsCtrl',
       createMeal: createMeal,
       removeMeal: removeMeal,
+      placeMeal: placeMeal,
       recipes: recipes,
       chosenRecipe: chosenRecipe
     });

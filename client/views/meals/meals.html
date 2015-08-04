@@ -3,11 +3,17 @@
   		<h1>My Meals</h1>
   	</div>
 	<div class="meals-list inventory">
-		<div class="achieved-meals">
+		<div class="achieved-meals bg-success">
 			<h3>Complete Meals</h3>
 			<ul class="list-unstyled">
-				<li ng-repeat="meal in vm.completeMeals" class="meal bg-success">
-					<a href="#">{{meal.name}}</a>
+				<li ng-repeat="meal in vm.completeMeals" class="meal row">
+					<div class="col-md-2">
+							<button class="btn btn-danger pull-left" ng-click="vm.removeMeal(meal)">Remove</a>
+					</div>
+					<div class="col-md-8"><h4>{{meal.name}}</h4></div>
+					<div class="col-md-2">
+ 						 <button class="btn btn-primary pull-right" ng-click="vm.placeMeal(meal)">Place</a>
+ 				 </div>
 				</li>
 			</ul>
 		</div>
@@ -15,13 +21,18 @@
 			<h3>Pending Meals</h3>
 			<ul class="list-unstyled">
 				<li ng-repeat="meal in vm.pendingMeals" class="meal">
-					<a href="#">{{meal.name}}</a>
-					<p>Missing ingredients:</p>
-					<ul>
-	         <li ng-repeat="ing in meal.ingredients.missing">
-	           {{ing.name}}
-	         </li>
+					<div class="col-md-2">
+							<button class="btn btn-danger pull-left" ng-click="vm.removeMeal(meal)">Remove</a>
+					</div>
+					<div class="col-md-8">
+					<h4>{{meal.name}}</h4>
+					<p class="list-intro-inline">Missing ingredients:</p>
+					<ul class="inline-list ingredients-list">
+	         <li ng-repeat="ing in meal.ingredients.missing">{{ing.name}}</li>
 	       </ul>
+				 </div>
+				 <div class="col-md-2">
+				 </div>
 				</li>
 			</ul>
 		</div>
