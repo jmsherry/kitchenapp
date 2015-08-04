@@ -5,8 +5,9 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var ObjectId = mongoose.Types.ObjectId;
 var User = require('./../user/user.model');
-var Meal = require('./meal.model');
+var MealsList = require('./meal.model');
 var MealItem = require('./mealItem.model');
+var _ = require('lodash');
 
 function handleError (res, err) {
   console.log(err);
@@ -27,7 +28,7 @@ exports.addToMeals = function addToMeals(req, res) {
 
   console.log('item: ', item);
 
-  Meal.findOneAndUpdate(
+  MealsList.findOneAndUpdate(
     {"owner": req._params.userid},
     {$push: {'contents': item}},
     {safe: false, upsert: true},
@@ -50,11 +51,11 @@ exports.addToMeals = function addToMeals(req, res) {
  * @param res
  */
 exports.getMeals = function getMeals(req, res) {
-  console.log('in getMeal \nreq.params', req.params, '\nreq._params', req._params,  '\nreq.body: ', req.body);
-  Meal.find(
+  console.log('in getMeals \nreq.params', req.params, '\nreq._params', req._params,  '\nreq.body: ', req.body);
+  MealsList.findOne(
     {'owner': req._params.userid},
   function(err, meals){
-    console.log('in getMeal results', err, meals);
+    console.log('in getMeals results', err, meals);
     if(err){
       handleError(res, err);
     }
@@ -75,32 +76,42 @@ exports.updateMeal = function updateMeal(req, res) {
 
   console.log('in updateMeal \nreq.params', req.params, '\nreq._params', req._params,  '\nreq.body: ', req.body);
 
-  Meal.findOneAndUpdate(
+  MealsList.findOne(
     {"owner": req._params.userid},
-    {$push: {'contents': req.body.item}},
-    {safe: true, upsert: true},
-    function(err, meal){
-      console.log('in updateMeal results', err, meal);
+    function(err, ML){
+      console.log('in updateMeal results', err, ML, req.body, req._params, req.params);
       if(err){
         handleError(res, err);
       }
-      return res.status(200).json(meal);
+      if(!ML){
+        return res.status(404).json({msg: "No meal list found to update"});
+      }
+      var meal = req.body;
+      meal = _.find(ML.contents, {"_id": ObjectId(req.params.mealid)});
+      if(!meal){
+        return res.status(404).json({msg: "No meal found to update"});
+      }
+      meal = req.body;
+      ML.save(function(){
+        return res.status(200).json(meal);
+      });
+
     }
   );
 
 };
 
 /**
- * Removes an ingredient from the user's meal.
+ * Removes an ingredient from the user's meal. new KEYWORD REMOVED BEFORE ObjectId
  *
  * @param req
  * @param res
  */
 exports.removeFromMeals = function removeFromMeals(req, res) {
   console.log('in removeFromMeal \nreq.params', req.params, '\nreq._params', req._params, '\nreq.body: ', req.body);
-  Meal.findOneAndUpdate(
+  MealsList.findOneAndUpdate(
     {"owner": req._params.userid},
-    {$pull: {'contents': {_id: new ObjectId(req.params.mealid)}}},
+    {$pull: {'contents': {"_id": ObjectId(req.params.mealid)}}},
     {safe: true},
     function(err, meal){
       console.log(err, meal);
@@ -125,7 +136,7 @@ exports.removeFromMeals = function removeFromMeals(req, res) {
  */
 exports.getMeal = function getMeal(req, res) {
   console.log('getMealItem req.params', req.params);
-  Meal.findOne({
+  MealsList.findOne({
     "owner": req._params.userid
   }, function(err, ML){
     if(err){

@@ -5,7 +5,7 @@ var Schema = mongoose.Schema;
 //var MealItemSchema = require('./cupboardItem.model.js');
 var ObjectId = Schema.ObjectId;
 
-var MealSchema = new Schema({
+var MealsListSchema = new Schema({
   owner: {type: ObjectId, ref: 'User'},
   contents: []
 });
@@ -19,7 +19,7 @@ var MealSchema = new Schema({
  * Validations
  */
 
-// MealSchema
+// MealsListSchema
 //   .path('title')
 //   .validate(function (value, respond) {
 //     var self = this;
@@ -37,8 +37,8 @@ var MealSchema = new Schema({
  * Methods
  */
 
-MealSchema.methods = {
+MealsListSchema.methods = {
 
 };
 
-module.exports = mongoose.model('Meal', MealSchema);
+module.exports = mongoose.model('MealsList', MealsListSchema);
