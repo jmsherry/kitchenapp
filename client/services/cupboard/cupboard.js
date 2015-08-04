@@ -79,17 +79,21 @@
      *
      */
     Cupboard.prototype.add = function add(ing) {
-        var self = this, userid;
+        var self = this, userid, $deferred = self.$q.defer();
 
         userid = self.getOwner()._id;
 
         function CBSuccess(ing, item) {
+          var addedLocally;
           item.ingredient = ing;
-          self.addLocal(item)
+          addedLocally = self.addLocal(item);
+          $deferred.resolve(addedLocally)
         }
 
         self.$resource('/api/users/:userid/cupboard', {userid: userid})
         .save({ing: ing}, _.bind(CBSuccess, self, ing));
+
+        return $deferred.promise;
 
     };
 
@@ -146,24 +150,36 @@
     };
 
 
-    Cupboard.prototype.process = function process(idsArray) {
+    Cupboard.prototype.process = function process(ings) {
         var self = this,
         deferred = self.$q.defer(),
-            presentIngredients = [],
+            presentIngredientItems = [],
             missingIngredients = [],
             cupboard = self.getCupboard();
 
         self.$q.when(cupboard, function(data){
-          _.forEach(idsArray, function(thisIngID) {
-              if (data.contents.indexOf(thisIngID) === -1) {
-                  missingIngredients.push(thisIngID);
-              } else {
-                  presentIngredients.push(thisIngID);
+          _.forEach(ings, function(thisIng) {
+              var item, len = data.contents.length, i, thisItem, thisItemIng;
+
+              for(i=0; i < len; i+=1){
+                thisItem = data.contents[i]
+                thisItemIng = thisItem.ingredient;
+                if(thisItemIng._id === thisIng._id){
+                  item = thisItem;
+                  break;
+                }
               }
+
+              if (item) {
+                  presentIngredientItems.push(item);
+              } else {
+                  missingIngredients.push(thisIng);
+              }
+
           });
 
           deferred.resolve({
-            present: presentIngredients,
+            present: presentIngredientItems,
             missing: missingIngredients
           });
 
@@ -175,11 +191,11 @@
       var self = this, cupboard;
 
       cupboard = self.getCupboard();
-      self.$q.when(cupboard, function (data) {
+      self.$q.when(cupboard, function(data) {
         var items = data.contents;
         items.push(item);
-        //self.setCupboard(data);
         self.toastr.success(item.ingredient.name + ' has been added to your cupboard');
+        return item;
       });
     };
 
@@ -203,7 +219,6 @@
       self.$q.when(cupboard, function (data) {
 	      var items = data.contents;
         items.splice(items.indexOf(item), 1);
-        //self.setCupboard(data);
         self.toastr.success(item.ingredient.name + ' has been removed from your cupboard');
       });
     };

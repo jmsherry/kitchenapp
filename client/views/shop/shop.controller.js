@@ -3,9 +3,9 @@
 angular.module('kitchenapp')
   .controller('ShopCtrl', ShopCtrl);
 
-ShopCtrl.$inject = ['Shopping', 'Auth', '$q'];
+ShopCtrl.$inject = ['Shopping', 'Auth', '$q', 'Meals'];
 
-  function ShopCtrl(Shopping, Auth, $q) {
+  function ShopCtrl(Shopping, Auth, $q, Meals) {
 
     Auth.checkAuthorised();
 
@@ -16,7 +16,10 @@ ShopCtrl.$inject = ['Shopping', 'Auth', '$q'];
 
     function buy(item){
       console.log('Buying ', item);
-      Shopping.buy(item);
+      var bought = Shopping.buy(item);
+      $q.when(bought, function(){
+        Meals.reCheckIngredients()
+      });
     }
 
     function remove(item){

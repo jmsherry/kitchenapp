@@ -4,9 +4,9 @@
     angular.module('kitchenapp')
         .service('Shopping', Shopping);
 
-    Shopping.$inject = ['$q', '$resource', 'Auth', 'Ingredients', 'toastr', 'Cupboard'];
+    Shopping.$inject = ['$q', '$resource', 'Auth', 'Ingredients', 'toastr', 'Cupboard', '$log'];
 
-    function Shopping($q, $resource, Auth, Ingredients, toastr, Cupboard) {
+    function Shopping($q, $resource, Auth, Ingredients, toastr, Cupboard, $log) {
 
         this.deferred = $q.defer();
         var _shopping = this.deferred.promise;
@@ -27,6 +27,7 @@
         this.$resource = $resource;
         this.Ingredients = Ingredients;
         this.$q = $q;
+        this.$log = $log;
         this.Cupboard = Cupboard;
         this.Auth = Auth;
 
@@ -42,10 +43,12 @@
      **/
 
     Shopping.prototype.init = function init() {
-        console.log('shopping init')
+
         var self = this,
             user = self.getOwner(),
             shopping;
+
+            self.$log.log('shopping init');
 
         shopping = self.$resource('/api/users/:userid/shopping', {
                 userid: user._id
@@ -116,7 +119,7 @@
      * update
      *
      * @param ingredient item {}
-     * Updates an ingredient in the ingredients user's array
+     * Updates an item in the user's shopping
      *
      */
 
@@ -153,14 +156,16 @@
      */
 
     Shopping.prototype.remove = function remove(item) {
-        console.log('IN Shopping remove: ', item);
+
         var self = this,
             userid;
+
+            self.$log.log('IN Shopping remove: ', item);
 
         userid = self.getOwner()._id;
 
         function CBSuccess() {
-            console.log('removed shopping item, removing locally', item);
+            self.$log.log('removed shopping item, removing locally', item);
             self.removeLocal(item);
         }
 
@@ -241,10 +246,9 @@
 
         shopping = self.getShopping();
 
-        this.$q.when(shopping, function (data) {
+        self.$q.when(shopping, function (data) {
             var items = data.contents;
             items.splice(items.indexOf(item), 1);
-            //self.setShopping(data);
             self.toastr.success(item.ingredient.name + ' has been removed from your shopping');
         });
 
@@ -259,11 +263,24 @@
      *
      */
     Shopping.prototype.buy = function buy(item) {
+
+
         var self = this,
-            user = self.Auth.getUser(); //add budgeting logic next
-            console.log('buying', item);
-        self.Cupboard.add(item.ingredient);
+        $deferred = self.$q.defer(), user, added;
+
+        self.$log.log('buying', item);
+
+        user = self.Auth.getUser(); //add budgeting logic next
         self.remove(item);
+
+        added = self.Cupboard.add(item.ingredient);
+
+        self.$q.when(added, function(data){
+          $deferred.resolve(data);
+        });
+
+
+        return $deferred.promise;
     };
 
 }());
