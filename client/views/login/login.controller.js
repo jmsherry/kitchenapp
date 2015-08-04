@@ -3,9 +3,9 @@
 angular.module('kitchenapp')
   .controller('LoginCtrl', LoginCtrl);
 
-  LoginCtrl.$inject = ['$location', 'Auth'];
+  LoginCtrl.$inject = ['$location', 'Auth', 'toastr'];
 
-  function LoginCtrl($location, Auth) {
+  function LoginCtrl($location, Auth, toastr) {
 console.log(arguments);
     var vm = this;
 
@@ -24,7 +24,8 @@ console.log(arguments);
 
           })
           .catch(function (err) {
-            vm.error = err;
+            //vm.error = err;
+            toastr.error(err.msg);
           });
       }
 
