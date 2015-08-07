@@ -11,7 +11,7 @@
 
   <div class="form-group" ng-class="{ 'has-error' : recipeForm.description.$invalid && !recipeForm.description.$pristine }">
     <label for="recipe_description">Description</label>
-    <textarea name="description" id="recipe_description" placeholder="Add a description" ng-model="vm.newRecipe.description" ng-required="true" ng-minlength="2" ng-maxlength="30"></textarea>
+    <textarea name="description" id="recipe_description" placeholder="Add a description" ng-model="vm.newRecipe.description" ng-required="true" ng-minlength="2" ng-maxlength="50"></textarea>
     <p ng-show="recipeForm.description.$invalid && !recipeForm.description.$pristine" class="help-block">A description is required.</p>
   </div>
 
