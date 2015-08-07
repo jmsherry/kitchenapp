@@ -2,6 +2,6 @@
 
 module.exports = {
   mongo: {
-    uri: 'mongodb://localhost/ka2-dev'
+    uri: 'mongodb://localhost/kitchenapp-dev'
   }
 };
