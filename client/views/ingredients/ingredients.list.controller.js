@@ -11,7 +11,7 @@ function IngredientsCtrl(Ingredients, $scope, $q, $log, uiGridConstants, Shoppin
 	var vm = this, ingredients, rowTemplate, data = [];
 
 		ingredients = Ingredients.get();
-		console.log('list controller ings', ingredients);
+		$log.log('list controller ings', ingredients);
 
 		rowTemplate = '<div ng-class="{ \'my-css-class\': grid.appScope.rowFormatter( row ) }">' +
          '  <div ng-repeat="(colRenderIndex, col) in colContainer.renderedColumns track by col.colDef.name" class="ui-grid-cell" ng-class="{ \'ui-grid-row-header-cell\': col.isRowHeader }"  ui-grid-cell></div>' +
@@ -25,10 +25,10 @@ function IngredientsCtrl(Ingredients, $scope, $q, $log, uiGridConstants, Shoppin
 	    	rowTemplate: rowTemplate,
 	    	data: data,
 		    columnDefs: [
-		      { name: 'name' },
-		      { name: 'price', enableFiltering: false },
-		      { name: 'quantity', enableFiltering: false },
-		      { name: 'description' }]
+		      { name: 'name', field: 'name' },
+		      { name: 'Price', field: 'price', enableFiltering: false, cellFilter : 'currency:"£"' },
+		      { name: 'Quantity', field: 'quantity',enableFiltering: false },
+		      { name: 'Description', field: 'description' }]
 		};
 
     $scope.gridOptions.multiSelect = true;
@@ -48,7 +48,7 @@ function IngredientsCtrl(Ingredients, $scope, $q, $log, uiGridConstants, Shoppin
       });
     };
 
-		console.log(ingredients);
+		$log.log(ingredients);
 
 		$q.when(ingredients, function(newData){
 			$scope.gridOptions.data = newData;
@@ -56,20 +56,20 @@ function IngredientsCtrl(Ingredients, $scope, $q, $log, uiGridConstants, Shoppin
 
     function addToCupboard(e){
       var selectedIngs = $scope.gridApi.selection.getSelectedGridRows();
-      console.log(selectedIngs);
+      $log.log(selectedIngs);
       selectedIngs = _.pluck(selectedIngs, 'entity');
-      console.log(selectedIngs);
+      $log.log(selectedIngs);
       Cupboard.bulkAdd(selectedIngs);
       //Cupboard.add(selectedIngs);
-      console.log(e);
+      $log.log(e);
       $('button').blur();
     }
 
     function addToShopping(){
       var selectedIngs = $scope.gridApi.selection.getSelectedGridRows();
-      console.log(selectedIngs);
+      $log.log(selectedIngs);
       selectedIngs = _.pluck(selectedIngs, 'entity');
-      console.log(selectedIngs);
+      $log.log(selectedIngs);
       Shopping.bulkAdd(selectedIngs);
       //Shopping.add(selectedIngs);
       $('button').blur();
