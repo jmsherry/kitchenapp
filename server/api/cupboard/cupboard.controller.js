@@ -24,7 +24,9 @@ exports.addToCupboard = function addToCupboard(req, res) {
   console.log('in addToCupboard \nreq.params',  req.params, '\nreq._params', req._params,  '\nreq.body: ', req.body);
 
   var item = new CupboardItem({
-    ingredient: req.body.ing._id
+    ingredient: req.body.ing._id,
+    dateAdded: new Date(),
+    reservedFor: null
   });
 
   console.log('item: ', item);

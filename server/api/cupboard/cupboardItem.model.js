@@ -5,7 +5,9 @@ var Schema = mongoose.Schema;
 var ObjectId = Schema.ObjectId;
 
 var CupboardItemSchema = new Schema({
-  ingredient: {type: ObjectId, ref: 'Ingredient'}
+  ingredient: {type: ObjectId, ref: 'Ingredient'},
+  dateAdded: Date,
+  reservedFor: {type: ObjectId, ref: 'Meal'}
 });
 
 /**
@@ -29,7 +31,7 @@ var CupboardItemSchema = new Schema({
 //       }
 //       respond(true);
 //     });
-//   }, 'ingredient already present');
+//   }, 'Cupboard item already present');
 
 /**
  * Methods

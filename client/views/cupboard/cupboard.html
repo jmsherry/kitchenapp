@@ -12,7 +12,10 @@
 	<div class="col-md-12">
   	<ul class="list-unstyled cupboardList">
   		<li ng-repeat="item in vm.items track by $index">
-				<div ng-class="vm.editing ? 'col-md-10 description' : 'col-md-12 description'">{{item.ingredient.name}}</div>
+				<div ng-class="vm.editing ? 'col-md-10 description' : 'col-md-12 description'">
+					<h2>{{item.ingredient.name}}</h2>
+					<p>Reserved for meal: {{item.reservedFor.name}} <span ng-if="item.reservedFor.date"> on {{item.reservedFor.date}}</span>. Added {{item.dateAdded}}</p>
+				</div>
 				<div class="col-md-2 actions" ng-if="vm.editing">
 					<button type="button" class="btn btn-danger" ng-click="vm.remove(item)">Remove</button>
 				</div>
