@@ -27,11 +27,11 @@ module.exports = function (done) {
         .pipe(jshint(conf))
         .pipe(jshint.reporter('jshint-stylish'))
         .on('finish', function () {
-          gulp.src(paths)
-            .pipe(jscs())
-            .on('error', function () {})
-            .pipe(jscsStylish())
-            .on('end', done);
+          // gulp.src(paths)
+          //   .pipe(jscs())
+          //   .on('error', function () {})
+          //   .pipe(jscsStylish())
+          //   .on('end', done);
         });
     };
   }

@@ -47,6 +47,12 @@ gulp.task('clean:finish', function (done) {
 gulp.task('copy:dist', function () {
   var main = gulp.src(['server/**/*', 'package.json'], { base: './' });
   var assets = gulp.src('client/assets/**/*', { base: './' });
+  var uiGridFonts  = gulp.src([
+    'client/bower_components/angular-ui-grid/*.eot',
+    'client/bower_components/angular-ui-grid/*.svg',
+    'client/bower_components/angular-ui-grid/*.ttf',
+    'client/bower_components/angular-ui-grid/*.woff'
+    ], { base: './' }).pipe(gulp.dest('dist/'));
 
   return sq({ objectMode: true }, main, assets)
     .pipe(gulp.dest('dist/'));
@@ -70,13 +76,13 @@ gulp.task('scripts', function () {
   var views = gulp.src('client/views/**/*.html')
     .pipe(angularTemplatecache({
       root: 'views',
-      module: 'ka2'
+      module: 'kitchenapp'
     }));
 
   var tpls = gulp.src('client/directives/**/*.html')
     .pipe(angularTemplatecache({
       root: 'directives',
-      module: 'ka2'
+      module: 'kitchenapp'
     }));
 
   var app = gulp.src('dist/client/app.js');
