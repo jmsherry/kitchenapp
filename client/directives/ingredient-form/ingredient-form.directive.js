@@ -5,6 +5,6 @@ angular.module('kitchenapp')
     return {
       restrict: 'E',
       replace:true,
-      templateUrl: 'directives/ingredient-form/ingredient-form.html',
+      templateUrl: 'directives/ingredient-form/ingredient-form.html'
     };
   });
