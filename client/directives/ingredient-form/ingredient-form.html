@@ -1,21 +1,21 @@
-<form ng-submit="vm.addIngredient(this)" novalidate  name="ingredientForm">
+<form ng-submit="vm.addIngredient(this)" novalidate name="ingredientForm">
 
   <div class="form-group" ng-class="{ 'has-error' : ingredientForm.name.$invalid && !ingredientForm.name.$pristine }">
   	<label for="ingredient_name">Name</label>
-  	<input type="text" name="name" id="ingredient_name" placeholder="Give it a name" ng-model="vm.newIngredient.name" ng-required="true" ng-minlength="2" ng-maxlength="30">
+  	<input type="text" name="name" id="ingredient_name" placeholder="Give it a name" ng-model="vm.newIngredient.name" ng-required="true" ng-minlength="2" ng-maxlength="30" ng-trim="true">
     <p ng-show="ingredientForm.name.$invalid && !ingredientForm.name.$pristine" class="help-block">Your name is required.</p>
     </div>
   </div>
 
   <div class="form-group" ng-class="{ 'has-error' : ingredientForm.description.$invalid && !ingredientForm.description.$pristine }">
   	<label for="ingredient_description">Description</label>
-  	<textarea name="description" id="ingredient_description" placeholder="Add a description" ng-model="vm.newIngredient.description" ng-required="true" ng-minlength="2" ng-maxlength="100"></textarea>
+  	<textarea name="description" id="ingredient_description" placeholder="Add a description" ng-model="vm.newIngredient.description" ng-required="true" ng-minlength="2" ng-maxlength="100" ng-trim="true"></textarea>
     <p ng-show="ingredientForm.description.$invalid && !ingredientForm.description.$pristine" class="help-block">A description is required.</p>
   </div>
 
   <div class="form-group" ng-class="{ 'has-error' : ingredientForm.mg_url.$invalid && !ingredientForm.mg_url.$pristine }">
     <label for="ingredient_img_url">Image URL</label>
-    <input type="url" id="ingredient_img_url" name="img_url" placeholder="Provide a link to an image of the ingredient" ng-model="vm.newIngredient.imageURL">
+    <input type="url" id="ingredient_img_url" name="img_url" placeholder="Provide a link to an image of the ingredient" ng-model="vm.newIngredient.imageURL" ng-trim="true">
     <p ng-show="ingredientForm.mg_url.$invalid && !ingredientForm.mg_url.$pristine" class="help-block">Incorrect URL format.</p>
   </div>
 
@@ -25,8 +25,8 @@
 
     <div class="horizontal-input-group">
       <label for="ingredient_price_pounds">&pound;</span> </label>
-      <input type="number" name="pounds" id="ingredient_price_pounds" placeholder="How much is it? &pound;&apos;s" ng-model="vm.newIngredient.pounds" ng-required="true" maxlength="5" ng-maxlength="5" ng-keyup="vm.handlePrice(event)">
-      <input type="number" name="pence" id="ingredient_price_pence" placeholder="pence" ng-model="vm.newIngredient.pence" ng-required="true" maxlength="2" ng-maxlength="2" ng-keyup="vm.handlePrice(event)">
+      <input type="number" name="pounds" id="ingredient_price_pounds" placeholder="How much is it? &pound;&apos;s" ng-model="vm.newIngredient.pounds" ng-required="true" ng-maxlength="5" ng-keyup="vm.handlePrice(event)" numbersOnly>
+      <input type="number" name="pence" id="ingredient_price_pence" placeholder="pence" ng-model="vm.newIngredient.pence" ng-required="true" maxlength="2" ng-maxlength="2" ng-keyup="vm.handlePrice(event)" numbersOnly>
       <label for="ingredient_price_pence"><abbr title="pence">p</abbr></label>
     </div>
 
@@ -35,7 +35,7 @@
 
   <div class="form-group" ng-class="{ 'has-error' : ingredientForm.quantity.$invalid && !ingredientForm.quantity.$pristine }">
     <label for="ingredient_quantity">Quantity (in servings or grams)</label>
-    <input type="text" name="quantity" id="ingredient_quantity" placeholder="What quantity does it come in?" ng-model="vm.newIngredient.quantity" ng-required="true"  ng-maxlength="10">
+    <input type="text" name="quantity" id="ingredient_quantity" placeholder="What quantity does it come in?" ng-model="vm.newIngredient.quantity" ng-required="true"  ng-maxlength="10" ng-trim="true">
     <p ng-show="ingredientForm.quantity.$invalid && !ingredientForm.quantity.$pristine" class="help-block">A quantity is required.</p>
   </div>
 
