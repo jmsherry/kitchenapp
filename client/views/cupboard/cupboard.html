@@ -2,9 +2,16 @@
 	<div class="col-md-12">
 		<h1>My Cupboard</h1>
 	</div>
-	<div class="col-md-12">
+	<div ng-class="vm.items.length > 0 ? 'col-md-6' : 'col-md-12'">
 		<button type="button" class="btn btn-warning" ng-if="!vm.editing  && vm.items.length > 0" ng-click="vm.toggleEdit()">Remove spolied or lost items</button>
 		<button type="button" class="btn btn-info" ng-if="vm.editing  && vm.items.length > 0" ng-click="vm.toggleEdit()">Finish editing</button>
+	</div>
+	<div ng-if="vm.items.length > 0" class="col-md-6">
+		<div class="pull-right">
+			<button type="button" class="btn btn-primary" ng-click="vm.sortBy('name')">Sort by Name</button>
+			<button type="button" class="btn btn-primary" ng-click="vm.sortBy('dateAdded')">Sort by Date</button>
+			<button type="button" class="btn btn-primary" ng-click="vm.sortBy('reservation')">Sort by Reservation</button>
+		</div>
 	</div>
 	<div class="col-md-12">
 	<p ng-if="!vm.items.length > 0">Your cupboard is empty!! Go to <a ui-sref="ingredients">ingredients</a> to register ingredients or <a ui-sref="shop">shop</a> to buy more.</p>
@@ -14,7 +21,7 @@
   		<li ng-repeat="item in vm.items track by $index">
 				<div ng-class="vm.editing ? 'col-md-10 description' : 'col-md-12 description'">
 					<h2>{{item.ingredient.name}}</h2>
-					<p>Reserved for meal: {{item.reservedFor.name}} <span ng-if="item.reservedFor.date"> on {{item.reservedFor.date}}</span>. Added {{item.dateAdded}}</p>
+					<p><span ng-if="item.reservedFor">Reserved for meal: {{item.reservedFor.name}}  on {{item.reservedFor.date | date : 'd MMMM y' : GMT}}.</span> Added: {{item.dateAdded  | date : 'd MMMM y' : GMT}}</p>
 				</div>
 				<div class="col-md-2 actions" ng-if="vm.editing">
 					<button type="button" class="btn btn-danger" ng-click="vm.remove(item)">Remove</button>

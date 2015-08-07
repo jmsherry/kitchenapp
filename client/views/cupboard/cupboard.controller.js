@@ -3,9 +3,9 @@
 angular.module('kitchenapp')
   .controller('CupboardCtrl', CupboardCtrl);
 
-CupboardCtrl.$inject = ['Cupboard', 'Auth', '$q'];
+CupboardCtrl.$inject = ['Cupboard', 'Auth', '$q', '$filter'];
 
-  function CupboardCtrl(Cupboard, Auth, $q) {
+  function CupboardCtrl(Cupboard, Auth, $q, $filter) {
 
   	Auth.checkAuthorised();
 
@@ -25,11 +25,35 @@ CupboardCtrl.$inject = ['Cupboard', 'Auth', '$q'];
       vm.editing = !vm.editing;
     }
 
+    function sortBy(predicate){
+
+      switch (predicate) {
+        case 'name':
+          vm.items = _.sortByOrder(vm.items, ['item.ingredient.name'], ['asc']);
+          break;
+        case 'dateAdded':
+          vm.items = _.sortByOrder(vm.items, ['item.dateAdded'], [ 'asc']);
+          break;
+        case 'reservation':
+          vm.items = _.sortByOrder(vm.items, ['reservedFor.date'], ['asc']);
+          break;
+        default:
+          $filter('orderBy')(vm.items, 'dateAdded', false);
+          break;
+      }
+
+      vm.predicate = predicate;
+
+    }
+
     angular.extend(vm, {
       name: 'CupboardCtrl',
       editing: false,
       remove: remove,
-      toggleEdit: toggleEdit
+      toggleEdit: toggleEdit,
+      sortBy: sortBy,
+      predicate: '',
+      reverse: false
     });
 
   }
