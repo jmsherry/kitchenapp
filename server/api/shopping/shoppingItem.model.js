@@ -5,7 +5,8 @@ var Schema = mongoose.Schema;
 var ObjectId = Schema.ObjectId;
 
 var ShoppingItemSchema = new Schema({
-  ingredient: {type: ObjectId, ref: 'Ingredient'}
+  ingredient: {type: ObjectId, ref: 'Ingredient'},
+  reservedFor: {type: ObjectId, ref: 'MealItem'}
 });
 
 /**
