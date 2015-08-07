@@ -20,18 +20,21 @@ exports.addToShoppingList = function addToShoppingList(req, res) {
   console.log('in addToShoppingList \nreq.params', req.params, '\nreq.body: ', req.body);
 
   var item = new ShoppingItem({
-    ingredient: req.body.ing._id
+    ingredient: req.body.ing,
+    reservedFor: req.body.reservedFor
   });
 
 	ShoppingList.findOneAndUpdate(
     {"owner": req._params.userid},
     {$push: {'contents': item}},
-    {safe: true, upsert: true, multi: true},
+    {safe: true, upsert: true},
     function(err, SL){
       console.log('addToShoppingList results', arguments);
       if(err){
         handleError(res, err);
       }
+
+      console.log('addToShoppingList new item', item);
       return res.status(201).json(item);
     }
   );

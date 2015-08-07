@@ -10,7 +10,8 @@ ShopCtrl.$inject = ['Shopping', 'Auth', '$q', 'Meals'];
     Auth.checkAuthorised();
 
     var vm = this,
-    items = Shopping.get();
+    items = Shopping.get(),
+    meals = Meals.get();
 
     console.log(items);
 
@@ -18,7 +19,7 @@ ShopCtrl.$inject = ['Shopping', 'Auth', '$q', 'Meals'];
       console.log('Buying ', item);
       var bought = Shopping.buy(item);
       $q.when(bought, function(){
-        Meals.reCheckIngredients()
+        Meals.reCheckIngredients();
       });
     }
 
@@ -28,7 +29,15 @@ ShopCtrl.$inject = ['Shopping', 'Auth', '$q', 'Meals'];
     }
 
     $q.when(items, function(data){
-      vm.items = data.contents;
+      $q.when(meals, function(mls){
+        var item, len = data.contents.length, i;
+        mls = mls.pending.concat(mls.complete);
+        for(i = 0; i < len; i+=1){
+          item = data.contents[i];
+          item.reservedFor = _.find(mls, {_id: item.reservedFor});
+        }
+        vm.items = data.contents
+      });
     });
 
     angular.extend(vm, {

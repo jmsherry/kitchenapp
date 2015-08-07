@@ -6,7 +6,10 @@
 	<p ng-if="!vm.items.length">You have no items on your list. Add <a ui-sref="meals">meals</a> to generate a shopping list.</p>
   	<ul class="list-unstyled shoppingList">
   		<li ng-repeat="item in vm.items track by $index">
-  			<div class="col-md-10 description">{{item.ingredient.name}}</div>
+  			<div class="col-md-10 description">
+					<h2>{{item.ingredient.name}}</h2>
+					<p ng-if="item.reservedFor">Reserved for <span class="text-info">{{item.reservedFor.name}}</span></p>
+				</div>
   			<div class="col-md-2 actions">
   				<button type="button" class="btn btn-primary" ng-click="vm.buy(item)">Buy</button>
 					<button type="button" class="btn btn-danger" ng-click="vm.remove(item)">Remove</button>
