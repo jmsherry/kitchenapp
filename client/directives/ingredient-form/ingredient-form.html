@@ -19,14 +19,22 @@
     <p ng-show="ingredientForm.mg_url.$invalid && !ingredientForm.mg_url.$pristine" class="help-block">Incorrect URL format.</p>
   </div>
 
-  <div class="form-group" ng-class="{ 'has-error' : ingredientForm.price.$invalid && !ingredientForm.price.$pristine }">
-    <label for="ingredient_price">Price (in &pound;&apos;s)</label>
-    <input type="text" name="price" id="ingredient_price" placeholder="How much is it?" ng-model="vm.newIngredient.price" ng-required="true" ng-minlength="2" ng-maxlength="5">
+  <div class="form-group horizontal-group" ng-class="{ 'has-error' : ingredientForm.price.$invalid && !ingredientForm.price.$pristine }">
+    <fieldset>
+      <legend>Price: <span class="text-info">&pound;{{vm.newIngredient.price.toFixed(2)}}</span></legend>
+
+    <div class="horizontal-input-group">
+      <label for="ingredient_price_pounds">&pound;</span> </label>
+      <input type="number" name="pounds" id="ingredient_price_pounds" placeholder="How much is it? &pound;&apos;s" ng-model="vm.newIngredient.pounds" ng-required="true" maxlength="5" ng-maxlength="5" ng-keyup="vm.handlePrice(event)">
+      <input type="number" name="pence" id="ingredient_price_pence" placeholder="pence" ng-model="vm.newIngredient.pence" ng-required="true" maxlength="2" ng-maxlength="2" ng-keyup="vm.handlePrice(event)">
+      <label for="ingredient_price_pence"><abbr title="pence">p</abbr></label>
+    </div>
+
     <p ng-show="ingredientForm.price.$invalid && !ingredientForm.price.$pristine" class="help-block">A price is required.</p>
   </div>
 
   <div class="form-group" ng-class="{ 'has-error' : ingredientForm.quantity.$invalid && !ingredientForm.quantity.$pristine }">
-    <label for="ingredient_quantity">Quantity</label>
+    <label for="ingredient_quantity">Quantity (in servings or grams)</label>
     <input type="text" name="quantity" id="ingredient_quantity" placeholder="What quantity does it come in?" ng-model="vm.newIngredient.quantity" ng-required="true"  ng-maxlength="10">
     <p ng-show="ingredientForm.quantity.$invalid && !ingredientForm.quantity.$pristine" class="help-block">A quantity is required.</p>
   </div>
