@@ -26,19 +26,20 @@ CupboardCtrl.$inject = ['Cupboard', 'Auth', '$q', '$filter'];
     }
 
     function sortBy(predicate){
-
+console.log('in sortBy: ', vm.items);
       switch (predicate) {
         case 'name':
           vm.items = _.sortByOrder(vm.items, ['item.ingredient.name'], ['asc']);
+          console.log('sorted: ', vm.items);
           break;
         case 'dateAdded':
-          vm.items = _.sortByOrder(vm.items, ['item.dateAdded'], [ 'asc']);
+          vm.items = _.sortByOrder(vm.items, ['item.dateAdded'], ['asc']);
           break;
         case 'reservation':
           vm.items = _.sortByOrder(vm.items, ['reservedFor.date'], ['asc']);
           break;
         default:
-          $filter('orderBy')(vm.items, 'dateAdded', false);
+          $filter('orderBy')(vm.items, 'item.dateAdded', false);
           break;
       }
 
