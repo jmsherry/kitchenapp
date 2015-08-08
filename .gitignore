@@ -7,3 +7,4 @@ dist/
 .bangular-refresh
 docs/
 Clear all.js
+.DS_Store
