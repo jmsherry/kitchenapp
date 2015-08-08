@@ -4,9 +4,9 @@
     angular.module('kitchenapp')
         .service('Cupboard', Cupboard);
 
-    Cupboard.$inject = ['$q', '$resource', 'Auth', 'Ingredients', 'toastr'];
+    Cupboard.$inject = ['$q', '$resource', '$log', 'Auth', 'Ingredients', 'toastr'];
 
-    function Cupboard($q, $resource, Auth, Ingredients, toastr) {
+    function Cupboard($q, $resource, $log, Auth, Ingredients, toastr) {
 
         this.deferred = $q.defer();
         var _cupboard = this.deferred.promise;
@@ -27,6 +27,7 @@
         this.$resource = $resource;
         this.Ingredients = Ingredients;
         this.$q = $q;
+        this.$log = $log;
 
         this.init();
 
@@ -39,12 +40,12 @@
      */
 
     Cupboard.prototype.init = function init() {
-      console.log('cupboard init')
-        var self = this, user = self.getOwner(), cupboard;
 
+        var self = this, user = self.getOwner(), cupboard;
+        self.$log.log('cupboard init');
         cupboard = self.$resource('/api/users/:userid/cupboard', {userid: user._id})
         .get(function(cupboard){
-          console.log(arguments);
+          self.$log.log(arguments);
           var contents = self.populate(cupboard.contents);
           cupboard.contents = contents;
           self.deferred.resolve(cupboard);
@@ -78,21 +79,29 @@
      * Adds an ingredient to the ingredients array
      *
      */
-    Cupboard.prototype.add = function add(ing) {
+    Cupboard.prototype.add = function add(item) {
         var self = this, userid, $deferred = self.$q.defer();
 
         userid = self.getOwner()._id;
 
 
-        function CBSuccess(ing, item) {
+        function CBSuccess(item, response) {
           var addedLocally;
-          item.ingredient = ing;
-          addedLocally = self.addLocal(item);
-          $deferred.resolve(addedLocally)
+          response.ingredient = item.ingredient;
+          addedLocally = self.addLocal(response);
+          $deferred.resolve(addedLocally);
+        }
+
+        function CBError(ing, err) {
+          self.$log.log(arguments);
+            self.toastr.error('Failed to add ' + err.config.data.name + "!", 'Server Error ' + err.status + ' ' + err.data.message);
         }
 
         self.$resource('/api/users/:userid/cupboard', {userid: userid})
-        .save({ing: ing}, _.bind(CBSuccess, self, ing));
+        .save({
+          ingId: item.ingredient._id,
+          reservedFor: item.reservedFor
+        }, _.bind(CBSuccess, self, item), _.bind(CBError, self, item));
 
         return $deferred.promise;
 
@@ -110,12 +119,17 @@
 
       userid = self.getOwner()._id;
 
-      function CBSuccess() {
-        self.updateLocal(item)
+      function CBSuccess(item, resp) {
+        self.updateLocal(item);
       }
 
-      self.$resource('/api/users/:userid/cupboard', {userid: userid}, {update: { method: 'PUT', isArray: true }})
-      .update({item: item}, _.bind(CBSuccess, self, item));
+      function CBError(ing, err) {
+        self.$log.log(arguments);
+          self.toastr.error('Failed to add ' + err.config.data.name + "!", 'Server Error ' + err.status + ' ' + err.data.message);
+      }
+
+      self.$resource('/api/users/:userid/cupboard', {userid: userid}, {update: { method: 'PUT', isArray: false }})
+      .update({item: item}, _.bind(CBSuccess, self, item), _.bind(CBError, self, item));
 
     };
 
@@ -125,7 +139,7 @@
       userid = self.getOwner()._id;
 
       function CBSuccess(item) {
-          console.log('removed cupboard item, removing locally', item);
+          self.$log.log('removed cupboard item, removing locally', item);
           self.removeLocal(item);
       }
 
@@ -150,6 +164,46 @@
       return items;
     };
 
+    Cupboard.prototype.reserve = function reserve(item, mealId) {
+      var self = this, userid;
+
+      // item.reservedFor = mealId;
+      // item.dateAdded = new Date();
+
+      userid = self.getOwner()._id;
+
+      function CBSuccess(item, resp) {
+          self.$log.log('reserved cupboard item', arguments);
+          self.reserveLocal(item);
+      }
+
+      function CBError(item, resp) {
+        self.$log.log(arguments);
+        self.toastr.error('could not reserve '+ item.name + ' from cupboard');
+      }
+
+      self.$resource('/api/users/:userid/cupboard/:itemid', {
+          userid: userid,
+          itemid: item._id
+      }, {
+        'update': {
+          method: 'PUT',
+          isArray: false
+        }
+      })
+      .update(item, _.bind(CBSuccess, self, item), _.bind(CBError, self, item));
+
+    };
+
+    Cupboard.prototype.bulkReserve = function bulkRemove (items, mealId) {
+      var self = this;
+      _.forEach(items, function(item){
+        self.reserve(item, mealId);
+      });
+
+      return items;
+    };
+
 
     Cupboard.prototype.process = function process(ings) {
         var self = this,
@@ -163,7 +217,7 @@
               var item, len = data.contents.length, i, thisItem, thisItemIng;
 
               for(i=0; i < len; i+=1){
-                thisItem = data.contents[i]
+                thisItem = data.contents[i];
                 thisItemIng = thisItem.ingredient;
                 if(thisItemIng._id === thisIng._id){
                   item = thisItem;
@@ -200,18 +254,29 @@
       });
     };
 
-    // Cupboard.prototype.updateLocal = function updateLocal(item){
-    //   var self = this, cupboard, oldItem;
-    //
-    //   cupboard = self.getCupboard();
-    //   this.$q.when(cupboard, function (data) {
-    //     oldItem = _.find(data, {_id: item._id});
-    //     oldItem = item;
-    //
-    //     self.setCupboard(data);
-    //     self.toastr.success(item.ingredient.name + ' has been updated in your cupboard');
-    //   });
-    // };
+    Cupboard.prototype.updateLocal = function updateLocal(item){
+      var self = this, cupboard, oldItem;
+
+      cupboard = self.getCupboard();
+      self.$q.when(cupboard, function (data) {
+        oldItem = _.find(data, {_id: item._id});
+        oldItem = item;
+
+        self.toastr.success(item.ingredient.name + ' has been updated in your cupboard');
+      });
+    };
+
+    Cupboard.prototype.reserveLocal = function reserveLocal(item){
+      var self = this, cupboard, oldItem;
+
+      cupboard = self.getCupboard();
+      self.$q.when(cupboard, function (data) {
+        oldItem = _.find(data, {_id: item._id});
+        oldItem = item;
+
+        self.toastr.success(item.ingredient.name + ' has been reserved for ' + item.reservedFor.name + ' on ' + moment(item.reservedFor.date, "DD MM YY"));
+      });
+    };
 
     Cupboard.prototype.removeLocal = function removeLocal(item){
       var self = this, cupboard;
@@ -219,8 +284,16 @@
       cupboard = self.getCupboard();
       self.$q.when(cupboard, function (data) {
 	      var items = data.contents;
+
+        //adjust for wrappers - Maybe convert to shopping list items
+        if(item.ingredient && item.ingredient.name){
+          name = item.ingredient.name;
+        } else {
+          name = item.name;
+        }
+
         items.splice(items.indexOf(item), 1);
-        self.toastr.success(item.ingredient.name + ' has been removed from your cupboard');
+        self.toastr.success(name + ' has been removed from your cupboard');
       });
     };
 

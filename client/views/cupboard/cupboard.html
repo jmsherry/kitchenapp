@@ -18,10 +18,14 @@
 	</div>
 	<div class="col-md-12">
   	<ul class="list-unstyled cupboardList">
-  		<li ng-repeat="item in vm.items track by $index">
+  		<li ng-repeat="item in vm.items track by $index" ng-class="item.reservedFor ? 'reserved' : ''">
 				<div ng-class="vm.editing ? 'col-md-10 description' : 'col-md-12 description'">
 					<h2>{{item.ingredient.name}}</h2>
-					<p><span ng-if="item.reservedFor">Reserved for meal: {{item.reservedFor.name}}  on {{item.reservedFor.date | date : 'd MMMM y' : GMT}}.</span> Added: {{item.dateAdded  | date : 'd MMMM y' : GMT}}</p>
+					<div>
+						<p ng-if="item.reservedFor">Reserved for meal: {{item.reservedFor.name}}  on {{item.reservedFor.date | date : 'd MMMM y' : GMT}}.</p>
+						<button type="button" class="btn btn-danger" ng-click="vm.uncouple(item)"  ng-if="item.reservedFor">Unreserve</button>
+					</div>
+					<p>Added: {{item.dateAdded  | date : 'd MMMM y' : GMT}}</p>
 				</div>
 				<div class="col-md-2 actions" ng-if="vm.editing">
 					<button type="button" class="btn btn-danger" ng-click="vm.remove(item)">Remove</button>
