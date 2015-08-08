@@ -91,20 +91,26 @@
      */
     Shopping.prototype.add = function add(ing, meal) {
         var self = this,
-            userid;
+            userid, reservedFor = null;
+
+            if(meal){
+              reservedFor = meal._id;
+            }
 
             self.$log.log('Shopping service add', arguments);
 
         delete(ing.$$hashKey);
         userid = self.getOwner()._id;
 
-        function CBSuccess(ing, item, meal) {
+        function CBSuccess(ing, meal, item) {
             item.ingredient = ing
-            item.reservedFor = meal;
+            if(meal){
+              item.reservedFor = meal;
+            }
             self.addLocal(item);
         }
 
-        function CBError(ing, err) {
+        function CBError(ing, meal, err) {
           self.$log.log(arguments);
             self.toastr.error('Failed to add ' + err.config.data.name + "!", 'Server Error ' + err.status + ' ' + err.data.message);
         }
@@ -114,7 +120,7 @@
             })
             .save({
                 ing: ing._id,
-                reservedFor: meal._id
+                reservedFor: reservedFor
             }, _.bind(CBSuccess, self, ing, meal), _.bind(CBError, self, ing, meal));
 
     };

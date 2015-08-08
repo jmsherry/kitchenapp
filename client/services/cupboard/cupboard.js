@@ -80,12 +80,20 @@
      *
      */
     Cupboard.prototype.add = function add(item) {
-        var self = this, userid, $deferred = self.$q.defer();
 
+        var self = this, userid, ingId, $deferred = self.$q.defer();
+self.$log.log('CUPBOARD ADD ITEM', item);
         userid = self.getOwner()._id;
 
+        //handle unpopulated items
+        if(!item.ingredient._id){
+          ingId = item.ingredient;
+        } else {
+          ingId = item.ingredient._id;
+        }
 
         function CBSuccess(item, response) {
+          self.$log.log('in Cupboard Add CBSuccess: ', arguments);
           var addedLocally;
           response.ingredient = item.ingredient;
           addedLocally = self.addLocal(response);
@@ -99,7 +107,7 @@
 
         self.$resource('/api/users/:userid/cupboard', {userid: userid})
         .save({
-          ingId: item.ingredient._id,
+          ingId: ingId,
           reservedFor: item.reservedFor
         }, _.bind(CBSuccess, self, item), _.bind(CBError, self, item));
 
@@ -247,10 +255,26 @@
 
       cupboard = self.getCupboard();
       self.$q.when(cupboard, function(data) {
-        var items = data.contents;
-        items.push(item);
-        self.toastr.success(item.ingredient.name + ' has been added to your cupboard');
-        return item;
+
+        function add(item) {
+          var items = data.contents, ing;
+          items.push(item);
+          self.toastr.success(item.ingredient.name + ' has been added to your cupboard');
+          return item;
+        }
+
+        if(item.ingredient.name){
+          add(item);
+        } else {
+          //Deal with unpopulated
+          ing = item.ingredient;
+          ing = Ingredients.getById(ing);
+          self.$q.when(ing, function(ingData){
+            ing = ingData;
+            add(item);
+          });
+        }
+
       });
     };
 

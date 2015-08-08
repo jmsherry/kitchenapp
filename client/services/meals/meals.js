@@ -86,9 +86,6 @@ angular.module('kitchenapp')
 
           ings = newMeal.ingredients;
 
-          ings.missing = Ingredients.populate(ings.missing);
-          ings.present = Ingredients.populate(ings.present);
-
           $q.when(meals, function(meals){
             if(newMeal.isComplete){
               meals.complete.push(newMeal);

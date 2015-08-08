@@ -71,7 +71,7 @@ function IngredientsCtrl(Ingredients, $scope, $q, $log, uiGridConstants, Shoppin
       }
 
       Cupboard.bulkAdd(selectedIngs);
-      //Cupboard.add(selectedIngs);
+
       $log.log(e);
       $('button').blur();
     }
