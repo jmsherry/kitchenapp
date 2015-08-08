@@ -55,10 +55,21 @@ function IngredientsCtrl(Ingredients, $scope, $q, $log, uiGridConstants, Shoppin
 		});
 
     function addToCupboard(e){
-      var selectedIngs = $scope.gridApi.selection.getSelectedGridRows();
+      var selectedIngs = $scope.gridApi.selection.getSelectedGridRows(), i, len = selectedIngs.length, thisIng;
       $log.log(selectedIngs);
       selectedIngs = _.pluck(selectedIngs, 'entity');
       $log.log(selectedIngs);
+
+      for(i=0; i<len; i+=1){
+        thisIng = {
+          ingredient: selectedIngs[i]._id,
+          reservedFor: null
+        };
+
+        selectedIngs[i] = thisIng;
+
+      }
+
       Cupboard.bulkAdd(selectedIngs);
       //Cupboard.add(selectedIngs);
       $log.log(e);

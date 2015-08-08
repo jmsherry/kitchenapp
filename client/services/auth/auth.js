@@ -82,39 +82,37 @@ angular.module('kitchenapp')
       return _user;
     };
 
+
     /**
+     * Update
+     *
+     * @param user
+     * @returns {promise}
+     */
+    // this.updateUser = function updateUser(user) {
+    //   var deferred = $q.defer();
+    //   $http.put('/api/users', user)
+    //     .then(function (res) {
+    //       _user = res.data.user;
+    //       $cookieStore.put('token', res.data.token);
+    //       deferred.resolve();
+    //     })
+    //     .catch(function (err) {
+    //       deferred.reject(err.data);
+    //     });
+    //   return deferred.promise;
+    // };
 
+    /**
+     * Checks if a user is logged in, and if not redirects them to the home view.
+     *
+     * @returns VOID
+     */
 
-/**
- * Update
- *
- * @param user
- * @returns {promise}
- */
-// this.updateUser = function updateUser(user) {
-//   var deferred = $q.defer();
-//   $http.put('/api/users', user)
-//     .then(function (res) {
-//       _user = res.data.user;
-//       $cookieStore.put('token', res.data.token);
-//       deferred.resolve();
-//     })
-//     .catch(function (err) {
-//       deferred.reject(err.data);
-//     });
-//   return deferred.promise;
-// };
-
-/**
- * Checks if a user is logged in, and if not redirects them to the home view.
- *
- * @returns VOID
- */
-
-this.checkAuthorised = function checkAuthorised(){
-  if(!_user.hasOwnProperty('email')){
-    $location.path('/');
-  }
-}
+    this.checkAuthorised = function checkAuthorised(){
+      if(!_user.hasOwnProperty('email')){
+        $location.path('/');
+      }
+    };
 
   });

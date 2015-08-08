@@ -58,7 +58,11 @@ angular.module('kitchenapp')
 
 
               function successCB(response) {
-                console.log('save successCB: ', response);
+                console.log('addMeal save successCB: ', response);
+                  response.ingredients.present = Ingredients.populate(response.ingredients.present);
+                  response.ingredients.missing = Ingredients.populate(response.ingredients.missing);
+                  Cupboard.bulkReserve(response.ingredients.present, response);
+                  Shopping.bulkAdd(response.ingredients.missing, response);
                   self.addLocal(response);
               }
 
@@ -94,6 +98,18 @@ angular.module('kitchenapp')
 
             toastr.success(newMeal.name + " added!");
           });
+        }
+
+        function populate(idsArray){
+          //if(idsArray.length === 0){return []};
+          var populated = [], self = this, ings = self.get();
+
+            $.each(idsArray, function(i, id){
+              var ing = _.find(ings, {_id: id});
+              populated.push(ing);
+            });
+
+          return populated;
         }
 
         // Turns a recipe id into a meal object
@@ -134,8 +150,6 @@ angular.module('kitchenapp')
 
           $q.when(meal, function(ml){
             $q.when(ml.ingredients, function(ings){
-              Cupboard.bulkRemove(ings.present);
-              Shopping.bulkAdd(ings.missing);
               ml.ings = ings;
               self.add(ml);
             });
@@ -184,28 +198,37 @@ angular.module('kitchenapp')
             $q.when(meals, function (mealData) {
               var mls = mealData.pending; //Get pending meals
             _.forEach(mls, function(meal){
+
               var missing = meal.ingredients.missing, //Get missing ings from those meals
               i, changed = false, item, missingIng;
 
               for(i=0; i < missing.length; i+=1){
+
                 missingIng = missing[i];
                 item = _.find(items, function(item){
                   if(item.ingredient._id === missingIng._id){
                     return item;
                   }
                 });
+
                 if(item){
                   missing.splice(missing.indexOf(missingIng), 1);
                   meal.ingredients.present.push(missingIng);
                   changed = true;
                 }
+
               }
+
               if(missing.length === 0){
                 meal.isComplete = true;
+              } else {
+                meal.isComplete = false;
               }
+
               if(changed){
                 self.update(meal);
               }
+
             });
           });
 
@@ -265,10 +288,11 @@ angular.module('kitchenapp')
           remove: remove,
           removeLocal: removeLocal,
           update: update,
-          updateLocal, updateLocal,
+          updateLocal: updateLocal,
           reCheckIngredients: reCheckIngredients,
           create: create,
-          createMealObject: createMealObject
+          createMealObject: createMealObject,
+          populate: populate
         };
 
     }
