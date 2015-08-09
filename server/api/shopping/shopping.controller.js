@@ -73,7 +73,7 @@ exports.addToShoppingList = function addToShoppingList(req, res) {
  * @param res
  */
 exports.removeFromShoppingList = function removeFromShoppingList(req, res) {
-	console.log('in removeFromShoppingList \nreq.params', req.params, '\nreq.body: ', req.body);
+	console.log('in removeFromShoppingList \nreq.params', req.params, '\nreq._params', req._params, '\nreq.body: ', req.body);
 	ShoppingList.findOneAndUpdate(
     {"owner": req._params.userid},
     {$pull: {'contents': {_id: new ObjectId(req.params.itemid)}}},

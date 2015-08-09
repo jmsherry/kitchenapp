@@ -97,18 +97,6 @@ angular.module('kitchenapp')
           });
         }
 
-        function populate(idsArray){
-          //if(idsArray.length === 0){return []};
-          var populated = [], self = this, ings = self.get();
-
-            $.each(idsArray, function(i, id){
-              var ing = _.find(ings, {_id: id});
-              populated.push(ing);
-            });
-
-          return populated;
-        }
-
         // Turns a recipe id into a meal object
         function createMealObject(id){
           var self = this,
@@ -180,6 +168,7 @@ angular.module('kitchenapp')
           var self = this, meals;
           meals = self.get();
           $q.when(meals, function (mealData) {
+            mealData = mealData.complete.concat(mealData.pending);
             var oldMeal = _.find(mealData, {_id: meal._id});
             oldMeal = meal;
           });
@@ -202,8 +191,8 @@ angular.module('kitchenapp')
               for(i=0; i < missing.length; i+=1){
 
                 missingIng = missing[i];
-                item = _.find(items, function(item){
-                  if(item.ingredient._id === missingIng._id){
+                item = _.find(items, function(thisItem){
+                  if(thisItem.ingredient._id === missingIng._id){
                     return item;
                   }
                 });
@@ -236,8 +225,8 @@ angular.module('kitchenapp')
         function remove(item){
           var self = this, userid;
 
-          Cupboard.bulkAdd(item.ingredients.present);
-          Shopping.bulkRemove(item.ingredients.missing);
+          Cupboard.handleMealDelete(item);
+          Shopping.handleMealDelete(item);
 
           userid = Auth.getUser()._id;
 
@@ -275,6 +264,18 @@ angular.module('kitchenapp')
           });
         }
 
+        function getMealById(id){
+          var self = this, meals, deferred = $q.defer();
+
+          meals = self.get();
+          $q.when(meals, function (data) {
+            var mls = data.complete.concat(data.pending);
+            var meal = _.find(mls, {'_id': id});
+            deferred.resolve(meal);
+          });
+          return deferred.promise;
+        }
+
         init();
 
         return {
@@ -289,7 +290,7 @@ angular.module('kitchenapp')
           reCheckIngredients: reCheckIngredients,
           create: create,
           createMealObject: createMealObject,
-          populate: populate
+          getMealById: getMealById
         };
 
     }

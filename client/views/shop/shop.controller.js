@@ -34,7 +34,9 @@ ShopCtrl.$inject = ['Shopping', 'Auth', '$q', 'Meals'];
         mls = mls.pending.concat(mls.complete);
         for(i = 0; i < len; i+=1){
           item = data.contents[i];
-          item.reservedFor = _.find(mls, {_id: item.reservedFor});
+          if(!item.reservedFor.name){
+            item.reservedFor = _.find(mls, {_id: item.reservedFor});
+          }
         }
         vm.items = data.contents
       });

@@ -87,9 +87,15 @@ angular.module('kitchenapp')
         }
 
         function getById(id){
-          var self = this,
+          var self = this, deferred = $q.defer(), ings;
           ings = self.get();
-          return _.find(ings, {'_id': id});
+
+          $q.when(ings, function(data){
+            var item = _.find(data, {'_id': id});
+            deferred.resolve(item);
+          });
+
+           return deferred.promise;
         }
 
         init();

@@ -202,6 +202,21 @@
       return items;
     };
 
+    Shopping.prototype.handleMealDelete = function handleMealDelete (meal) {
+      var self = this, idsArray = [], shoppingList = self.getShopping(), mealId = meal._id;
+
+      self.$q.when(shoppingList, function(SL){
+        _.forEach(SL.contents, function(item){
+          if(item.reservedFor._id === mealId){
+            self.remove(item);
+          }
+        });
+      });
+
+
+      return meal;
+    };
+
 
     Shopping.prototype.process = function process(idsArray) {
         var self = this,

@@ -3,9 +3,9 @@
 angular.module('kitchenapp')
   .controller('CupboardCtrl', CupboardCtrl);
 
-CupboardCtrl.$inject = ['Cupboard', 'Auth', '$q', '$filter'];
+CupboardCtrl.$inject = ['Cupboard', 'Auth', '$q', '$filter', 'Meals'];
 
-  function CupboardCtrl(Cupboard, Auth, $q, $filter) {
+  function CupboardCtrl(Cupboard, Auth, $q, $filter, Meals) {
 
   	Auth.checkAuthorised();
 
@@ -13,12 +13,25 @@ CupboardCtrl.$inject = ['Cupboard', 'Auth', '$q', '$filter'];
     cupboard = Cupboard.get();
 
     $q.when(cupboard, function(data){
-      console.log('HERERERERE', data);
-      vm.items = data.contents;
+      console.log('HERERERERE', data, Meals);
+      var i, len = data.contents.length, thisItem, theseItems = [];
+
+      for(i=0;i<len;i+=1){
+        thisItem = data.contents[i];
+        thisItem = Meals.getMealById(thisItem.reservedFor); //returns a promise
+        theseItems.push(thisItem);
+      }
+
+      $q.all(theseItems).then(function(fullData){
+        for(i=0;i<len;i+=1){
+          data.contents[i].reservedFor = fullData[i];
+        }
+        vm.items = data.contents;
+      });
     });
 
     function remove(item){
-      Cupboard.remove(item)
+      Cupboard.remove(item);
     }
 
     function toggleEdit(){

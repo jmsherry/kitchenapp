@@ -45,19 +45,34 @@
         self.$log.log('cupboard init');
         cupboard = self.$resource('/api/users/:userid/cupboard', {userid: user._id})
         .get(function(cupboard){
-          self.$log.log(arguments);
+          self.$log.log('cupboard serv init:', arguments);
           var contents = self.populate(cupboard.contents);
-          cupboard.contents = contents;
-          self.deferred.resolve(cupboard);
+          self.$q.when(contents, function(data){
+            cupboard.contents = data;
+            self.$log.log('cupboard contents resolve:', data);
+            self.deferred.resolve(cupboard);
+          });
         });
     };
 
     Cupboard.prototype.populate = function populate(items){
-      var self = this, i, len = items.length;
+      var self = this, i, len = items.length, deferred = self.$q.defer(), promises = [], thisIng;
+
       for (i = 0; i < len; i+=1) {
-        items[i].ingredient = self.Ingredients.getById(items[i].ingredient);
+        thisIng = items[i].ingredient;
+        thisIng = self.Ingredients.getById(items[i].ingredient); //returns a promise
+        promises.push(thisIng);
       }
-      return items;
+
+      self.$q.all(promises).then(function(data){
+        var i, len = data.length;
+        for(i=0; i<len; i+=1){
+          items[i].ingredient = data[i];
+        }
+        deferred.resolve(items);
+      });
+
+      return deferred.promise;
     };
 
     /**
@@ -172,6 +187,22 @@ self.$log.log('CUPBOARD ADD ITEM', item);
       return items;
     };
 
+    Cupboard.prototype.handleMealDelete = function handleMealDelete (meal) {
+      var self = this, idsArray = [], cupboard = self.getCupboard(), mealId = meal._id;
+
+      self.$q.when(cupboard, function(data){
+        _.forEach(data.contents, function(item){
+          if(item.reservedFor === mealId){
+            item.reservedFor = null;
+            self.update(item);
+          }
+        });
+      });
+
+
+      return meal;
+    };
+
     Cupboard.prototype.reserve = function reserve(item, mealId) {
       var self = this, userid;
 
@@ -255,6 +286,7 @@ self.$log.log('CUPBOARD ADD ITEM', item);
 
       cupboard = self.getCupboard();
       self.$q.when(cupboard, function(data) {
+        var ing;
 
         function add(item) {
           var items = data.contents, ing;
@@ -268,7 +300,9 @@ self.$log.log('CUPBOARD ADD ITEM', item);
         } else {
           //Deal with unpopulated
           ing = item.ingredient;
-          ing = Ingredients.getById(ing);
+          ing = self.Ingredients.getById(ing);
+
+
           self.$q.when(ing, function(ingData){
             ing = ingData;
             add(item);

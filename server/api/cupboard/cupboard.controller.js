@@ -7,6 +7,7 @@ var ObjectId = mongoose.Types.ObjectId;
 var User = require('./../user/user.model');
 var Cupboard = require('./cupboard.model');
 var CupboardItem = require('./cupboardItem.model');
+var _ = require('lodash');
 
 function handleError (res, err) {
   console.log(err);
