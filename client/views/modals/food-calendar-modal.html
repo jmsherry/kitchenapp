@@ -1,0 +1,12 @@
+<div class="modal-contaner">
+	<div class="col-xs-12">
+		<h1>Place a meal</h1>
+
+		<ul class="list-unstyled">
+			<li ng-repeat="meal in completeMeals">
+				<a href="#" class="btn btn-block btn-info" ng-click="place(meal)">{{meal.name}}</a>
+			</li>
+		</ul>
+
+	</div>
+</div>
