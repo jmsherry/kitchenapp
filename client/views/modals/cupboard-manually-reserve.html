@@ -3,8 +3,8 @@
 		<h1>Manually Reserve Item</h1>
 		<p>Choose a meal to reserve the item for:</p>
 		<ul class="list-unstyled">
-			<li ng-repeat="meal in meals">
-				<a href="#" class="btn btn-block btn-info" ng-click="reserve(meal)">{{meal.name}}</a>
+			<li ng-repeat="meal in pendingMeals">
+				<button href="#" class="btn btn-block btn-info" ng-click="reserve(this.item, meal)">{{::meal.name}}</button>
 			</li>
 		</ul>
 	</div>
