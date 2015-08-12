@@ -28,6 +28,7 @@
         this.Ingredients = Ingredients;
         this.$q = $q;
         this.$log = $log;
+        this.initialised = false;
 
         this.init();
 
@@ -51,6 +52,7 @@
             cupboard.contents = data;
             self.$log.log('cupboard contents resolve:', data);
             self.deferred.resolve(cupboard);
+            self.initialised = true;
           });
         });
     };
@@ -60,7 +62,7 @@
 
       for (i = 0; i < len; i+=1) {
         thisIng = items[i].ingredient;
-        thisIng = self.Ingredients.getById(items[i].ingredient); //returns a promise
+        thisIng = self.Ingredients.getById(thisIng); //returns a promise
         promises.push(thisIng);
       }
 
@@ -138,9 +140,10 @@ self.$log.log('CUPBOARD ADD ITEM', item);
     };
 
     Cupboard.prototype.update = function update(item) {
-      var self = this, userid;
+      var self = this, userid, itemid;
 
       userid = self.getOwner()._id;
+      itemid = item._id;
 
       function CBSuccess(item, resp) {
         self.updateLocal(item);
@@ -151,7 +154,7 @@ self.$log.log('CUPBOARD ADD ITEM', item);
           self.toastr.error('Failed to add ' + err.config.data.name + "!", 'Server Error ' + err.status + ' ' + err.data.message);
       }
 
-      self.$resource('/api/users/:userid/cupboard', {userid: userid}, {update: { method: 'PUT', isArray: false }})
+      self.$resource('/api/users/:userid/cupboard/itemid', {userid: userid, itemid: itemid}, {update: { method: 'PUT', isArray: false }})
       .update({item: item}, _.bind(CBSuccess, self, item), _.bind(CBError, self, item));
 
     };
@@ -206,9 +209,6 @@ self.$log.log('CUPBOARD ADD ITEM', item);
     Cupboard.prototype.reserve = function reserve(item, mealId) {
       var self = this, userid;
 
-      // item.reservedFor = mealId;
-      // item.dateAdded = new Date();
-
       userid = self.getOwner()._id;
 
       function CBSuccess(item, resp) {
@@ -218,7 +218,7 @@ self.$log.log('CUPBOARD ADD ITEM', item);
 
       function CBError(item, resp) {
         self.$log.log(arguments);
-        self.toastr.error('could not reserve '+ item.name + ' from cupboard');
+        self.toastr.error('Could not reserve '+ item.name + ' from cupboard');
       }
 
       self.$resource('/api/users/:userid/cupboard/:itemid', {
@@ -230,7 +230,7 @@ self.$log.log('CUPBOARD ADD ITEM', item);
           isArray: false
         }
       })
-      .update(item, _.bind(CBSuccess, self, item), _.bind(CBError, self, item));
+      .update({item: item}, _.bind(CBSuccess, self, item), _.bind(CBError, self, item));
 
     };
 
@@ -243,8 +243,8 @@ self.$log.log('CUPBOARD ADD ITEM', item);
       return items;
     };
 
-
-    Cupboard.prototype.process = function process(ings) {
+    //Assess a meal vs what is in the cupboard currently
+    Cupboard.prototype.process = function process(ings, meal) {
         var self = this,
         deferred = self.$q.defer(),
             presentIngredientItems = [],
@@ -265,6 +265,7 @@ self.$log.log('CUPBOARD ADD ITEM', item);
               }
 
               if (item) {
+                  //item.reservedFor = meal._id;
                   presentIngredientItems.push(item);
               } else {
                   missingIngredients.push(thisIng);
