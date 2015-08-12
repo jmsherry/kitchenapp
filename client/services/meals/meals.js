@@ -44,7 +44,7 @@ angular.module('kitchenapp')
          }
 
         function get() {
-          console.log('GET', _meals);
+          //console.log('GET', _meals);
           return _meals;
         }
 
@@ -183,21 +183,21 @@ angular.module('kitchenapp')
 
             $q.when(meals, function (mealData) {
               var mls = mealData.pending; //Get pending meals
-            _.forEach(mls, function(meal){
+            _.forEach(mls, function(meal){ //and go through them
 
-              var missing = meal.ingredients.missing, //Get missing ings from those meals
+              var missing = meal.ingredients.missing, //Get missing ings from that meal
               i, changed = false, item, missingIng;
 
-              for(i=0; i < missing.length; i+=1){
+              for(i=0; i < missing.length; i+=1){ //Go throught them and
 
                 missingIng = missing[i];
                 item = _.find(items, function(thisItem){
-                  if(thisItem.ingredient._id === missingIng._id){
+                  if(thisItem.ingredient._id === missingIng._id){ //compare vs cupboard items
                     return item;
                   }
                 });
 
-                if(item){
+                if(item){ //if you get a match then move it from missing to present
                   missing.splice(missing.indexOf(missingIng), 1);
                   meal.ingredients.present.push(missingIng);
                   changed = true;
