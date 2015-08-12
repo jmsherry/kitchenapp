@@ -29,18 +29,18 @@ MealsCtrl.$inject = ['$scope', 'Meals', 'Auth', 'Recipes', '$modal', '$window', 
 
 
     function createMeal(){
-      console.log(vm.chosenRecipe);
+      $log.log(vm.chosenRecipe);
     	Meals.create(vm.chosenRecipe);
     	vm.chosenRecipe = "";
     }
 
     function removeMeal(meal){
-      console.log('removeMeal', meal);
+      $log.log('removeMeal', meal);
       Meals.remove(meal);
     }
 
     function placeMeal(meal){
-      console.log('placeMeal', meal);
+      $log.log('placeMeal', meal);
     }
 
 
