@@ -15,16 +15,17 @@ CupboardCtrl.$inject = ['Cupboard', 'Auth', '$q', '$filter', 'Meals', '$modal', 
 
     $q.when(cupboard, function(data){
 
-      if(!Cupboard.initialised){
           $log.log('HERERERERE', data, Meals);
-          var i, len = data.contents.length, thisItem, theseItems = [], meals;
+          var i, len = data.contents.length, thisItem, theseItems = [], meals, reservedForPromise;
 
           for(i=0;i<len;i+=1){
             thisItem = data.contents[i];
             $log.log(thisItem);
-            thisItem = Meals.getMealById(thisItem.reservedFor); //returns a promise
-            $log.log(thisItem);
-            theseItems.push(thisItem);
+            if(typeof thisItem.reservedFor === 'string'){
+              reservedForPromise = Meals.getMealById(thisItem.reservedFor); //returns a promise
+              $log.log(thisItem);
+              theseItems.push(reservedForPromise);
+            }
           }
 
           $q.all(theseItems).then(function(fullData){
@@ -32,22 +33,14 @@ CupboardCtrl.$inject = ['Cupboard', 'Auth', '$q', '$filter', 'Meals', '$modal', 
             $log.log('all called', fullData);
             for(i=0;i<len;i+=1){
               thisItem = data.contents[i];
-              reservedForMeal = fullData[i];
-              $log.log(fullData[i]);
-
-              if(reservedForMeal){
-                thisItem.reservedFor = reservedForMeal;
-              } else {
-                thisItem.reservedFor = null;
+              if(thisItem.reservedFor && typeof thisItem.reservedFor === 'string'){
+                thisItem.reservedFor = _.find(fullData, {_id: thisItem.reservedFor});
               }
             }
 
             vm.items = data.contents;
           });
 
-        } else {
-          vm.items = data.contents;
-        }
 
       meals = Meals.get();
       $q.when(meals, function(mealsData){
@@ -66,20 +59,27 @@ CupboardCtrl.$inject = ['Cupboard', 'Auth', '$q', '$filter', 'Meals', '$modal', 
     }
 
     function sortBy(predicate){
-      $log.log('in sortBy: ', vm.items);
+      $log.log('in sortBy: ', vm.items, predicate);
       switch (predicate) {
         case 'name':
-          vm.items = _.sortByOrder(vm.items, ['item.ingredient.name'], ['asc']);
+          $log.log('pre-sort name: ', vm.items);
+          vm.items = _.sortByOrder(vm.items, ['ingredient.name'], ['asc']);
           $log.log('sorted: ', vm.items);
           break;
         case 'dateAdded':
-          vm.items = _.sortByOrder(vm.items, ['item.dateAdded'], ['asc']);
+          $log.log('pre-sort dateAdded: ', vm.items);
+          vm.items = _.sortByOrder(vm.items, ['dateAdded'], ['asc']);
+          $log.log('sorted: ', vm.items);
           break;
         case 'reservation':
+          $log.log('pre-sort reservation: ', vm.items);
           vm.items = _.sortByOrder(vm.items, ['reservedFor.date'], ['asc']);
+          $log.log('sorted: ', vm.items);
           break;
         default:
-          $filter('orderBy')(vm.items, 'item.dateAdded', false);
+          $log.log('pre-sort default name: ', vm.items);
+          $filter('orderBy')(vm.items, 'dateAdded', false);
+          $log.log('sorted: ', vm.items);
           break;
       }
 
