@@ -15,8 +15,8 @@ angular.module('kitchenapp')
   meals = Meals.get();
   $q.when(meals, function(data){
     var mls = data.complete;
-    completeMeals = _.filter(mls, 'starts_at', ''),
-    placedMeals = _.reject(mls, 'starts_at', '');
+    completeMeals = _.filter(mls, 'starts_at', null),
+    placedMeals = _.reject(mls, 'starts_at', null);
 
 
   	$log.log("meals data: ", data);
@@ -27,18 +27,22 @@ angular.module('kitchenapp')
     //These variables MUST be set as a minimum for the calendar to work
     $scope.calendarView = 'month';
     $scope.calendarDay = new Date();
-    $scope.events = placedMeals;
 
+    $scope.events = placedMeals;
     $scope.completeMeals = completeMeals;
 
 
-    function showModal(action, event) {
+    $scope.showModal = function showModal(action, event) {
+      $log.log('showModal', arguments);
       $modal.open({
-        templateUrl: './views/meals/food-calendar-modal.html',
-        controller: function($scope, $modalInstance) {
+        templateUrl: '/views/modals/food-calendar-modal.html',
+        controller: function modalController($scope, $modalInstance) {
+          $log.log('modal controller running', arguments, placedMeals);
           $scope.$modalInstance = $modalInstance;
           $scope.action = action;
           $scope.event = event;
+          $scope.completeMeals = completeMeals;
+          $log.log('modal scope', $scope);
         }
       });
     }
