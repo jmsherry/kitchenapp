@@ -74,26 +74,26 @@ exports.getMeals = function getMeals(req, res) {
  */
 exports.updateMeal = function updateMeal(req, res) {
 
-  console.log('in updateMeal \nreq.params', req.params, '\nreq._params', req._params,  '\nreq.body: ', req.body);
+  //console.log('in updateMeal \nreq.params', req.params, '\nreq._params', req._params,  '\nreq.body: ', req.body);
 
   MealsList.findOne(
     {"owner": req._params.userid},
     function(err, ML){
-      console.log('in updateMeal results', err, ML, req.body, req._params, req.params);
+      //console.log('in updateMeal results', err, ML, req.body, req._params, req.params);
       if(err){
         handleError(res, err);
       }
       if(!ML){
         return res.status(404).json({msg: "No meal list found to update"});
       }
-      var meal = req.body;
-      meal = _.find(ML.contents, {"_id": ObjectId(req.params.mealid)});
+      var meal = _.find(ML.contents, {"_id": ObjectId(req.params.mealid)});
       if(!meal){
         return res.status(404).json({msg: "No meal found to update"});
       }
-      meal = req.body;
-      ML.save(function(){
-        return res.status(200).json(meal);
+      //meal = req.body;
+      meal.$save(function(m){
+        console.log(arguments);
+        return res.status(200).json(m);
       });
 
     }

@@ -5,7 +5,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var ObjectId = mongoose.Types.ObjectId;
 var User = require('./../user/user.model');
-var Cupboard = require('./cupboard.model');
+//var Cupboard = require('./cupboard.model');
 var CupboardItem = require('./cupboardItem.model');
 var _ = require('lodash');
 
@@ -80,9 +80,12 @@ exports.updateCupboard = function updateCupboard(req, res) {
 
   console.log('in updateCupboard \nreq.params', req.params, '\nreq._params', req._params,  '\nreq.body: ', req.body);
 
+  var newItem = req.body.item;
+  newItem.ingredient = newItem.ingredient._id;
+
   Cupboard.findOneAndUpdate(
     {"owner": req._params.userid},
-    {$push: {'contents': req.body.item}},
+    {$push: {'contents':  new ObjectId(newItem)}},
     {safe: true, upsert: true},
     function(err, cupboard){
       console.log('in updateCupboard results', err, cupboard);
@@ -96,7 +99,7 @@ exports.updateCupboard = function updateCupboard(req, res) {
         return res.status(200).json({msg: "Could not find users cupboard"});
       }
 
-      item = _.find(cupboard.contents, {_id: req.body._id});
+      item = _.find(cupboard.contents, {_id: newItem.ingredient});
       console.log('Item updated for return: ', item);
       return res.status(200).json(item);
     }

@@ -68,4 +68,8 @@ angular.module('kitchenapp', [
 
     $rootScope.Auth = Auth;
 
+    $("body").on('click.bgActive', ".btn-group > .btn", function(){
+        $(this).addClass("active").siblings().removeClass("active");
+    });
+
   });

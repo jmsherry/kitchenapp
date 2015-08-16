@@ -4,20 +4,20 @@
 angular.module('kitchenapp')
     .factory('Meals', Meals);
 
-    Meals.$inject = ['$rootScope', '$cookieStore', '$q', '$resource', 'toastr', 'Auth', 'Recipes', 'Cupboard', 'Shopping', 'Ingredients'];
+    Meals.$inject = ['$rootScope', '$cookieStore', '$q', '$log', '$resource', 'toastr', 'Auth', 'Recipes', 'Cupboard', 'Shopping', 'Ingredients'];
 
-    function Meals($rootScope, $cookieStore, $q, $resource, toastr, Auth, Recipes, Cupboard, Shopping, Ingredients) {
+    function Meals($rootScope, $cookieStore, $q, $log, $resource, toastr, Auth, Recipes, Cupboard, Shopping, Ingredients) {
 
         var $deferred = $q.defer(),
         _meals = $deferred.promise;
 
          function init() {
-          console.log('meals init');
+          $log.log('meals init');
 
           var user = Auth.getUser();
 
             function successCB(MealsList){
-              console.log('in successCB', arguments);
+              $log.log('in successCB', arguments);
 
               var meals = MealsList.contents, completeMeals, pendingMeals;
               _.each(meals, function(meal){
@@ -31,11 +31,11 @@ angular.module('kitchenapp')
                 pending: pendingMeals
               };
               $deferred.resolve(MealsList);
-              console.log('meals service loaded.', _meals, MealsList);
+              $log.log('meals service loaded.', _meals, MealsList);
             }
 
             function errCB(err){
-              console.log('in errCB', arguments);
+              $log.log('in errCB', arguments);
               $deferred.reject(err);
               toastr.error('Failed to load meals!', 'Server Error ' + err.status + ' ' + err.data.message);
             }
@@ -44,13 +44,13 @@ angular.module('kitchenapp')
          }
 
         function get() {
-          //console.log('GET', _meals);
+          //$log.log('GET', _meals);
           return _meals;
         }
 
         function add(newMeal) {
-            console.log('save args', arguments);
-            console.log('SAVE _meals: ', _meals);
+            $log.log('save args', arguments);
+            $log.log('SAVE _meals: ', _meals);
             var self = this, user = Auth.getUser();
 
             $q.when(newMeal.ingredients, function(data){
@@ -58,8 +58,8 @@ angular.module('kitchenapp')
 
 
               function successCB(response) {
-                console.log('addMeal save successCB: ', response);
-                  response.ingredients.present = Ingredients.populate(response.ingredients.present);
+                $log.log('addMeal save successCB: ', response);
+                  response.ingredients.present = Cupboard.populate(response.ingredients.present);
                   response.ingredients.missing = Ingredients.populate(response.ingredients.missing);
                   Cupboard.bulkReserve(response.ingredients.present, response);
                   Shopping.bulkAdd(response.ingredients.missing, response);
@@ -67,7 +67,7 @@ angular.module('kitchenapp')
               }
 
               function errCB(err) {
-                  console.log('save errCB: ', err);
+                  $log.log('save errCB: ', err);
                   toastr.error('Failed to add ' + err.config.data.name + "!", 'Server Error ' + err.status + ' ' + err.data.message);
               }
 
@@ -81,7 +81,7 @@ angular.module('kitchenapp')
 
 
         function addLocal(newMeal){
-          console.log('in add:', arguments);
+          $log.log('in add:', arguments);
           var meals = this.get(), ings;
 
           ings = newMeal.ingredients;
@@ -104,14 +104,13 @@ angular.module('kitchenapp')
           recipe = Recipes.getRecipe(id),
           mealObj = _.clone(recipe),
           ingredients = Cupboard.process(mealObj.ingredients);
-          console.log('Ingredients for new meal', ingredients);
+          $log.log('Ingredients for new meal', ingredients);
 
           $q.when(ingredients, function(data){
 
             mealObj = angular.extend(mealObj, {
               _id: undefined,
               isComplete: false,
-              sheduledDate: null,
               ingredients:data,
               recipe: id
             });
@@ -148,12 +147,12 @@ angular.module('kitchenapp')
           mealid = meal._id;
 
           function successCB(meal, response) {
-            console.log('update successCB: ', response);
+            $log.log('update successCB: ', response);
               self.updateLocal(response);
           }
 
           function errCB(err) {
-              console.log('update errCB: ', err);
+              $log.log('update errCB: ', err);
               toastr.error('Failed to update ' + err.config.data.name + "!", 'Server Error ' + err.status + ' ' + err.data.message);
           }
 
@@ -193,7 +192,7 @@ angular.module('kitchenapp')
                 missingIng = missing[i];
                 item = _.find(items, function(thisItem){
                   if(thisItem.ingredient._id === missingIng._id){ //compare vs cupboard items
-                    return item;
+                    return thisItem;
                   }
                 });
 
@@ -231,7 +230,7 @@ angular.module('kitchenapp')
           userid = Auth.getUser()._id;
 
           function CBSuccess(item) {
-              console.log('removed meal item, removing locally', item);
+              $log.log('removed meal item, removing locally', item);
               self.removeLocal(item);
           }
 

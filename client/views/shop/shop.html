@@ -8,7 +8,7 @@
   		<li ng-repeat="item in vm.items track by $index">
   			<div class="col-md-10 description">
 					<h2>{{item.ingredient.name}}</h2>
-					<p ng-if="item.reservedFor">Reserved for <span class="text-info">{{item.reservedFor.name}}</span></p>
+					<p ng-if="item.reservedFor">To make <span class="text-info">{{item.reservedFor.name}}</span></p>
 				</div>
   			<div class="col-md-2 actions">
   				<button type="button" class="btn btn-primary" ng-click="vm.buy(item)">Buy</button>

@@ -99,7 +99,7 @@
 
             self.$log.log('Shopping service add', arguments);
 
-        delete(ing.$$hashKey);
+
         userid = self.getOwner()._id;
 
         function CBSuccess(ing, meal, item) {

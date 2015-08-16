@@ -234,7 +234,7 @@ self.$log.log('CUPBOARD ADD ITEM', item);
 
     };
 
-    Cupboard.prototype.bulkReserve = function bulkRemove (items, mealId) {
+    Cupboard.prototype.bulkReserve = function bulkReserve (items, mealId) {
       var self = this;
       _.forEach(items, function(item){
         self.reserve(item, mealId);

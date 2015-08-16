@@ -256,3 +256,30 @@ select {
  .modal-contaner {
    overflow: hidden;
  }
+
+ .info-messages p {
+   padding: 10px;
+ }
+
+.modal-dialog {
+  .close {
+    padding: 0 15px;
+    font-size: 2em;
+  }
+  li {
+    margin-bottom: 5px;
+  }
+  .actions {
+    padding: 10px 0;
+    overflow: hidden;
+  }
+}
+
+.sorts {
+  p {
+    display: inline-block;
+    margin-right: 20px;
+    font-size: 1.6em;
+    vertical-align: baseline;
+  }
+}

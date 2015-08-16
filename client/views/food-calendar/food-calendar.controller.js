@@ -28,28 +28,32 @@ angular.module('kitchenapp')
     $scope.calendarView = 'month';
     $scope.calendarDay = new Date();
 
+
     $scope.events = placedMeals;
     $scope.completeMeals = completeMeals;
 
 
-    $scope.showModal = function showModal(action, event) {
+    $scope.showModal = function showModal(date) {
       $log.log('showModal', arguments);
       $modal.open({
         templateUrl: '/views/modals/food-calendar-modal.html',
         controller: function modalController($scope, $modalInstance) {
           $log.log('modal controller running', arguments, placedMeals);
           $scope.$modalInstance = $modalInstance;
-          $scope.action = action;
-          $scope.event = event;
+          $scope.selectedDate = date;
           $scope.completeMeals = completeMeals;
+          $scope.placeMeal = function(meal, date){
+            console.log('Placing', arguments);
+            meal.starts_at = date;
+            Meals.update(meal);
+          }
           $log.log('modal scope', $scope);
         }
       });
     }
 
     $scope.eventClicked = function() {
-    	$log.log('event clicked');
-      $log.log($event);
+    	$log.log('event clicked', event);
       //showModal('Clicked', event);
       $event.preventDefault();
       $event.stopPropagation();
@@ -63,13 +67,13 @@ angular.module('kitchenapp')
       showModal('Deleted', event);
     };
 
-    // $scope.calclickalert = function(){
-    // 	$log.log('day clicked');
-    // 	$log.log(arguments);
-    // 	showModal('Clicked', event);
-    //   // $event.preventDefault();
-    //   // $event.stopPropagation();
-    // };
+    $scope.calclickalert = function(calendarDate){
+    	$log.log('day clicked');
+    	$log.log(calendarDate);
+    	$scope.showModal(calendarDate);
+      event.preventDefault();
+      event.stopPropagation();
+    };
 
     $scope.setCalendarToToday = function() {
       $scope.calendarDay = new Date();

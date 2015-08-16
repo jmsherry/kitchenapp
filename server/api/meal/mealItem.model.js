@@ -23,7 +23,6 @@ var mealItemSchema = new Schema({
     }]
   },
   isComplete: {type:Boolean, required: true},
-  dateScheduled: {type: Date, default: null},
   recipe: {type: ObjectId, required: true},
   starts_at: {type: Date, default: null}
 });
