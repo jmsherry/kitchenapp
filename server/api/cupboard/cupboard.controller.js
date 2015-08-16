@@ -25,6 +25,7 @@ exports.addToCupboard = function addToCupboard(req, res) {
   console.log('in addToCupboard \nreq.params',  req.params, '\nreq._params', req._params,  '\nreq.body: ', req.body);
 
   var item = new CupboardItem({
+    owner: req._params.userid,
     ingredient: req.body.ingId,
     dateAdded: new Date(),
     reservedFor: req.body.reservedFor
@@ -32,19 +33,15 @@ exports.addToCupboard = function addToCupboard(req, res) {
 
   console.log('item: ', item);
 
-  Cupboard.findOneAndUpdate(
-    {"owner": req._params.userid},
-    {$push: {'contents': item}},
-    {safe: false, upsert: true},
-    function(err, cupboard){
-      console.log('in addToCupboard results', err, cupboard);
-      if(err){
-        handleError(res, err);
-      }
-      console.log('sent item: ', item);
-      return res.status(201).json(item);
+  item.save(function(err, item){
+    console.log('in addToCupboard results', err, item);
+    if(err){
+      handleError(res, err);
     }
-  );
+    console.log('sent item: ', item);
+    return res.status(201).json(item);
+  });
+
 
 };
 
@@ -56,17 +53,14 @@ exports.addToCupboard = function addToCupboard(req, res) {
  */
 exports.getCupboard = function getCupboard(req, res) {
   console.log('in getCupboard \nreq.params', req.params, '\nreq._params', req._params,  '\nreq.body: ', req.body);
-  Cupboard.findOne(
+  CupboardItem.find(
     {'owner': req._params.userid},
-  function(err, cupboard){
-    console.log('in getCupboard results', err, cupboard);
+  function(err, items){
+    console.log('in getCupboard results', err, items);
     if(err){
       handleError(res, err);
     }
-    if(!cupboard){
-      return res.status(404).json({});
-    }
-    return res.status(200).json(cupboard);
+    return res.status(200).json(items);
   });
 };
 
@@ -83,24 +77,17 @@ exports.updateCupboard = function updateCupboard(req, res) {
   var newItem = req.body.item;
   newItem.ingredient = newItem.ingredient._id;
 
-  Cupboard.findOneAndUpdate(
-    {"owner": req._params.userid},
-    {$push: {'contents':  new ObjectId(newItem)}},
+  CupboardItem.findByIdAndUpdate(
+    req._params.itemid,
+    newItem,
     {safe: true, upsert: true},
-    function(err, cupboard){
-      console.log('in updateCupboard results', err, cupboard);
+    function(err, item){
+      console.log('in updateCupboard results', err, item);
       var item;
 
       if(err){
         handleError(res, err);
       }
-
-      if(!cupboard){
-        return res.status(200).json({msg: "Could not find users cupboard"});
-      }
-
-      item = _.find(cupboard.contents, {_id: newItem.ingredient});
-      console.log('Item updated for return: ', item);
       return res.status(200).json(item);
     }
   );
@@ -115,19 +102,15 @@ exports.updateCupboard = function updateCupboard(req, res) {
  */
 exports.removeFromCupboard = function removeFromCupboard(req, res) {
   console.log('in removeFromCupboard \nreq.params', req.params, '\nreq._params', req._params, '\nreq.body: ', req.body);
-  Cupboard.findOneAndUpdate(
-    {"owner": req._params.userid},
-    {$pull: {'contents': {_id: new ObjectId(req.params.itemid)}}},
-    {safe: true},
-    function(err, cupboard){
-      console.log(err, cupboard);
+  CupboardItem.findByIdAndRemove(
+    req.params.itemid,
+    {},
+    function(err, item){
+      console.log('in removeFromCupboard results', err, item);
       if(err){
         handleError(res, err);
       }
-      if(!cupboard){
-        return res.status(404).json({message: req.params.itemid + " not found in cupboard"});
-      }
-      return res.status(200).json(cupboard);
+      return res.status(200).json(item);
     }
   );
 };
@@ -142,14 +125,13 @@ exports.removeFromCupboard = function removeFromCupboard(req, res) {
  */
 exports.getCupboardItem = function getCupboardItem(req, res) {
   console.log('getCupboardItem req.params', req.params);
-  Cupboard.findOne({
-    "owner": req._params.userid
-  }, function(err, cup){
+  CupboardItem.findById(req.params.itemid, function(err, item){
+    console.log('in getCupboardItem results', err, item);
     if(err){
       handleError(res, err);
     }
 
-    if(!cup){
+    if(!item){
       return res.status(404).json({});
     }
     return res.status(200).json(item);

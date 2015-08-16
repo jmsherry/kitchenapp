@@ -4,7 +4,8 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var ObjectId = Schema.ObjectId;
 
-var ShoppingItemSchema = new Schema({
+var ShoppingListItemSchema = new Schema({
+  owner: {type: ObjectId, ref: 'User'},
   ingredient: {type: ObjectId, ref: 'Ingredient'},
   reservedFor: {type: ObjectId, ref: 'MealItem'}
 });
@@ -18,7 +19,7 @@ var ShoppingItemSchema = new Schema({
  * Validations
  */
 
-// ShoppingItemSchema
+// ShoppingListItemSchema
 //   .path('title')
 //   .validate(function (value, respond) {
 //     var self = this;
@@ -36,8 +37,8 @@ var ShoppingItemSchema = new Schema({
  * Methods
  */
 
-ShoppingItemSchema.methods = {
+ShoppingListItemSchema.methods = {
 
 };
 
-module.exports = mongoose.model('ShoppingItem', ShoppingItemSchema);
+module.exports = mongoose.model('ShoppingListItem', ShoppingListItemSchema);

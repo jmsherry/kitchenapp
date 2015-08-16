@@ -5,6 +5,7 @@ var Schema = mongoose.Schema;
 var ObjectId = Schema.ObjectId;
 
 var CupboardItemSchema = new Schema({
+  owner: {type: ObjectId, ref: 'User'},
   ingredient: {type: ObjectId, ref: 'Ingredient'},
   dateAdded: Date,
   reservedFor: {type: ObjectId, ref: 'Meal'}

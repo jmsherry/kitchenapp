@@ -28,7 +28,6 @@
         this.Ingredients = Ingredients;
         this.$q = $q;
         this.$log = $log;
-        this.initialised = false;
 
         this.init();
 
@@ -45,14 +44,13 @@
         var self = this, user = self.getOwner(), cupboard;
         self.$log.log('cupboard init');
         cupboard = self.$resource('/api/users/:userid/cupboard', {userid: user._id})
-        .get(function(cupboard){
+        .query(function(cupboard){
           self.$log.log('cupboard serv init:', arguments);
-          var contents = self.populate(cupboard.contents);
-          self.$q.when(contents, function(data){
-            cupboard.contents = data;
+          cupboard = self.populate(cupboard);
+          self.$q.when(cupboard, function(data){
+            cupboard = data;
             self.$log.log('cupboard contents resolve:', data);
             self.deferred.resolve(cupboard);
-            self.initialised = true;
           });
         });
     };
@@ -61,7 +59,6 @@
       var self = this, i, len = items.length, deferred = self.$q.defer(), promises = [], thisIng;
 
       for (i = 0; i < len; i+=1) {
-        thisIng = items[i].ingredient;
         thisIng = self.Ingredients.getById(thisIng); //returns a promise
         promises.push(thisIng);
       }
@@ -194,7 +191,7 @@ self.$log.log('CUPBOARD ADD ITEM', item);
       var self = this, idsArray = [], cupboard = self.getCupboard(), mealId = meal._id;
 
       self.$q.when(cupboard, function(data){
-        _.forEach(data.contents, function(item){
+        _.forEach(data, function(item){
           if(item.reservedFor === mealId){
             item.reservedFor = null;
             self.update(item);
@@ -253,10 +250,10 @@ self.$log.log('CUPBOARD ADD ITEM', item);
 
         self.$q.when(cupboard, function(data){
           _.forEach(ings, function(thisIng) {
-              var item, len = data.contents.length, i, thisItem, thisItemIng;
+              var item, len = data.length, i, thisItem, thisItemIng;
 
               for(i=0; i < len; i+=1){
-                thisItem = data.contents[i];
+                thisItem = data[i];
                 thisItemIng = thisItem.ingredient;
                 if(thisItemIng._id === thisIng._id){
                   item = thisItem;
@@ -290,8 +287,7 @@ self.$log.log('CUPBOARD ADD ITEM', item);
         var ing;
 
         function add(item) {
-          var items = data.contents, ing;
-          items.push(item);
+          data.push(item);
           self.toastr.success(item.ingredient.name + ' has been added to your cupboard');
           return item;
         }
@@ -342,7 +338,7 @@ self.$log.log('CUPBOARD ADD ITEM', item);
 
       cupboard = self.getCupboard();
       self.$q.when(cupboard, function (data) {
-	      var items = data.contents;
+	      var items = data;
 
         //adjust for wrappers - Maybe convert to shopping list items
         if(item.ingredient && item.ingredient.name){

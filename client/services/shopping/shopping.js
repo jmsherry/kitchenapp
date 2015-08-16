@@ -55,10 +55,12 @@
         shopping = self.$resource('/api/users/:userid/shopping', {
                 userid: user._id
             })
-            .get(function (shopping) {
-              var contents = self.populate(shopping.contents);
-              shopping.contents = contents;
-              self.deferred.resolve(shopping);
+            .query(function (shopping) {
+              self.$q.when(shopping, function(data){
+                data = self.populate(data);
+                shopping = data;
+                self.deferred.resolve(shopping);
+              });
             });
     };
 
@@ -206,7 +208,7 @@
       var self = this, idsArray = [], shoppingList = self.getShopping(), mealId = meal._id;
 
       self.$q.when(shoppingList, function(SL){
-        _.forEach(SL.contents, function(item){
+        _.forEach(SL, function(item){
           if(item.reservedFor._id === mealId){
             self.remove(item);
           }
@@ -226,7 +228,7 @@
 
             self.$q.when(shopping, function(data){
               _.forEach(idsArray, function (thisIngID) {
-                  if (data.contents.indexOf(thisIngID) === -1) {
+                  if (data.indexOf(thisIngID) === -1) {
                       missingIngredients.push(thisIngID);
                   } else {
                       presentIngredients.push(thisIngID);
@@ -248,7 +250,7 @@
         shopping = self.getShopping();
 
         self.$q.when(shopping, function (data) {
-            var items = data.contents;
+            var items = data;
             items.push(item);
             self.toastr.success(item.ingredient.name + ' has been added to your shopping');
         });
@@ -262,7 +264,7 @@
     //     shopping = self.getShopping();
     //
     //     this.$q.when(shopping, function (data) {
-    //       var items = data.contents;
+    //       var items = data;
     //         oldItem = _.find(data, {
     //             _id: item._id
     //         });
@@ -286,7 +288,7 @@
         shopping = self.getShopping();
 
         self.$q.when(shopping, function (data) {
-            var items = data.contents;
+            var items = data;
             items.splice(items.indexOf(item), 1);
             self.toastr.success(name + ' has been removed from your shopping');
         });

@@ -16,22 +16,22 @@ angular.module('kitchenapp')
 
           var user = Auth.getUser();
 
-            function successCB(MealsList){
+            function successCB(meals){
               $log.log('in successCB', arguments);
 
-              var meals = MealsList.contents, completeMeals, pendingMeals;
+              var completeMeals, pendingMeals;
               _.each(meals, function(meal){
                 meal.ingredients.missing = Ingredients.populate(meal.ingredients.missing);
                 meal.ingredients.present = Ingredients.populate(meal.ingredients.present);
               });
               completeMeals = _.filter(meals, {isComplete: true});
               pendingMeals = _.filter(meals, {isComplete: false});
-              MealsList = {
+              meals = {
                 complete: completeMeals,
                 pending: pendingMeals
               };
-              $deferred.resolve(MealsList);
-              $log.log('meals service loaded.', _meals, MealsList);
+              $deferred.resolve(meals);
+              $log.log('meals service loaded.', meals);
             }
 
             function errCB(err){
@@ -40,7 +40,7 @@ angular.module('kitchenapp')
               toastr.error('Failed to load meals!', 'Server Error ' + err.status + ' ' + err.data.message);
             }
 
-            $resource('/api/users/:userid/meals', {userid: user._id}).get(successCB, errCB);
+            $resource('/api/users/:userid/meals', {userid: user._id}).query(successCB, errCB);
          }
 
         function get() {
@@ -59,11 +59,17 @@ angular.module('kitchenapp')
 
               function successCB(response) {
                 $log.log('addMeal save successCB: ', response);
-                  response.ingredients.present = Cupboard.populate(response.ingredients.present);
-                  response.ingredients.missing = Ingredients.populate(response.ingredients.missing);
-                  Cupboard.bulkReserve(response.ingredients.present, response);
-                  Shopping.bulkAdd(response.ingredients.missing, response);
-                  self.addLocal(response);
+                response.ingredients.missing = Ingredients.populate(response.ingredients.missing);
+                Shopping.bulkAdd(response.ingredients.missing, response);
+
+                $q.when(response.ingredients.present, function(data){
+                  var presentIngredients = Cupboard.populate(data);
+                  $q.when(presentIngredients, function(presentIngs){
+                    Cupboard.bulkReserve(presentIngs, response);
+                    response.ingredients.present = presentIngs;
+                    self.addLocal(response);
+                  });
+                });
               }
 
               function errCB(err) {
@@ -99,8 +105,8 @@ angular.module('kitchenapp')
 
         // Turns a recipe id into a meal object
         function createMealObject(id){
-          var self = this,
-          deferred = $q.defer(),
+          var deferred = $q.defer(),
+          user = Auth.getUser(),
           recipe = Recipes.getRecipe(id),
           mealObj = _.clone(recipe),
           ingredients = Cupboard.process(mealObj.ingredients);
@@ -112,7 +118,8 @@ angular.module('kitchenapp')
               _id: undefined,
               isComplete: false,
               ingredients:data,
-              recipe: id
+              recipe: id,
+              owner: user
             });
 
 
@@ -177,8 +184,7 @@ angular.module('kitchenapp')
           var self = this, cupboard, meals;
           meals = self.get();
           cupboard = Cupboard.get();
-          $q.when(cupboard, function (cupboardData) {
-            var items = cupboardData.contents; //Get cupboard items
+          $q.when(cupboard, function (cupboardData) { //Get cupboard items
 
             $q.when(meals, function (mealData) {
               var mls = mealData.pending; //Get pending meals

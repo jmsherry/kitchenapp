@@ -3,7 +3,7 @@
 		<h1>Shop View</h1>
 	</div>
 	<div class="col-md-12">
-	<p ng-if="!vm.items.length">You have no items on your list. Add <a ui-sref="meals">meals</a> to generate a shopping list.</p>
+	<p ng-if="!vm.items.length">You have no items on your list. Add <a ui-sref="meals">meals</a> to generate a shopping list. (You can also add items from the <a ui-sref="ingredients">ingredients</a> view)</p>
   	<ul class="list-unstyled shoppingList">
   		<li ng-repeat="item in vm.items track by $index">
   			<div class="col-md-10 description">

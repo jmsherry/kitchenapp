@@ -16,10 +16,10 @@ CupboardCtrl.$inject = ['Cupboard', 'Auth', '$q', '$filter', 'Meals', '$modal', 
     $q.when(cupboard, function(data){
 
           $log.log('HERERERERE', data, Meals);
-          var i, len = data.contents.length, thisItem, theseItems = [], meals, reservedForPromise;
+          var i, len = data.length, thisItem, theseItems = [], meals, reservedForPromise;
 
           for(i=0;i<len;i+=1){
-            thisItem = data.contents[i];
+            thisItem = data[i];
             $log.log(thisItem);
             if(typeof thisItem.reservedFor === 'string'){
               reservedForPromise = Meals.getMealById(thisItem.reservedFor); //returns a promise
@@ -32,13 +32,13 @@ CupboardCtrl.$inject = ['Cupboard', 'Auth', '$q', '$filter', 'Meals', '$modal', 
             var thisItem, reservedForMeal;
             $log.log('all called', fullData);
             for(i=0;i<len;i+=1){
-              thisItem = data.contents[i];
+              thisItem = data[i];
               if(thisItem.reservedFor && typeof thisItem.reservedFor === 'string'){
                 thisItem.reservedFor = _.find(fullData, {_id: thisItem.reservedFor});
               }
             }
 
-            vm.items = data.contents;
+            vm.items = data;
           });
 
 
@@ -109,6 +109,7 @@ CupboardCtrl.$inject = ['Cupboard', 'Auth', '$q', '$filter', 'Meals', '$modal', 
           $log.log('modal scope', $scope);
           $scope.reserve = vm.reserve;
           $scope.modal = modal;
+
         }
       });
     }

@@ -5,7 +5,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var ObjectId = mongoose.Types.ObjectId;
 var User = require('./../user/user.model');
-var MealsList = require('./meal.model');
+//var MealsList = require('./meal.model');
 var MealItem = require('./mealItem.model');
 var _ = require('lodash');
 
@@ -24,23 +24,18 @@ exports.addToMeals = function addToMeals(req, res) {
 
   console.log('in addToMeal \nreq.params',  req.params, '\nreq._params', req._params,  '\nreq.body: ', req.body);
 
-  var item = new MealItem(req.body);
+  var meal = new MealItem(req.body);
+  meal.owner = req._params.userid;
 
-  console.log('item: ', item);
+  console.log('meal: ', meal);
 
-  MealsList.findOneAndUpdate(
-    {"owner": req._params.userid},
-    {$push: {'contents': item}},
-    {safe: false, upsert: true},
-    function(err, meal){
-      console.log('in addToMeal results', err, meal);
-      if(err){
-        handleError(res, err);
-      }
-      console.log('sent item: ', item);
-      return res.status(201).json(item);
+  meal.save(function(err, ml){
+    console.log('in addToMeals results', err, ml);
+    if(err){
+      handleError(res, err);
     }
-  );
+    return res.status(201).json(ml);
+  });
 
 };
 
@@ -52,15 +47,12 @@ exports.addToMeals = function addToMeals(req, res) {
  */
 exports.getMeals = function getMeals(req, res) {
   console.log('in getMeals \nreq.params', req.params, '\nreq._params', req._params,  '\nreq.body: ', req.body);
-  MealsList.findOne(
+  MealItem.find(
     {'owner': req._params.userid},
   function(err, meals){
     console.log('in getMeals results', err, meals);
     if(err){
       handleError(res, err);
-    }
-    if(!meals){
-      return res.status(404).json({});
     }
     return res.status(200).json(meals);
   });
@@ -75,27 +67,19 @@ exports.getMeals = function getMeals(req, res) {
 exports.updateMeal = function updateMeal(req, res) {
 
   //console.log('in updateMeal \nreq.params', req.params, '\nreq._params', req._params,  '\nreq.body: ', req.body);
+  var newMeal = req.body.meal;
 
-  MealsList.findOne(
-    {"owner": req._params.userid},
-    function(err, ML){
-      //console.log('in updateMeal results', err, ML, req.body, req._params, req.params);
+  MealItem.findByIdAndUpdate(
+    req._params.itemid,
+    newMeal,
+    {safe: true, upsert: true},
+    function(err, meal){
+      console.log('in updateMeal results', err, meal);
+
       if(err){
         handleError(res, err);
       }
-      if(!ML){
-        return res.status(404).json({msg: "No meal list found to update"});
-      }
-      var meal = _.find(ML.contents, {"_id": ObjectId(req.params.mealid)});
-      if(!meal){
-        return res.status(404).json({msg: "No meal found to update"});
-      }
-      //meal = req.body;
-      meal.$save(function(m){
-        console.log(arguments);
-        return res.status(200).json(m);
-      });
-
+      return res.status(200).json(meal);
     }
   );
 
@@ -109,19 +93,15 @@ exports.updateMeal = function updateMeal(req, res) {
  */
 exports.removeFromMeals = function removeFromMeals(req, res) {
   console.log('in removeFromMeal \nreq.params', req.params, '\nreq._params', req._params, '\nreq.body: ', req.body);
-  MealsList.findOneAndUpdate(
-    {"owner": req._params.userid},
-    {$pull: {'contents': {"_id": ObjectId(req.params.mealid)}}},
-    {safe: true},
-    function(err, meal){
-      console.log(err, meal);
+  MealItem.findByIdAndRemove(
+    req.params.mealid,
+    {},
+    function(err, item){
+      console.log(err, item);
       if(err){
         handleError(res, err);
       }
-      if(!meal){
-        return res.status(404).json({message: req.params.mealid + " not found in meal"});
-      }
-      return res.status(200).json(meal);
+      return res.status(200).json(item);
     }
   );
 };
@@ -136,16 +116,12 @@ exports.removeFromMeals = function removeFromMeals(req, res) {
  */
 exports.getMeal = function getMeal(req, res) {
   console.log('getMealItem req.params', req.params);
-  MealsList.findOne({
-    "owner": req._params.userid
-  }, function(err, ML){
+  MealItem.findById(req.params.itemid, function(err, meal){
     if(err){
       handleError(res, err);
     }
 
-    var meal = _.find(ML.contents, {_id: req.params.mealid});
-
-    if(!cup){
+    if(!meal){
       return res.status(404).json({});
     }
     return res.status(200).json(meal);
