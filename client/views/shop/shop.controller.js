@@ -19,7 +19,11 @@ ShopCtrl.$inject = ['Shopping', 'Auth', '$q', 'Meals'];
       console.log('Buying ', item);
       var bought = Shopping.buy(item);
       $q.when(bought, function(){
-        Meals.reCheckIngredients();
+        if(item.reservedFor){
+          Meals.itemBought(item);
+        } else {
+          Meals.reCheckIngredients();
+        }
       });
     }
 

@@ -241,7 +241,7 @@ self.$log.log('CUPBOARD ADD ITEM', item);
     };
 
     //Assess a meal vs what is in the cupboard currently
-    Cupboard.prototype.process = function process(ings, meal) {
+    Cupboard.prototype.process = function process(ings) {
         var self = this,
         deferred = self.$q.defer(),
             presentIngredientItems = [],

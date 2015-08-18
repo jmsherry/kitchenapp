@@ -99,7 +99,7 @@ angular.module('kitchenapp')
               meals.pending.push(newMeal);
             }
 
-            toastr.success(newMeal.name + " added!");
+            toastr.success(newMeal.name + " added to your meals list!");
           });
         }
 
@@ -281,21 +281,46 @@ angular.module('kitchenapp')
           return deferred.promise;
         }
 
+        function obtainItem(meal, item){
+          var missing = meal.ingredients.missing;
+          missing.splice(missing.indexOf(item), 1);
+          meal.ingredients.present.push(item);
+          return meal;
+        }
+
+        function loseItem(meal, item){
+          meal.ingredients.present.splice(missing.indexOf(item), 1);
+          meal.ingredients.missing.push(item);
+          return meal;
+        }
+
+        function itemBought(item){
+          var self = this, meals = self.get();
+          $q.when(meals, function (data) {
+            var meal = _.find(data.pending, {_id: item.reservedFor._id});
+            meal = self.obtainItem(meal, item);
+            self.update(meal);
+          });
+        }
+
         init();
 
         return {
           init: init,
-          get: get,
-          add: add,
-          addLocal: addLocal,
-          remove: remove,
-          removeLocal: removeLocal,
-          update: update,
-          updateLocal: updateLocal,
-          reCheckIngredients: reCheckIngredients,
           create: create,
           createMealObject: createMealObject,
-          getMealById: getMealById
+          add: add,
+          addLocal: addLocal,
+          get: get,
+          getMealById: getMealById,
+          update: update,
+          updateLocal: updateLocal,
+          remove: remove,
+          removeLocal: removeLocal,
+          reCheckIngredients: reCheckIngredients,
+          obtainItem: obtainItem,
+          loseItem: loseItem,
+          itemBought: itemBought
         };
 
     }
