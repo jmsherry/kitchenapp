@@ -66,7 +66,7 @@ exports.getMeals = function getMeals(req, res) {
  */
 exports.updateMeal = function updateMeal(req, res) {
 
-  //console.log('in updateMeal \nreq.params', req.params, '\nreq._params', req._params,  '\nreq.body: ', req.body);
+  console.log('in updateMeal \nreq.params', req.params, '\nreq._params', req._params,  '\nreq.body: ', req.body);
   var newMeal = req.body.meal;
 
   MealItem.findByIdAndUpdate(

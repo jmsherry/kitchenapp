@@ -18,9 +18,9 @@ ShopCtrl.$inject = ['Shopping', 'Auth', '$q', 'Meals'];
     function buy(item){
       console.log('Buying ', item);
       var bought = Shopping.buy(item);
-      $q.when(bought, function(){
+      $q.when(bought, function(data){
         if(item.reservedFor){
-          Meals.itemBought(item);
+          Meals.itemBought(data);
         } else {
           Meals.reCheckIngredients();
         }

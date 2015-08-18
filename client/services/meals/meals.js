@@ -148,26 +148,41 @@ angular.module('kitchenapp')
 
         }
 
+        function depopulate(meal){
+          var thisIng;
+          for(var i=0; i< meal.ingredients.present.length; i+=1){
+            thisIng = meal.ingredients.present[i];
+            thisIng.reservedFor = thisIng.reservedFor._id;
+          }
+          delete(meal.$promise);
+          delete(meal.$resolved);
+          return meal;
+        }
+
         function update(meal){
           var self = this,
           userid = Auth.getUser()._id,
-          mealid = meal._id;
+          mealid = meal._id,
+          flatMeal = _.clone(meal);
+
+          //prevent circular JSON reference
+          flatMeal = self.depopulate(flatMeal);
 
           function successCB(meal, response) {
             $log.log('update successCB: ', response);
               self.updateLocal(response);
           }
 
-          function errCB(err) {
+          function errCB(meal, err) {
               $log.log('update errCB: ', err);
-              toastr.error('Failed to update ' + err.config.data.name + "!", 'Server Error ' + err.status + ' ' + err.data.message);
+              toastr.error('Failed to update ' + meal.name + "!", 'Server Error ' + err.status + ' ' + err.data.message);
           }
 
 
           $resource('/api/users/:userid/meals/:mealid',
           {userid: userid, mealid:mealid},
           {update: { method: 'PUT'}})
-          .update({meal: meal}, _.bind(successCB, self, meal), _.bind(errCB, self));
+          .update({meal: flatMeal}, _.bind(successCB, self, meal), _.bind(errCB, self, meal));
         }
 
         function updateLocal(meal){
@@ -181,49 +196,49 @@ angular.module('kitchenapp')
         }
 
         function reCheckIngredients(){
-          var self = this, cupboard, meals;
-          meals = self.get();
-          cupboard = Cupboard.get();
-          $q.when(cupboard, function (cupboardData) { //Get cupboard items
-
-            $q.when(meals, function (mealData) {
-              var mls = mealData.pending; //Get pending meals
-            _.forEach(mls, function(meal){ //and go through them
-
-              var missing = meal.ingredients.missing, //Get missing ings from that meal
-              i, changed = false, item, missingIng;
-
-              for(i=0; i < missing.length; i+=1){ //Go throught them and
-
-                missingIng = missing[i];
-                item = _.find(items, function(thisItem){
-                  if(thisItem.ingredient._id === missingIng._id){ //compare vs cupboard items
-                    return thisItem;
-                  }
-                });
-
-                if(item){ //if you get a match then move it from missing to present
-                  missing.splice(missing.indexOf(missingIng), 1);
-                  meal.ingredients.present.push(missingIng);
-                  changed = true;
-                }
-
-              }
-
-              if(missing.length === 0){
-                meal.isComplete = true;
-              } else {
-                meal.isComplete = false;
-              }
-
-              if(changed){
-                self.update(meal);
-              }
-
-            });
-          });
-
-          });
+          // var self = this, cupboard, meals;
+          // meals = self.get();
+          // cupboard = Cupboard.get();
+          // $q.when(cupboard, function (cupboardData) { //Get cupboard items
+          //
+          //   $q.when(meals, function (mealData) {
+          //     var mls = mealData.pending; //Get pending meals
+          //   _.forEach(mls, function(meal){ //and go through them
+          //
+          //     var missing = meal.ingredients.missing, //Get missing ings from that meal
+          //     i, changed = false, item, missingIng;
+          //
+          //     for(i=0; i < missing.length; i+=1){ //Go throught them and
+          //
+          //       missingIng = missing[i];
+          //       item = _.find(items, function(thisItem){
+          //         if(thisItem.ingredient._id === missingIng._id){ //compare vs cupboard items
+          //           return thisItem;
+          //         }
+          //       });
+          //
+          //       if(item){ //if you get a match then move it from missing to present
+          //         missing.splice(missing.indexOf(missingIng), 1);
+          //         meal.ingredients.present.push(missingIng);
+          //         changed = true;
+          //       }
+          //
+          //     }
+          //
+          //     if(missing.length === 0){
+          //       meal.isComplete = true;
+          //     } else {
+          //       meal.isComplete = false;
+          //     }
+          //
+          //     if(changed){
+          //       self.update(meal);
+          //     }
+          //
+          //   });
+          // });
+          //
+          // });
         }
 
 
@@ -320,7 +335,8 @@ angular.module('kitchenapp')
           reCheckIngredients: reCheckIngredients,
           obtainItem: obtainItem,
           loseItem: loseItem,
-          itemBought: itemBought
+          itemBought: itemBought,
+          depopulate: depopulate
         };
 
     }

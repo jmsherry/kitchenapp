@@ -28,10 +28,10 @@ exports.addToCupboard = function addToCupboard(req, res) {
     owner: req._params.userid,
     ingredient: req.body.ingId,
     dateAdded: new Date(),
-    reservedFor: req.body.reservedFor
+    reservedFor: req.body.reservedForId
   });
 
-  console.log('item: ', item);
+  console.log('new constructed item: ', item);
 
   item.save(function(err, item){
     console.log('in addToCupboard results', err, item);
