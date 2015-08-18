@@ -12,7 +12,7 @@
 		<button type="button" class="btn btn-warning" ng-if="!vm.editing  && vm.items.length > 0" ng-click="vm.toggleEdit()">Remove spolied or lost items</button>
 		<button type="button" class="btn btn-info" ng-if="vm.editing  && vm.items.length > 0" ng-click="vm.toggleEdit()">Finish editing</button>
 	</div>
-	<div ng-if="vm.items.length > 0" class="col-md-6">
+	<div ng-if="vm.items.length > 1" class="col-md-6">
 		<div class="pull-right sorts">
 			<p>Sort by: </p>
 			<div class="btn-group  btn-group-lg" role="group" aria-label="sorting choices">
