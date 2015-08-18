@@ -48,9 +48,8 @@
           self.$log.log('cupboard serv init:', arguments);
           cupboard = self.populate(cupboard);
           self.$q.when(cupboard, function(data){
-            cupboard = data;
             self.$log.log('cupboard contents resolve:', data);
-            self.deferred.resolve(cupboard);
+            self.deferred.resolve(data);
           });
         });
     };
@@ -59,6 +58,7 @@
       var self = this, i, len = items.length, deferred = self.$q.defer(), promises = [], thisIng;
 
       for (i = 0; i < len; i+=1) {
+        thisIng = items[i].ingredient;
         thisIng = self.Ingredients.getById(thisIng); //returns a promise
         promises.push(thisIng);
       }
@@ -122,7 +122,7 @@ self.$log.log('CUPBOARD ADD ITEM', item);
         self.$resource('/api/users/:userid/cupboard', {userid: userid})
         .save({
           ingId: ingId,
-          reservedFor: item.reservedFor
+          reservedForId: item.reservedFor._id
         }, _.bind(CBSuccess, self, item), _.bind(CBError, self, item));
 
         return $deferred.promise;
