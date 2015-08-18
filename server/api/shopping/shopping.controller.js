@@ -26,7 +26,7 @@ exports.addToShoppingList = function addToShoppingList(req, res) {
   });
 
 	item.save(function(err, item){
-    console.log('in addToMeals results', err, item);
+    console.log('in addToShoppingList results', err, item);
     if(err){
       handleError(res, err);
     }
