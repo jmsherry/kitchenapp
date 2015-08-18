@@ -13,8 +13,12 @@ describe('GET /meals', function () {
       .expect(200)
       .expect('Content-Type', /json/)
       .end(function (err, res) {
-        if (err) { return done(err); }
-        console.log(err);
+
+        if (err) {
+          console.log(err);
+          return done(err);
+        }
+
         done();
       });
   });
