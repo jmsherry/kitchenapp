@@ -149,13 +149,23 @@ angular.module('kitchenapp')
         }
 
         function depopulate(meal){
-          var thisIng;
-          for(var i=0; i< meal.ingredients.present.length; i+=1){
-            thisIng = meal.ingredients.present[i];
-            thisIng.reservedFor = thisIng.reservedFor._id;
+          var missing = meal.ingredients.missing,
+          present = meal.ingredients.present,
+          mlen = missing.length,
+          plen = present.length;
+
+          for(var i=0; i< plen; i+=1){
+            present[i] = present[i]._id;
           }
+
+          for(var i=0; i< mlen; i+=1){
+            missing[i] = missing[i]._id;
+          }
+
+          //For safety remove any promise cruft
           delete(meal.$promise);
           delete(meal.$resolved);
+
           return meal;
         }
 
@@ -163,13 +173,15 @@ angular.module('kitchenapp')
           var self = this,
           userid = Auth.getUser()._id,
           mealid = meal._id,
-          flatMeal = _.clone(meal);
+          flatMeal;
 
-          //prevent circular JSON reference
+          //Copy the meal and depopulate it to itemIds
+          flatMeal = _.cloneDeep(meal);
           flatMeal = self.depopulate(flatMeal);
 
           function successCB(meal, response) {
             $log.log('update successCB: ', response);
+              response.ingredients = meal.ingredients;
               self.updateLocal(response);
           }
 
@@ -280,7 +292,7 @@ angular.module('kitchenapp')
             }
 
             items.splice(items.indexOf(meal), 1);
-            toastr.success(meal.name + ' has been removed.');
+            toastr.success(meal.name + ' has been removed from your meals list.');
           });
         }
 
@@ -298,21 +310,22 @@ angular.module('kitchenapp')
 
         function obtainItem(meal, item){
           var missing = meal.ingredients.missing;
-          missing.splice(missing.indexOf(item), 1);
+          missing.splice(missing.indexOf(item.ingredient), 1);
           meal.ingredients.present.push(item);
           return meal;
         }
 
         function loseItem(meal, item){
-          meal.ingredients.present.splice(missing.indexOf(item), 1);
-          meal.ingredients.missing.push(item);
+          var present = meal.ingredients.missing;
+          present.splice(present.indexOf(item), 1);
+          meal.ingredients.missing.push(item.ingredient);
           return meal;
         }
 
         function itemBought(item){
           var self = this, meals = self.get();
           $q.when(meals, function (data) {
-            var meal = _.find(data.pending, {_id: item.reservedFor._id});
+            var meal = _.find(data.pending, {_id: item.reservedFor}); //item is unpopulated at this stage
             meal = self.obtainItem(meal, item);
             self.update(meal);
           });

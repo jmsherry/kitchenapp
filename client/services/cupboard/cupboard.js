@@ -95,8 +95,8 @@
      */
     Cupboard.prototype.add = function add(item) {
 
-        var self = this, userid, ingId, $deferred = self.$q.defer();
-self.$log.log('CUPBOARD ADD ITEM', item);
+        var self = this, userid, ingId, deferred = self.$q.defer();
+        self.$log.log('CUPBOARD ADD ITEM', item);
         userid = self.getOwner()._id;
 
         //handle unpopulated items
@@ -109,14 +109,18 @@ self.$log.log('CUPBOARD ADD ITEM', item);
         function CBSuccess(item, response) {
           self.$log.log('in Cupboard Add CBSuccess: ', arguments);
           var addedLocally;
-          response.ingredient = item.ingredient;
+          response = response.toJSON();
+          response.ingredient = item.ingredient; //fast populate
           addedLocally = self.addLocal(response);
-          $deferred.resolve(addedLocally);
+          self.$log.log('returned promise from localAdd', addedLocally);
+          self.$q.when(addedLocally, function(data){
+            deferred.resolve(data);
+          });
         }
 
         function CBError(ing, err) {
           self.$log.log(arguments);
-            self.toastr.error('Failed to add ' + err.config.data.name + "!", 'Server Error ' + err.status + ' ' + err.data.message);
+          self.toastr.error('Failed to add ' + err.config.data.name + "!", 'Server Error ' + err.status + ' ' + err.data.message);
         }
 
         self.$resource('/api/users/:userid/cupboard', {userid: userid})
@@ -125,7 +129,7 @@ self.$log.log('CUPBOARD ADD ITEM', item);
           reservedForId: item.reservedFor._id
         }, _.bind(CBSuccess, self, item), _.bind(CBError, self, item));
 
-        return $deferred.promise;
+        return deferred.promise;
 
     };
 
@@ -139,16 +143,20 @@ self.$log.log('CUPBOARD ADD ITEM', item);
     Cupboard.prototype.update = function update(item) {
       var self = this, userid, itemid;
 
+      //depopulate
+      item = self.depopulate(item);
+
       userid = self.getOwner()._id;
       itemid = item._id;
 
       function CBSuccess(item, resp) {
-        self.updateLocal(item);
+        //resp = resp.toJSON();
+        self.updateLocal(resp);
       }
 
       function CBError(ing, err) {
         self.$log.log(arguments);
-          self.toastr.error('Failed to add ' + err.config.data.name + "!", 'Server Error ' + err.status + ' ' + err.data.message);
+          self.toastr.error('Failed to add ' + ing.name + "!", 'Server Error ' + err.status + ' ' + err.data.message);
       }
 
       self.$resource('/api/users/:userid/cupboard/itemid', {userid: userid, itemid: itemid}, {update: { method: 'PUT', isArray: false }})
@@ -280,16 +288,16 @@ self.$log.log('CUPBOARD ADD ITEM', item);
     };
 
     Cupboard.prototype.addLocal = function addLocal(item){
-      var self = this, cupboard;
+      var self = this, cupboard, deferred = self.$q.defer();
 
       cupboard = self.getCupboard();
       self.$q.when(cupboard, function(data) {
-        var ing;
+        var ing, fullIng;
 
         function add(item) {
           data.push(item);
           self.toastr.success(item.ingredient.name + ' has been added to your cupboard');
-          return item;
+          deferred.resolve(item);
         }
 
         if(item.ingredient.name){
@@ -297,16 +305,18 @@ self.$log.log('CUPBOARD ADD ITEM', item);
         } else {
           //Deal with unpopulated
           ing = item.ingredient;
-          ing = self.Ingredients.getById(ing);
+          fullIng = self.Ingredients.getById(ing);
 
 
-          self.$q.when(ing, function(ingData){
+          self.$q.when(fullIng, function(ingData){
             ing = ingData;
             add(item);
           });
         }
-
       });
+
+        return deferred.promise;
+
     };
 
     Cupboard.prototype.updateLocal = function updateLocal(item){
@@ -351,5 +361,25 @@ self.$log.log('CUPBOARD ADD ITEM', item);
         self.toastr.success(name + ' has been removed from your cupboard');
       });
     };
+
+    Cupboard.prototype.depopulate = function depopulate(item){
+      // depopulate owner, ingredient, reservedFor fields
+      if(typeof item.owner === 'object' && item.owner._id){
+        item.owner = item.owner._id;
+      }
+      if(typeof item.ingredient === 'object' && item.ingredient._id){
+        item.ingredient = item.ingredient._id;
+      }
+      if(typeof item.reservedFor === 'object' && item.reservedFor._id){
+        item.reservedFor = item.reservedFor._id;
+      }
+
+      //For safety remove any promise cruft
+      delete(item.$promise);
+      delete(item.$resolved);
+
+      return item;
+
+    }
 
 }());

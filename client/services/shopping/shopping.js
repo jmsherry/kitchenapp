@@ -89,6 +89,8 @@
      *
      * @param ingredient item{}
      * Adds an ingredient to the ingredients array
+     * @param meal {} (optional)
+     * The meal that the ingredient is reserved for
      *
      */
     Shopping.prototype.add = function add(ing, meal) {
@@ -105,6 +107,7 @@
         userid = self.getOwner()._id;
 
         function CBSuccess(ing, meal, item) {
+            //item = item.toJSON();
             item.ingredient = ing
             if(meal){
               item.reservedFor = meal;
@@ -148,16 +151,15 @@
     //
     //     userid = self.getOwner()._id;
     //
-    //     function CBSuccess() {
-    //         self.updateLocal(item);
+    //     function CBSuccess(item, response) {
+    //         self.updateLocal(response);
     //     }
     //
     //     self.$resource('/api/users/:userid/shopping', {
     //             userid: userid
     //         }, {
     //             update: {
-    //                 method: 'PUT',
-    //                 isArray: true
+    //                 method: 'PUT'
     //             }
     //         })
     //         .update({
@@ -307,7 +309,7 @@
 
 
         var self = this,
-        $deferred = self.$q.defer(), user, added;
+        deferred = self.$q.defer(), user, added;
 
         self.$log.log('buying', item);
 
@@ -317,11 +319,11 @@
         added = self.Cupboard.add(item);
 
         self.$q.when(added, function(data){
-          $deferred.resolve(data);
+          deferred.resolve(data);
         });
 
 
-        return $deferred.promise;
+        return deferred.promise;
     };
 
 }());
