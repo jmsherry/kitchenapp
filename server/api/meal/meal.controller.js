@@ -70,9 +70,9 @@ exports.updateMeal = function updateMeal(req, res) {
   var newMeal = req.body.meal;
 
   MealItem.findByIdAndUpdate(
-    req._params.itemid,
+    req.params.mealid,
     newMeal,
-    {safe: true, upsert: true},
+    {new: true},
     function(err, meal){
       console.log('in updateMeal results', err, meal);
 
