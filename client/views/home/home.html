@@ -1,5 +1,16 @@
 <div>
-  <h1>Welcome to KitchenApp</h1>
+  <h1 class="banner">KitchenApp</h1>
+
+
+    <img class="hero" src="/assets/images/Food-Spread-1200x400.jpg" alt="banner image" sizes="(min-width: 992px) 80vw, 100vw"
+	srcset="/assets/images/Food-Spread-500x167.jpg 500w,
+			/assets/images/Food-Spread-768x256.jpg 768w,
+			/assets/images/Food-Spread-992x331.jpg 992w,
+			/assets/images/Food-Spread-1200x400.jpg 1200w">
+
+
+  <div class="row">
+    <div class="col-md-6">
   <h2>Purpose</h2>
   <p>The idea behind kitchen app is to allow you to plan meals and shopping. By building meals and then placing them into the calendar, the system will allow you to:</p>
   <ul>
@@ -8,7 +19,9 @@
   	<li>keep a shopping list</li>
   </ul>
   <p>...and you can even add your own meals and ingredients!</p>
-
+  <strong ng-if="!Auth.isLogged()">To begin, please register or sign in above...</strong>
+</div>
+<div class="col-md-6">
   <h2>How to use the app</h2>
   <p>(Semantically running right to left on the main menu)</p>
   <ul>
@@ -28,6 +41,6 @@
 		  </ul>
 	  </li>
   </ul>
-
-  <strong ng-if="!Auth.isLogged()">To begin, please register or sign in above...</strong>
+</div>
+</div>
 </div>
