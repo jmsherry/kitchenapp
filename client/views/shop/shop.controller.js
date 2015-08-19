@@ -22,8 +22,6 @@ ShopCtrl.$inject = ['Shopping', 'Auth', '$q', 'Meals'];
       $q.when(bought, function(data){
         if(item.reservedFor){
           Meals.itemBought(data);
-        } else {
-          Meals.reCheckIngredients();
         }
       });
     }
@@ -33,8 +31,7 @@ ShopCtrl.$inject = ['Shopping', 'Auth', '$q', 'Meals'];
       Shopping.remove(item);
     }
 
-    $q.when(items, function(data){
-      $q.when(meals, function(mls){
+    $q.all(items, meals).spread(function(data, mls){
 
         var item, len = data.length, i, ings = [];
         mls = mls.pending.concat(mls.complete);
@@ -53,8 +50,6 @@ ShopCtrl.$inject = ['Shopping', 'Auth', '$q', 'Meals'];
           vm.items = data;
         });
 
-
-      });
     });
 
     angular.extend(vm, {

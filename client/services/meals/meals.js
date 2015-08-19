@@ -171,6 +171,7 @@ angular.module('kitchenapp')
 
         function update(meal){
           var self = this,
+          deferred = $q.defer(),
           userid = Auth.getUser()._id,
           mealid = meal._id,
           flatMeal;
@@ -181,8 +182,12 @@ angular.module('kitchenapp')
 
           function successCB(meal, response) {
             $log.log('update successCB: ', response);
+            var updatedLocally;
               response.ingredients = meal.ingredients;
-              self.updateLocal(response);
+              updatedLocally = self.updateLocal(response);
+              $q.when(updatedLocally, function(updatedMeal){
+                deferred.resolve(updatedMeal);
+              });
           }
 
           function errCB(meal, err) {
@@ -195,6 +200,8 @@ angular.module('kitchenapp')
           {userid: userid, mealid:mealid},
           {update: { method: 'PUT'}})
           .update({meal: flatMeal}, _.bind(successCB, self, meal), _.bind(errCB, self, meal));
+
+          return deferred.promise;
         }
 
         function updateLocal(meal){
@@ -205,52 +212,6 @@ angular.module('kitchenapp')
             var oldMeal = _.find(mealData, {_id: meal._id});
             oldMeal = meal;
           });
-        }
-
-        function reCheckIngredients(){
-          // var self = this, cupboard, meals;
-          // meals = self.get();
-          // cupboard = Cupboard.get();
-          // $q.when(cupboard, function (cupboardData) { //Get cupboard items
-          //
-          //   $q.when(meals, function (mealData) {
-          //     var mls = mealData.pending; //Get pending meals
-          //   _.forEach(mls, function(meal){ //and go through them
-          //
-          //     var missing = meal.ingredients.missing, //Get missing ings from that meal
-          //     i, changed = false, item, missingIng;
-          //
-          //     for(i=0; i < missing.length; i+=1){ //Go throught them and
-          //
-          //       missingIng = missing[i];
-          //       item = _.find(items, function(thisItem){
-          //         if(thisItem.ingredient._id === missingIng._id){ //compare vs cupboard items
-          //           return thisItem;
-          //         }
-          //       });
-          //
-          //       if(item){ //if you get a match then move it from missing to present
-          //         missing.splice(missing.indexOf(missingIng), 1);
-          //         meal.ingredients.present.push(missingIng);
-          //         changed = true;
-          //       }
-          //
-          //     }
-          //
-          //     if(missing.length === 0){
-          //       meal.isComplete = true;
-          //     } else {
-          //       meal.isComplete = false;
-          //     }
-          //
-          //     if(changed){
-          //       self.update(meal);
-          //     }
-          //
-          //   });
-          // });
-          //
-          // });
         }
 
 
@@ -325,11 +286,21 @@ angular.module('kitchenapp')
         function itemBought(item){
           var self = this, meals = self.get();
           $q.when(meals, function (data) {
-            var meal = _.find(data.pending, {_id: item.reservedFor}); //item is unpopulated at this stage
+            var meal = _.find(data.pending, {_id: item.reservedFor}), updated; //item is unpopulated at this stage
             meal = self.obtainItem(meal, item);
-            self.update(meal);
+
+            if(meal.ingredients.missing.length === 0){
+              meal.isComplete = true;
+            }
+
+            updated = self.update(meal);
+            $q.when(updated, function(savedMeal){
+              data.pending.splice(data.pending.indexOf(savedMeal), 1);
+              data.complete.push(savedMeal);
+            });
           });
         }
+
 
         init();
 
@@ -345,7 +316,6 @@ angular.module('kitchenapp')
           updateLocal: updateLocal,
           remove: remove,
           removeLocal: removeLocal,
-          reCheckIngredients: reCheckIngredients,
           obtainItem: obtainItem,
           loseItem: loseItem,
           itemBought: itemBought,
