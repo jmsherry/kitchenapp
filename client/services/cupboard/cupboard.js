@@ -363,14 +363,18 @@
     };
 
     Cupboard.prototype.depopulate = function depopulate(item){
+      if(!item){
+        self.toastr.error('Error depolulating. Please contact the maintainer');
+        throw new Error('Error in depopulation \(cupboard\)');
+      }
       // depopulate owner, ingredient, reservedFor fields
-      if(typeof item.owner === 'object' && item.owner._id){
+      if(item.owner && typeof item.owner === 'object' && item.owner._id){
         item.owner = item.owner._id;
       }
-      if(typeof item.ingredient === 'object' && item.ingredient._id){
+      if(item.ingredient && typeof item.ingredient === 'object' && item.ingredient._id){
         item.ingredient = item.ingredient._id;
       }
-      if(typeof item.reservedFor === 'object' && item.reservedFor._id){
+      if(item.reservedFor && typeof item.reservedFor === 'object' && item.reservedFor._id){
         item.reservedFor = item.reservedFor._id;
       }
 
