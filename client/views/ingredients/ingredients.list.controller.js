@@ -54,7 +54,7 @@ function IngredientsCtrl(Ingredients, $scope, $q, $log, uiGridConstants, Shoppin
 			$scope.gridOptions.data = newData;
 		});
 
-    function addToCupboard(e){
+    function addToCupboard(){
       var selectedIngs = $scope.gridApi.selection.getSelectedGridRows(), i, len = selectedIngs.length, thisIng;
       $log.log(selectedIngs);
       selectedIngs = _.pluck(selectedIngs, 'entity');
@@ -72,8 +72,6 @@ function IngredientsCtrl(Ingredients, $scope, $q, $log, uiGridConstants, Shoppin
 
       Cupboard.bulkAdd(selectedIngs);
 
-      $log.log(e);
-      $('button').blur();
     }
 
     function addToShopping(){
@@ -82,8 +80,6 @@ function IngredientsCtrl(Ingredients, $scope, $q, $log, uiGridConstants, Shoppin
       selectedIngs = _.pluck(selectedIngs, 'entity');
       $log.log(selectedIngs);
       Shopping.bulkAdd(selectedIngs);
-      //Shopping.add(selectedIngs);
-      $('button').blur();
     }
 
     function clear(){
