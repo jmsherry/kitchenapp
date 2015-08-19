@@ -15,7 +15,7 @@ var mealItemSchema = new Schema({
   ingredients: {
     present:[{
         type: ObjectId,
-        ref: 'Ingredient'
+        ref: 'CupboardItem'
     }],
     missing:[{
         type: ObjectId,
@@ -23,7 +23,7 @@ var mealItemSchema = new Schema({
     }]
   },
   isComplete: {type:Boolean, required: true},
-  recipe: {type: ObjectId, required: true},
+  recipe: {type: ObjectId, ref: 'Recipe', required: true},
   starts_at: {type: Date, default: null}
 });
 
