@@ -74,16 +74,12 @@ exports.updateCupboard = function updateCupboard(req, res) {
 
   console.log('in updateCupboard \nreq.params', req.params, '\nreq._params', req._params,  '\nreq.body: ', req.body);
 
-  var newItem = req.body.item;
-  newItem.ingredient = newItem.ingredient._id;
-
   CupboardItem.findByIdAndUpdate(
     req._params.itemid,
-    newItem,
-    {safe: true, upsert: true},
+    req.body.item,
+    {new: true},
     function(err, item){
       console.log('in updateCupboard results', err, item);
-      var item;
 
       if(err){
         handleError(res, err);
