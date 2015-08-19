@@ -1,17 +1,25 @@
 <div class="row">
-	<div class="col-md-12">
+	<div class="col-xs-12">
 		<h1>My Cupboard</h1>
 	</div>
-	<div class="col-md-12">
+</div>
+<div class="row">
+	<div class="col-xs-12">
 		<p ng-if="!vm.items.length > 0">Your cupboard is empty!! Go to <a ui-sref="ingredients">ingredients</a> to register ingredients or <a ui-sref="shop">shop</a> to buy more.</p>
 	</div>
-	<div class="col-md-12 info-messages">
+</div>
+<div class="row">
+	<div class="col-xs-12 info-messages">
 		<p ng-if="!vm.meals.complete.length > 0 && !vm.meals.pending.length > 0 && vm.items.length > 0" class="bg-warning">There are no meals currently in the system. Go <a ui-sref="meals" title="Go to meals page">here</a> to create some<span  ng-if="vm.items.length > 0"> and put your ingredients to good use</span>!!</p>
 	</div>
+</div>
+<div class="row">
 	<div ng-class="vm.items.length > 0 ? 'col-md-6' : 'col-md-12'">
 		<button type="button" class="btn btn-warning" ng-if="!vm.editing  && vm.items.length > 0" ng-click="vm.toggleEdit()">Remove spolied or lost items</button>
 		<button type="button" class="btn btn-info" ng-if="vm.editing  && vm.items.length > 0" ng-click="vm.toggleEdit()">Finish editing</button>
 	</div>
+</div>
+<div class="row">
 	<div ng-if="vm.items.length > 1" class="col-md-6">
 		<div class="pull-right sorts">
 			<p>Sort by: </p>
@@ -22,13 +30,15 @@
 			</div>
 		</div>
 	</div>
+</div>
+<div class="row">
 	<div class="col-md-12">
   	<ul class="list-unstyled cupboardList">
   		<li ng-repeat="item in vm.items track by $index" ng-class="item.reservedFor ? 'reserved bg-success' : ''">
 				<div ng-class="vm.editing ? 'col-md-10 description' : 'col-md-12 description'">
-					<h2>{{ item.ingredient.name}}</h2>
+					<h2>{{ item.ingredient.name }}</h2>
 					<div>
-						<p ng-if="item.reservedFor">Reserved for meal: {{item.reservedFor.name}}<span ng-if="item.reservedFor.starts_at"> on {{item.reservedFor.date | date : 'd MMMM y' : GMT}}</span>.</p>
+						<p ng-if="item.reservedFor">Reserved for meal: {{ item.reservedFor.name }}<span ng-if="item.reservedFor.starts_at"> on {{ item.reservedFor.date | date : 'd MMMM y' : GMT }}</span>.</p>
 						<button type="button" class="btn btn-danger" ng-click="vm.unreserve(item)"  ng-if="item.reservedFor">Unreserve</button>
 						<button type="button" class="btn btn-primary" ng-click="vm.showReserveModal(item)"  ng-if="!item.reservedFor && vm.meals.pending.length > 0">Add to a meal</button>
 					</div>
@@ -40,5 +50,4 @@
 			</li>
   	</ul>
 	</div>
-
 </div>

@@ -70,6 +70,8 @@ angular.module('kitchenapp', [
 
     $("body").on('click.bgActive', ".btn-group > .btn", function(){
         $(this).addClass("active").siblings().removeClass("active");
+    }).on('click.menuSelected', '.navbar-collapse ul a:not(.dropdown-toggle)', function () {
+        $('.navbar-toggle:visible').click();
     });
 
   });

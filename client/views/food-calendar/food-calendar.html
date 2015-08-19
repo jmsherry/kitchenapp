@@ -1,24 +1,24 @@
 <div>
 	<h1>Meal Planner</h1>
-	<p>You have {{completeMeals.length}} complete meal<span ng-if="completeMeals.length !== 1">s</span>. Go to '<a href="#" ui-sref="meals">Build Meals</a>' to create more...</p>
+	<p class="ng-cloak">You have <span class="completeCount">{{completeMeals.length}} complete meal<span ng-if="completeMeals.length !== 1">s</span></span>. Click on a date to place it, or go to <a href="#" ui-sref="meals">Build Meals</a> to create more...</p>
 	<div class="row">
 		<div class="col-md-12">
-			<button class="btn btn-primary" ng-click="showModal()">Modal</button>
-		</div>
-		<div class="col-md-12">
-			<mwl-calendar
-		    calendar-events="events"
-		    calendar-view="calendarView"
-		    calendar-current-day="calendarDay"
-		    calendar-control="calendarControl"
-		    calendar-event-click="eventClicked(calendarEvent)"
-		    calendar-edit-event-html="'<i class=\'glyphicon glyphicon-pencil\'></i>'"
-		    calendar-delete-event-html="'<i class=\'glyphicon glyphicon-remove\'></i>'"
-		    calendar-edit-event-click="eventEdited(calendarEvent)"
-		    calendar-delete-event-click="eventDeleted(calendarEvent)"
-		    calendar-timespan-click="calclickalert(calendarDate)",
-		    calendar-auto-open="true"
-		    ></mwl-calendar>
+			<div class="grid-wrapper">
+				<p class="bg-info responsive-table">Slide the table left to see all the columns</p>
+				<mwl-calendar
+			    calendar-events="events"
+			    calendar-view="calendarView"
+			    calendar-current-day="calendarDay"
+			    calendar-control="calendarControl"
+			    calendar-event-click="eventClicked(calendarEvent)"
+			    calendar-edit-event-html="'<i class=\'glyphicon glyphicon-pencil\'></i>'"
+			    calendar-delete-event-html="'<i class=\'glyphicon glyphicon-remove\'></i>'"
+			    calendar-edit-event-click="eventEdited(calendarEvent)"
+			    calendar-delete-event-click="eventDeleted(calendarEvent)"
+			    calendar-timespan-click="calclickalert(calendarDate)",
+			    calendar-auto-open="true"
+			    ></mwl-calendar>
+			</div>
 		</div>
 	</div>
 </div>

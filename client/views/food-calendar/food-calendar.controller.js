@@ -55,8 +55,8 @@ angular.module('kitchenapp')
     $scope.eventClicked = function() {
     	$log.log('event clicked', event);
       //showModal('Clicked', event);
-      $event.preventDefault();
-      $event.stopPropagation();
+      event.preventDefault();
+      event.stopPropagation();
     };
 
     $scope.eventEdited = function() {
@@ -77,13 +77,6 @@ angular.module('kitchenapp')
 
     $scope.setCalendarToToday = function() {
       $scope.calendarDay = new Date();
-    };
-
-    $scope.toggle = function($event, field, event) {
-      $event.preventDefault();
-      $event.stopPropagation();
-
-      event[field] = !event[field];
     };
 
 });

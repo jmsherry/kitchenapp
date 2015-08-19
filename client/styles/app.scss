@@ -145,11 +145,11 @@ to prevent collapsing during animation*/
     button {
       margin-top: 10%;
     }
-    a {
-      display: block;
-      color: #000;
-      padding: 10px;
-    }
+    /* a {
+    //   display: block;
+    //   color: #000;
+    //   padding: 10px;
+  }*/
   }
 
   &.shopping-list {
@@ -168,7 +168,7 @@ to prevent collapsing during animation*/
     min-height:100px;
     border-bottom: 5px dashed #000;
     padding:5px 10px 15px;
-    button {
+    button, a.place {
       margin-top:1%;
     }
     h3 {
@@ -180,6 +180,39 @@ to prevent collapsing during animation*/
     }
   }
 }
+
+p.responsive-table {
+  display: none;
+}
+
+@media  (max-width: 480px) {
+  .inventory .achieved-meals button,
+  .inventory .achieved-meals a.place {
+    margin-top:10%;
+  }
+
+  .controls button {
+    width: 100%;
+    margin-bottom: 5px;
+  }
+
+  .grid-wrapper {
+    overflow-x: scroll;
+  }
+  .cal-context,
+  .ng-ui-grid {
+    min-width:600px;
+  }
+
+  p.responsive-table {
+    display: block;
+  }
+
+  .sorts {
+    margin-top:10px;
+  }
+}
+
 
 .partial-meals {
   padding:0 10px;
@@ -295,4 +328,14 @@ select {
     font-size: 1.6em;
     vertical-align: baseline;
   }
+}
+
+.completeCount {
+  color:green;
+  font-size: 1.5em;
+  font-weight: 900;
+}
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
 }
