@@ -14,12 +14,10 @@
 	</div>
 </div>
 <div class="row">
-	<div ng-class="vm.items.length > 0 ? 'col-md-6' : 'col-md-12'">
+	<div ng-class="vm.items.length > 1 ? 'col-md-6' : 'col-md-12'">
 		<button type="button" class="btn btn-warning" ng-if="!vm.editing  && vm.items.length > 0" ng-click="vm.toggleEdit()">Remove spolied or lost items</button>
 		<button type="button" class="btn btn-info" ng-if="vm.editing  && vm.items.length > 0" ng-click="vm.toggleEdit()">Finish editing</button>
 	</div>
-</div>
-<div class="row">
 	<div ng-if="vm.items.length > 1" class="col-md-6">
 		<div class="pull-right sorts">
 			<p>Sort by: </p>
