@@ -13,36 +13,45 @@ BudgetCtrl.$inject = ['Shopping', 'Auth', '$q', 'Meals', '$log', '$scope'];
     user = Auth.getUser(),
     budget = user.budget;
 
-    $scope.data = [
-      {x: new Date(2015, 8, 16), value: budget - 4, guide: budget},
-      {x: new Date(2015, 8, 17), value: budget - 8, guide: (budget * (6/7))},
-      {x: new Date(2015, 8, 18), value: budget - 15, guide:  budget * (5/7)},
-      {x: new Date(2015, 8, 19), value: budget - 16, guide:  budget * (4/7)},
-      {x: new Date(2015, 8, 20), value: budget - 23, guide:  budget * (3/7)},
-      {x: new Date(2015, 8, 21), value: budget - 32, guide:  budget * (2/7)},
-      {x: new Date(2015, 8, 22), value: budget - 43, guide:  budget * (1/7)}
-    ];
+    $scope.data = [{
+    key: "Cumulative Return",
+    values: [
+        { "label" : "Monday" , "value" : -29.765957771107 },
+        { "label" : "Tuesday" , "value" : 0 },
+        { "label" : "Wednesday" , "value" : 32.807804682612 },
+        { "label" : "Thursday" , "value" : 196.45946739256 },
+        { "label" : "Friday" , "value" : 0.19434030906893 },
+        { "label" : "Saturday" , "value" : -98.079782601442 },
+        { "label" : "Sunday" , "value" : -13.925743130903 }
+    ]
+}];
 
-    $scope.options = {
-      axes: {
-        x: {key: 'x', type: 'linear', ticks: 7, ticksFormatter: function(date){return moment(date).format("ddd Do")}},
-        y: {type: 'linear', min: -budget/2, max: budget, ticks: 10}
-      },
-      margin: {
-        left: 30
-      },
-      series: [
-        {y: 'value', color: 'steelblue', thickness: '2px', type: 'area', striped: true, label: 'Achieved Budget'},
-        {y: 'guide', color: 'red', thickness: '2px', type: 'area', striped: true, label: 'Target Budget'}
-      ],
-      lineMode: 'linear',
-      tension: 0.7,
-      tooltip: {mode: 'scrubber', formatter: function(x, y, series) {return '£' + y.toFixed(2);}},
-      drawLegend: true,
-      drawDots: true,
-      hideOverflow: false,
-      columnsHGap: 7
+$scope.options = {
+    chart: {
+        type: 'discreteBarChart',
+        height: 450,
+        margin : {
+            top: 20,
+            right: 20,
+            bottom: 60,
+            left: 55
+        },
+        x: function(d){ return d.label; },
+        y: function(d){ return d.value; },
+        showValues: true,
+        valueFormat: function(d){
+            return d3.format(',.4f')(d);
+        },
+        transitionDuration: 500,
+        xAxis: {
+            axisLabel: 'X Axis'
+        },
+        yAxis: {
+            axisLabel: 'Y Axis',
+            axisLabelDistance: 30
+        }
     }
+};
 
     angular.extend(vm, {
       name: 'BudgetCtrl'
