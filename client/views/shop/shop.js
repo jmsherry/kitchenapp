@@ -8,5 +8,11 @@ angular.module('kitchenapp')
         templateUrl: 'views/shop/shop.html',
         controller: 'ShopCtrl',
         controllerAs: 'vm'
+      })
+      .state('budget', {
+        url: '/budget',
+        templateUrl: 'views/shop/budget.html',
+        controller: 'BudgetCtrl',
+        controllerAs: 'vm'
       });
   });

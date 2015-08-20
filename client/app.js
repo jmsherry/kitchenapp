@@ -16,7 +16,8 @@ angular.module('kitchenapp', [
   'mwl.calendar',
   'ui.bootstrap',
   'ui.gravatar',
-  'toastr'
+  'toastr',
+  'n3-line-chart'
 ])
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, calendarConfigProvider, toastrConfig) {
 
