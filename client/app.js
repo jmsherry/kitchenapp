@@ -17,7 +17,7 @@ angular.module('kitchenapp', [
   'ui.bootstrap',
   'ui.gravatar',
   'toastr',
-  'n3-line-chart'
+  'nvd3'
 ])
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, calendarConfigProvider, toastrConfig) {
 
