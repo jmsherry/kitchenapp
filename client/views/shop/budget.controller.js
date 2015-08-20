@@ -14,26 +14,27 @@ BudgetCtrl.$inject = ['Shopping', 'Auth', '$q', 'Meals', '$log', '$scope'];
     budget = user.budget;
 
     $scope.data = [
-      {x: new Date(2015, 8, 16), value: budget - 4, guide: budget},
-      {x: new Date(2015, 8, 17), value: budget - 8, guide: (budget * (6/7))},
-      {x: new Date(2015, 8, 18), value: budget - 15, guide:  budget * (5/7)},
-      {x: new Date(2015, 8, 19), value: budget - 16, guide:  budget * (4/7)},
-      {x: new Date(2015, 8, 20), value: budget - 23, guide:  budget * (3/7)},
-      {x: new Date(2015, 8, 21), value: budget - 32, guide:  budget * (2/7)},
-      {x: new Date(2015, 8, 22), value: budget - 43, guide:  budget * (1/7)}
+      {x: new Date(2015, 8, 15), value: budget, guide: budget},
+      {x: new Date(2015, 8, 16), value: budget - 8, guide: (budget * (6/7))},
+      {x: new Date(2015, 8, 17), value: budget - 8, guide: (budget * (5/7))},
+      {x: new Date(2015, 8, 18), value: budget - 15, guide:  budget * (4/7)},
+      {x: new Date(2015, 8, 19), value: budget - 16, guide:  budget * (3/7)},
+      {x: new Date(2015, 8, 20), value: budget - 23, guide:  budget * (2/7)},
+      {x: new Date(2015, 8, 21), value: budget - 32, guide:  budget * (1/7)},
+      {x: new Date(2015, 8, 22), value: budget - 43, guide:  budget * (0/7)}
     ];
 
     $scope.options = {
       axes: {
-        x: {key: 'x', type: 'linear', ticks: 7, ticksFormatter: function(date){return moment(date).format("ddd Do")}},
+        x: {key: 'x', type: 'linear', ticksFormatter: function(date){return moment(date).format("ddd Do")}},
         y: {type: 'linear', min: -budget/2, max: budget, ticks: 10}
       },
       margin: {
         left: 30
       },
       series: [
-        {y: 'value', color: 'steelblue', thickness: '2px', type: 'area', striped: true, label: 'Achieved Budget'},
-        {y: 'guide', color: 'red', thickness: '2px', type: 'area', striped: true, label: 'Target Budget'}
+        {y: 'value', color: 'steelblue', thickness: '2px', type: 'area', striped: true, label: 'Achieved Budget (Remaining)'},
+        {y: 'guide', color: 'red', thickness: '2px', striped: true, label: 'Target Budget (Remaining)'}
       ],
       lineMode: 'linear',
       tension: 0.7,
