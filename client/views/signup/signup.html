@@ -2,7 +2,7 @@
   <formly-form model="vm.model" fields="vm.fields" form="vm.form">
     <button type="submit" class="btn btn-default" ng-disabled="signupForm.$invalid">Submit</button>
   </formly-form>
-</form> 
+</form>
 
 <pre ng-if="vm.error">{{ vm.error | json }}</pre> -->
 
@@ -32,14 +32,14 @@
 
   <hr>
   <div class="form-group">
-    <label for="userBudget">Budget:</label>
+    <label for="userBudget">Budget (£ per week):</label>
     <input id="userBudget" type="text"
          ng-model="vm.user.budget"
          placeholder="&pound;?">
   </div>
- 
+
   <button type="submit" class="btn btn-default" ng-disabled="signupForm.$invalid">Submit</button>
 
-  </form> 
+  </form>
 
 <pre ng-if="vm.error">{{ vm.error | json }}</pre>

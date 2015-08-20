@@ -20,14 +20,13 @@ BudgetCtrl.$inject = ['Shopping', 'Auth', '$q', 'Meals', '$log', '$scope'];
       {x: new Date(2015, 8, 19), value: budget - 16, guide:  budget * (4/7)},
       {x: new Date(2015, 8, 20), value: budget - 23, guide:  budget * (3/7)},
       {x: new Date(2015, 8, 21), value: budget - 32, guide:  budget * (2/7)},
-      {x: new Date(2015, 8, 22), value: budget - 43, guide:  budget * (1/7)},
-      {x: new Date(2015, 8, 23), value: budget - 52, guide:  budget * (0/7)}
+      {x: new Date(2015, 8, 22), value: budget - 43, guide:  budget * (1/7)}
     ];
 
     $scope.options = {
       axes: {
-        x: {key: 'x', type: 'linear', ticksFormatter: function(date){return moment(date).format("ddd")}},
-        y: {type: 'linear', min: 0, max: budget, ticks: 10}
+        x: {key: 'x', type: 'linear', ticks: 7, ticksFormatter: function(date){return moment(date).format("ddd Do")}},
+        y: {type: 'linear', min: -budget/2, max: budget, ticks: 10}
       },
       margin: {
         left: 30
@@ -38,11 +37,11 @@ BudgetCtrl.$inject = ['Shopping', 'Auth', '$q', 'Meals', '$log', '$scope'];
       ],
       lineMode: 'linear',
       tension: 0.7,
-      tooltip: {mode: 'scrubber', formatter: function(x, y, series) {return y.toFixed(2);}},
+      tooltip: {mode: 'scrubber', formatter: function(x, y, series) {return '£' + y.toFixed(2);}},
       drawLegend: true,
       drawDots: true,
       hideOverflow: false,
-      columnsHGap: 5
+      columnsHGap: 7
     }
 
     angular.extend(vm, {
