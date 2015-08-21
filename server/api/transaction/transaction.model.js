@@ -4,12 +4,10 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var ObjectId = Schema.ObjectId;
 
-var CupboardItemSchema = new Schema({
+var TransactionSchema = new Schema({
   owner: {type: ObjectId, ref: 'User'},
-  ingredient: {type: ObjectId, ref: 'Ingredient'},
   dateAdded: { type: Date, default: Date.now },
-  reservedFor: {type: ObjectId, ref: 'Meal'},
-  bought: Boolean
+  amount: Number
 });
 
 /**
@@ -21,7 +19,7 @@ var CupboardItemSchema = new Schema({
  * Validations
  */
 
-// CupboardItemSchema
+// TransactionSchema
 //   .path('title')
 //   .validate(function (value, respond) {
 //     var self = this;
@@ -33,14 +31,14 @@ var CupboardItemSchema = new Schema({
 //       }
 //       respond(true);
 //     });
-//   }, 'Cupboard item already present');
+//   }, 'ingredient already present');
 
 /**
  * Methods
  */
 
-CupboardItemSchema.methods = {
+TransactionSchema.methods = {
 
 };
 
-module.exports = mongoose.model('CupboardItem', CupboardItemSchema);
+module.exports = mongoose.model('Transaction', TransactionSchema);

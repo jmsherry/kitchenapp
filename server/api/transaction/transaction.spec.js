@@ -5,11 +5,11 @@ require('should');
 var server = require('../../server');
 var request = require('supertest');
 
-describe('GET /shopping', function () {
+describe('GET /purchases', function () {
 
-  it('should respond with a JSON collection of meals', function (done) {
+  it('should respond with a JSON collection of purchases', function (done) {
     request(server)
-      .get('/api/shopping')
+      .get('/api/purchases')
       .expect(200)
       .expect('Content-Type', /json/)
       .end(function (err, res) {

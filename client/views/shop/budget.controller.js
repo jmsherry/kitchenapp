@@ -3,9 +3,9 @@
 angular.module('kitchenapp')
   .controller('BudgetCtrl', BudgetCtrl);
 
-BudgetCtrl.$inject = ['Shopping', 'Auth', '$q', 'Meals', '$log', '$scope'];
+BudgetCtrl.$inject = ['Shopping', 'Transaction', 'Auth', '$q', 'Meals', '$log', '$scope'];
 
-  function BudgetCtrl(Shopping, Auth, $q, Meals, $log, $scope) {
+  function BudgetCtrl(Shopping, Transaction, Auth, $q, Meals, $log, $scope) {
 
     Auth.checkAuthorised();
 
@@ -13,50 +13,71 @@ BudgetCtrl.$inject = ['Shopping', 'Auth', '$q', 'Meals', '$log', '$scope'];
     user = Auth.getUser(),
     budget = user.budget;
 
+    var data = Transaction.getBudgetInformation();
+$q.when(data, function(dada){
+  $log.log(dada);
+});
 
-    $scope.data = [{
-    key: "Cumulative Return",
-    values: [
-        { "label" : "Monday" , "value" : -29.765957771107 },
-        { "label" : "Tuesday" , "value" : 0 },
-        { "label" : "Wednesday" , "value" : 32.807804682612 },
-        { "label" : "Thursday" , "value" : 196.45946739256 },
-        { "label" : "Friday" , "value" : 0.19434030906893 },
-        { "label" : "Saturday" , "value" : -98.079782601442 },
-        { "label" : "Sunday" , "value" : -13.925743130903 }
-    ]
-}];
+    $scope.data = [
+      {
+        "key": "Remaining Budget",
+        "values": [
+          { "x" : new Date(2015, 8, 17) , "y" : budget - 0, "series": 0},
+          { "x" : new Date(2015, 8, 18) , "y" : budget - 10, "series": 0 },
+          { "x" : new Date(2015, 8, 19) , "y" : budget - 20, "series": 0 },
+          { "x" : new Date(2015, 8, 20) , "y" : budget -30, "series": 0 },
+          { "x" : new Date(2015, 8, 21) , "y" : budget - 40, "series": 0 },
+          { "x" : new Date(2015, 8, 22) , "y" : budget - 50, "series": 0 },
+          { "x" : new Date(2015, 8, 23) , "y" : budget - 60, "series": 0 }
+        ]
+      }, {
+        "key": 'Amount Spent so far',
+        "values": [
+          { "x" : new Date(2015, 8, 17) , "y" : 0, "series": 1 },
+          { "x" : new Date(2015, 8, 18) , "y" : 10, "series": 1 },
+          { "x" : new Date(2015, 8, 19) , "y" : 20, "series": 1 },
+          { "x" : new Date(2015, 8, 20) , "y" : 30, "series": 1 },
+          { "x" : new Date(2015, 8, 21) , "y" : 40, "series": 1 },
+          { "x" : new Date(2015, 8, 22) , "y" : 50, "series": 1 },
+          { "x" : new Date(2015, 8, 23) , "y" : 60, "series": 1 }
+        ]
+      }
+    ];
 
 $scope.options = {
-    chart: {
-        type: 'discreteBarChart',
-        height: 450,
-        margin : {
-            top: 20,
-            right: 20,
-            bottom: 60,
-            left: 55
-        },
-        x: function(d){ return d.label; },
-        y: function(d){ return d.value; },
-        showValues: true,
-        valueFormat: function(d){
-            return d3.format(',.4f')(d);
-        },
-        transitionDuration: 500,
-        xAxis: {
-            axisLabel: 'X Axis'
-        },
-        yAxis: {
-            axisLabel: 'Y Axis',
-            axisLabelDistance: 30
-        }
-
-    }
-};
+          chart: {
+              type: 'multiBarChart',
+              height: 450,
+              margin : {
+                  top: 20,
+                  right: 20,
+                  bottom: 60,
+                  left: 65
+              },
+              clipEdge: true,
+              staggerLabels: true,
+              transitionDuration: 500,
+              stacked: true,
+              xAxis: {
+                  axisLabel: 'Day',
+                  showMaxMin: false,
+                  tickFormat: function(d){
+                      return moment(d).format('dddd Do');
+                  }
+              },
+              yAxis: {
+                  axisLabel: 'Cost',
+                  axisLabelDistance: 20,
+                  tickFormat: function(d){
+                      return '£' + d3.format(',.2f')(d);
+                  }
+              }
+          }
+      };
 
     angular.extend(vm, {
       name: 'BudgetCtrl'
     });
+
 
   }

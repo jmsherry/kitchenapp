@@ -5,8 +5,9 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var ObjectId = mongoose.Types.ObjectId;
 var User = require('./../user/user.model');
-//var Cupboard = require('./cupboard.model');
+var Ingredient = require('./../ingredient/ingredient.model');
 var CupboardItem = require('./cupboardItem.model');
+var Transaction = require('./../transaction/transaction.model');
 var _ = require('lodash');
 
 function handleError (res, err) {
@@ -28,7 +29,8 @@ exports.addToCupboard = function addToCupboard(req, res) {
     owner: req._params.userid,
     ingredient: req.body.ingId,
     dateAdded: new Date(),
-    reservedFor: req.body.reservedForId
+    reservedFor: req.body.reservedForId,
+    bought: req.body.bought
   });
 
   console.log('new constructed item: ', item);
@@ -41,6 +43,26 @@ exports.addToCupboard = function addToCupboard(req, res) {
     console.log('sent item: ', item);
     return res.status(201).json(item);
   });
+
+  if(req.body.bought){
+    Ingredient.findOne({
+      _id: req.body.ingId
+    }, function(err, ing){
+      var transaction = new Transaction({
+        owner: req._params.userid,
+        dateAdded: new Date(),
+        amount: ing.price
+      });
+
+      transaction.save(function(err, item){
+        console.log('saving transaction', err, item);
+        if(err){
+          //handleError(res, err);
+          //throw new Error('transaction wasn\'t saved');
+        }
+      });
+    });
+  }
 
 
 };
@@ -128,7 +150,7 @@ exports.getCupboardItem = function getCupboardItem(req, res) {
     }
 
     if(!item){
-      return res.status(404).json({});
+      return res.status(404).json(null);
     }
     return res.status(200).json(item);
   });

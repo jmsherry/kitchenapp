@@ -70,7 +70,7 @@ function IngredientsCtrl(Ingredients, $scope, $q, $log, uiGridConstants, Shoppin
 
       }
 
-      Cupboard.bulkAdd(selectedIngs);
+      Cupboard.bulkAdd(selectedIngs, false);
 
     }
 

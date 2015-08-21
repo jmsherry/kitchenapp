@@ -16,6 +16,7 @@ module.exports = function (app) {
   app.use('/api/users/:userid/meals', paramFix, require('./api/meal'));
   app.use('/api/users/:userid/shopping', paramFix, require('./api/shopping'));
   app.use('/api/users/:userid/cupboard', paramFix, require('./api/cupboard'));
+  app.use('/api/users/:userid/purchases', paramFix, require('./api/transaction'));
 
 
   // Auth

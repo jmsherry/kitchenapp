@@ -93,11 +93,12 @@
      * Adds an ingredient to the ingredients array
      *
      */
-    Cupboard.prototype.add = function add(item) {
+    Cupboard.prototype.add = function add(item, bought) {
 
         var self = this, userid, ingId, deferred = self.$q.defer();
         self.$log.log('CUPBOARD ADD ITEM', item);
         userid = self.getOwner()._id;
+
 
         //handle unpopulated items
         if(!item.ingredient._id){
@@ -126,17 +127,18 @@
         self.$resource('/api/users/:userid/cupboard', {userid: userid})
         .save({
           ingId: ingId,
-          reservedForId: item.reservedFor._id
+          reservedForId: item.reservedFor._id,
+          bought: bought
         }, _.bind(CBSuccess, self, item), _.bind(CBError, self, item));
 
         return deferred.promise;
 
     };
 
-    Cupboard.prototype.bulkAdd = function bulkAdd(ings) {
+    Cupboard.prototype.bulkAdd = function bulkAdd(ings, bought) {
       var self = this;
       $.each(ings, function(i, ing){
-        self.add(ing);
+        self.add(ing, bought);
       });
     };
 
