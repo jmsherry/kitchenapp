@@ -70,7 +70,7 @@
   },
   "scripts": {
     "start": "node ./server/server.js",
-    "postinstall": "bower install && gulp",
+    "postinstall": "./node_modules/bower/bin/bower install && ./node_modules/bower/bin/gulp",
     "test": "gulp test"
   }
 }
