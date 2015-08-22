@@ -20,32 +20,6 @@ $q.when(data, function(dada){
   $scope.data = dada;
 });
 
-    // $scope.data = [
-    //   {
-    //     "key": "Remaining Budget",
-    //     "values": [
-    //       { "x" : new Date(2015, 8, 17) , "y" : budget - 0, "series": 0},
-    //       { "x" : new Date(2015, 8, 18) , "y" : budget - 10, "series": 0 },
-    //       { "x" : new Date(2015, 8, 19) , "y" : budget - 20, "series": 0 },
-    //       { "x" : new Date(2015, 8, 20) , "y" : budget -30, "series": 0 },
-    //       { "x" : new Date(2015, 8, 21) , "y" : budget - 40, "series": 0 },
-    //       { "x" : new Date(2015, 8, 22) , "y" : budget - 50, "series": 0 },
-    //       { "x" : new Date(2015, 8, 23) , "y" : budget - 60, "series": 0 }
-    //     ]
-    //   }, {
-    //     "key": 'Amount Spent so far',
-    //     "values": [
-    //       { "x" : new Date(2015, 8, 17) , "y" : 0, "series": 1 },
-    //       { "x" : new Date(2015, 8, 18) , "y" : 10, "series": 1 },
-    //       { "x" : new Date(2015, 8, 19) , "y" : 20, "series": 1 },
-    //       { "x" : new Date(2015, 8, 20) , "y" : 30, "series": 1 },
-    //       { "x" : new Date(2015, 8, 21) , "y" : 40, "series": 1 },
-    //       { "x" : new Date(2015, 8, 22) , "y" : 50, "series": 1 },
-    //       { "x" : new Date(2015, 8, 23) , "y" : 60, "series": 1 }
-    //     ]
-    //   }
-    // ];
-
 $scope.options = {
           chart: {
               type: 'multiBarChart',
