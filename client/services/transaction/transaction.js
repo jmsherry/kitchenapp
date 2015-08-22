@@ -28,30 +28,60 @@
 
       function getBudgetInformation(date){
 
-          var self = this, deferred, startOfWeek, endOfWeek, remValues = [], spentValues = [], dayObj = {},
-          budget = Auth.getUser().budget, AmountSpent, data;
+          var self = this, deferred, startOfWeek, endOfWeek, remValues = [], spentValues = [], dayObj, holder = 0,
+          budget = Auth.getUser().budget, amountSpent, data, weeksPurchases = [], wpLen = weeksPurchases.length,
+          pdLen, wpCondensed = [], thisPurchase, amountSpent = 0;
 
           data = self.getPurchases();
           deferred = $q.defer();
 
           $q.when(data, function(purchaseData){
+            pdLen = purchaseData.length;
             $log.log('purchaseData', purchaseData);
             startOfWeek = moment(date).startOf('isoweek');
             endOfWeek = moment(date).endOf('isoweek');
 
             $log.log(startOfWeek, endOfWeek);
 
-            for(var i=0; i < 7; i+=1){
-              dayObj.x = startOfWeek.add(i, 'd');
-              remValues.push(dayObj);
-              spentValues.push(dayObj);
+            //collect the relevant purchases
+            for(var i=0; i < pdLen; i+=1){
+              thisPurchase = purchaseData[i];
+              console.log('thisPurchase', thisPurchase);
+              if(moment(thisPurchase.dateAdded).isBetween(startOfWeek, endOfWeek)){
+                weeksPurchases.push(thisPurchase);
+              }
             }
 
-            for(var i=0; i < 7; i+=1){
-              remValues[i].y = budget - AmountSpent;
-              remValues[i].series = 0
-              spentValues[i].y = AmountSpent;
-              spentValues[i].series = 1;
+            //group them by day
+            wpCondensed = _.groupBy(weeksPurchases, 'dateAdded');
+            $log.log('wpCondensed', wpCondensed);
+
+            //make the value an array of amounts
+            for(var prop in wpCondensed){
+               wpCondensed[prop] = _.pluck(wpCondensed[prop], 'amount');
+               wpCondensed[prop] = _.sum(wpCondensed[prop]);
+               wpCondensed[moment(prop).isoWeekday()] = wpCondensed[prop];
+               delete(wpCondensed[prop]);
+            }
+
+
+            for(var i=0, thisDay, amountSpent = 0; i < 7; i+=1){
+              thisDay = moment(startOfWeek);
+              amountSpent += wpCondensed[i+1] || 0; // +1 because isoWeekday is not zero based
+              thisDay.add(i, 'd');
+              if(thisDay.isAfter(moment())){
+                break;
+              }
+              remValues.push({
+                x: thisDay.toDate(),
+                y: budget - amountSpent,
+                series: 0
+              });
+              spentValues.push({
+                x: thisDay.toDate(),
+                y: amountSpent,
+                series: 1
+              });
             }
 
             deferred.resolve([{
