@@ -14,12 +14,13 @@
 				<ul class="list-unstyled">
 					<li ng-repeat="meal in vm.completeMeals" class="meal row">
 						<div class="col-xs-2">
-								<button class="btn btn-danger pull-left" ng-click="vm.removeMeal(meal)">Remove</a>
+								<button class="btn btn-danger pull-left" ng-click="vm.removeMeal(meal)">
+									<span class="hidden-xs">Remove</span>
+									<span aria-ignore="true" class="visible-xs-inline glyphicon glyphicon-remove"></span>
+								</a>
 						</div>
 						<div class="col-xs-8"><h4>{{meal.name}}</h4></div>
-						<div class="col-xs-2">
-	 						 <a class="btn btn-primary pull-right place" ui-sref="food-calendar">Place</a>
-	 				 </div>
+						<div class="col-xs-2"></div>
 					</li>
 				</ul>
 			</div>
@@ -36,7 +37,10 @@
 					<ul class="list-unstyled">
 						<li ng-repeat="meal in vm.pendingMeals" class="meal row">
 							<div class="col-xs-2">
-									<button class="btn btn-danger pull-left" ng-click="vm.removeMeal(meal)">Remove</a>
+									<button class="btn btn-danger pull-left" ng-click="vm.removeMeal(meal)">
+										<span class="hidden-xs">Remove</span>
+										<span aria-hidden="true" class="visible-xs-inline glyphicon glyphicon-remove"></span>
+									</a>
 							</div>
 							<div class="col-xs-8">
 								<h4>{{meal.name}}</h4>
@@ -54,17 +58,19 @@
 		</div>
 	</div>
 		<div class="add-controls">
-			<!--<select name="mealsAdder" ng-model="vm.chosenRecipe" ng-change="vm.createMeal()" class="form-control">
+			<select name="mealsAdder" ng-model="vm.chosenRecipe" ng-change="vm.createMeal()" class="form-control">
 				<option value="" ng-selected="true">Add a meal</option>
 				<option ng-repeat="recipe in vm.recipes" value="{{recipe._id}}">{{recipe.name}}</option>
-			</select>-->
+			</select>
 
-			<ui-select ng-model="vm.chosenRecipe" name="mealsAdder">
-				<ui-select-match placeholder="Select or search a meal in the list...">{{$select.selected.name}}</ui-select-match>
-        <ui-select-choices repeat="recipe in vm.recipes | filter: $select.search">
-          <div ng-bind-html="recipe.name | highlight: $select.search"></div>
-        </ui-select-choices>
-			</ui-select>
+			<!--<ui-select ng-model="vm.searchOptions"
+             reset-search-input="false"
+             title="Choose a Meal">
+    <ui-select-match placeholder="Pick a meal...">{{$select.selected.recipe}}</ui-select-match>
+    <ui-select-choices repeat="recipe in vm.recipes track by $index">
+      <div ng-bind-html="recipe.name | highlight: $select.search"></div>
+    </ui-select-choices>
+  </ui-select>-->
 		</div>
 	</div>
 </div>
