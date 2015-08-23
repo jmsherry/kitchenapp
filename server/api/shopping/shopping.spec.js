@@ -9,7 +9,7 @@ describe('GET /shopping', function () {
 
   it('should respond with a JSON collection of meals', function (done) {
     request(server)
-      .get('/api/shopping')
+      .get('/api/users/55c45f47a82eb3c704aa697c/shopping')
       .expect(200)
       .expect('Content-Type', /json/)
       .end(function (err, res) {
