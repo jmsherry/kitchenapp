@@ -54,11 +54,17 @@
 		</div>
 	</div>
 		<div class="add-controls">
-			<select name="mealsAdder" ng-model="vm.chosenRecipe" ng-change="vm.createMeal()">
-				<option value="" ng-selected="true">Add a meal
+			<!--<select name="mealsAdder" ng-model="vm.chosenRecipe" ng-change="vm.createMeal()" class="form-control">
+				<option value="" ng-selected="true">Add a meal</option>
 				<option ng-repeat="recipe in vm.recipes" value="{{recipe._id}}">{{recipe.name}}</option>
-			</select>
-			<!-- <button class="btn btn-primary" ng-click="vm.addMeal()"><span class="">Add meal</span></button> -->
+			</select>-->
+
+			<ui-select ng-model="vm.chosenRecipe" name="mealsAdder">
+				<ui-select-match placeholder="Select or search a meal in the list...">{{$select.selected.name}}</ui-select-match>
+        <ui-select-choices repeat="recipe in vm.recipes | filter: $select.search">
+          <div ng-bind-html="recipe.name | highlight: $select.search"></div>
+        </ui-select-choices>
+			</ui-select>
 		</div>
 	</div>
 </div>

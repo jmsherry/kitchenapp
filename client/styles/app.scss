@@ -83,6 +83,10 @@ to prevent collapsing during animation*/
 }
 */
 
+.select2-container {
+  width: 80%;
+}
+
 @-moz-document url-prefix() {
   fieldset { display: table-cell; }
 }
@@ -135,7 +139,7 @@ to prevent collapsing during animation*/
   background-color: #fdfdfd;
   border:1px solid #eee;
   border-top:0;
-  overflow: hidden;
+  /* overflow: hidden; */
   padding-bottom: 15px;
 
   & .meal {

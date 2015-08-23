@@ -17,20 +17,25 @@ angular.module('kitchenapp', [
   'ui.bootstrap',
   'ui.gravatar',
   'toastr',
-  'nvd3'
+  'nvd3',
+  'ui.select'
 ])
-  .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, calendarConfigProvider, toastrConfig) {
+  .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, calendarConfigProvider, toastrConfig, uiSelectConfig) {
     var positionClass;
 
     if($(window).width() < 992){
-      positionClass: 'toast-top-right'
+      positionClass = 'toast-top-right';
     } else {
-      positionClass: 'toast-bottom-right'
+      positionClass = 'toast-bottom-right';
     }
+
+
 
     $urlRouterProvider.otherwise('/');
     $locationProvider.html5Mode(true);
     $httpProvider.interceptors.push('authInterceptor');
+
+    uiSelectConfig.theme = 'select2';
 
     calendarConfigProvider.configureDateFormats({
       hour: 'HH:mm' //this will configure the hour view to display in 24 hour format rather than the default of 12 hour
