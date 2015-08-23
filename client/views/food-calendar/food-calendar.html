@@ -1,10 +1,46 @@
-<div>
-	<h1>Meal Planner</h1>
-	<p class="ng-cloak">You have <span ng-class="completeMeals.length > 0 ?  'completeCount text-success' : 'completeCount text-info'">{{completeMeals.length}} complete meal<span ng-if="completeMeals.length !== 1">s</span></span>. Click on a date to place it, or go to <a href="#" ui-sref="meals">Build Meals</a> to create more...</p>
-	<div class="row">
-		<div class="col-md-12">
-			<div class="grid-wrapper">
-				<p class="bg-info responsive-table">Slide the table left to see all the columns</p>
+<div class="row">
+	<div class="col-xs-12">
+		<h1>Meal Planner</h1>
+		<p class="ng-cloak">You have
+			<span ng-class="completeMeals.length > 0 ?  'completeCount text-success' : 'completeCount text-info'">
+					{{completeMeals.length}} complete meal<span ng-if="completeMeals.length !== 1">s</span>
+			</span>.
+			<span ng-if="completeMeals.length > 0">Click on a date to place a meal.</span>
+			<span ng-if="completeMeals.length === 0">Go to <a href="#" ui-sref="meals">Build Meals</a> to create more...</span>
+		</p>
+	</div>
+</div>
+<div class="row">
+	<div class="col-xs-12">
+		<div class="form-group">
+			<button
+			  class="btn btn-primary"
+			  mwl-date-modifier
+			  date="calendarDay"
+			  decrement="calendarView">
+			  Previous
+			</button>
+
+			<button
+			  class="btn btn-default"
+			  mwl-date-modifier
+			  date="calendarDay"
+			  set-to-today>
+			  Today
+			</button>
+
+			<button
+			  class="btn btn-primary"
+			  mwl-date-modifier
+			  date="calendarDay"
+			  increment="calendarView">
+			  Next
+			</button>
+		</div>
+	</div>
+</div>
+	<div class="grid-wrapper">
+		<p class="bg-info responsive-banner">Slide the table left to see all the columns</p>
 				<mwl-calendar
 			    calendar-events="events"
 			    calendar-view="calendarView"
@@ -16,9 +52,8 @@
 			    calendar-edit-event-click="eventEdited(calendarEvent)"
 			    calendar-delete-event-click="eventDeleted(calendarEvent)"
 			    calendar-timespan-click="calclickalert(calendarDate)",
-			    calendar-auto-open="true"
+			    calendar-auto-open="true",
+					calendar-drill-down-click="drillDownClick()"
 			    ></mwl-calendar>
-			</div>
-		</div>
+
 	</div>
-</div>

@@ -52,22 +52,22 @@ angular.module('kitchenapp')
       });
     }
 
-    $scope.eventClicked = function() {
+    $scope.eventClicked = function eventClicked() {
     	$log.log('event clicked', event);
       //showModal('Clicked', event);
       event.preventDefault();
       event.stopPropagation();
     };
 
-    $scope.eventEdited = function() {
+    $scope.eventEdited = function eventEdited() {
       showModal('Edited', event);
     };
 
-    $scope.eventDeleted = function() {
+    $scope.eventDeleted = function eventDeleted() {
       showModal('Deleted', event);
     };
 
-    $scope.calclickalert = function(calendarDate){
+    $scope.calclickalert = function calclickalert(calendarDate){
       if($(event.target).hasClass('cal-day-past')){ return false;}
     	$log.log('day clicked', event);
     	$log.log(calendarDate);
@@ -76,9 +76,15 @@ angular.module('kitchenapp')
       event.stopPropagation();
     };
 
-    $scope.setCalendarToToday = function() {
+    $scope.setCalendarToToday = function setCalendarToToday() {
       $scope.calendarDay = new Date();
     };
+
+    $scope.drillDownClick = function drillDownClick(){
+      alert('yes');
+      return false;
+    };
+
 
 });
   }

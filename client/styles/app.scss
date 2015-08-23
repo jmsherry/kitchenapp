@@ -214,13 +214,16 @@ p.responsive-table {
   .grid-wrapper {
     overflow-x: scroll;
   }
+
+  .responsive-banner,
   .cal-context,
   .ng-ui-grid {
     min-width:600px;
   }
 
-  p.responsive-table {
+  p.responsive-banner {
     display: block;
+    padding: 0 15px;
   }
 
   .sorts {
