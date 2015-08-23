@@ -20,6 +20,13 @@ angular.module('kitchenapp', [
   'nvd3'
 ])
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, calendarConfigProvider, toastrConfig) {
+    var positionClass;
+
+    if($(window).width() < 992){
+      positionClass: 'toast-top-right'
+    } else {
+      positionClass: 'toast-bottom-right'
+    }
 
     $urlRouterProvider.otherwise('/');
     $locationProvider.html5Mode(true);
@@ -35,7 +42,7 @@ angular.module('kitchenapp', [
 
     angular.extend(toastrConfig, {
       timeOut: 1500,
-      positionClass: 'toast-bottom-right'
+      positionClass: positionClass
     });
 
   })
