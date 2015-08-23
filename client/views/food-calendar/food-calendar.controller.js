@@ -68,7 +68,8 @@ angular.module('kitchenapp')
     };
 
     $scope.calclickalert = function(calendarDate){
-    	$log.log('day clicked');
+      if($(event.target).hasClass('cal-day-past')){ return false;}
+    	$log.log('day clicked', event);
     	$log.log(calendarDate);
     	$scope.showModal(calendarDate);
       event.preventDefault();
