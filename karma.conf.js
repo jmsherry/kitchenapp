@@ -39,12 +39,12 @@ module.exports = function (config) {
       'bower_components/angular-sanitize/angular-sanitize.js',
       'bower_components/angular-cookies/angular-cookies.js',
       'bower_components/angular-resource/angular-resource.js',
-      'bower_components/restangular/dist/restangular.js',
+      //'bower_components/restangular/dist/restangular.js',
       'bower_components/angular-socket-io/socket.min.js',
       //'bower_components/angular-socket-io/socket.min.js.map',
       'bower_components/api-check/dist/api-check.js',
-      'bower_components/angular-formly/dist/formly.js',
-      'bower_components/angular-formly-templates-bootstrap/dist/angular-formly-templates-bootstrap.js',
+      //'bower_components/angular-formly/dist/formly.js',
+      //'bower_components/angular-formly-templates-bootstrap/dist/angular-formly-templates-bootstrap.js',
       'bower_components/angular-touch/angular-touch.js',
       'bower_components/angular-bootstrap-calendar/dist/js/angular-bootstrap-calendar-tpls.js',
       'bower_components/jquery-ui/ui/jquery-ui.js',
@@ -54,6 +54,10 @@ module.exports = function (config) {
       'bower_components/angular-gravatar/build/angular-gravatar.js',
       'bower_components/angular-toastr/dist/angular-toastr.tpls.js',
       'bower_components/angular-ui-calendar/src/calendar.js',
+      'bower_components/i18n/i18n.js',
+      'bower_components/d3/d3.js',
+      'bower_components/nvd3/nv.d3.js',
+      'bower_components/angular-nvd3/dist/angular-nvd3.min.js',
       'app.js',
       'views/**/*.js',
       'views/**/*.html',
@@ -92,10 +96,10 @@ module.exports = function (config) {
 
     autoWatch: false,
 
-    //browsers: ['PhantomJS'],
-    browsers: ['Chrome'],
+    browsers: ['PhantomJS'],
+    //browsers: ['Chrome'],
 
-    singleRun: false
-    //singleRun: true
+    //singleRun: false
+    singleRun: true
   });
 };

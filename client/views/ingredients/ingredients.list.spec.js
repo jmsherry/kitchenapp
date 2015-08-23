@@ -16,7 +16,7 @@ describe('Controller: IngredientsCtrl', function () {
 
   it('should define gridOptions with 4 column headings', function () {
       var $scope = {}, controller;
-      controller = $controller('IngredientsCtrl', { $scope: $scope });
+      controller = IngredientsCtrl;
       expect($scope.gridOptions).not.toBeUndefined();
       expect($scope.gridOptions.columnDefs.length).toBe(4);
   });

@@ -30,11 +30,15 @@ describe('Service: Cupboard', function() {
         Cupboard = _Cupboard_;
 
         userMock = {
+          _id: "55c6f7b1253d754d387d270c",
           cupboard: [{_id: '1'}, {_id: '2'}, {_id: '3'}]
         };
 
         spyOn(Auth, "getUser").and.returnValue(userMock);
 
+        $httpBackend.expectGET('/api/users/me').respond(userMock);
+        $httpBackend.expectGET('/api/ingredients').respond([]);
+        $httpBackend.expectGET('/api/users/cupboard').respond(userMock.cupboard);
         // authRequestHandler = $httpBackend.when('GET', '/api/user')
         //                     .respond({userId: 'userX'}, {'A-Token': 'xxx'});
     }));
@@ -48,21 +52,25 @@ describe('Service: Cupboard', function() {
 
 
     it('is a registered service', function() {
+      $httpBackend.flush();
         expect(Cupboard).not.toBeUndefined();
     });
 
 
     it('is has an \'init\' method', function() {
+      $httpBackend.flush();
         expect(Cupboard.init).not.toBeUndefined();
     });
 
     describe('\'init\' method', function() {
-      
+
       it('calls the Auth service', function() {
+        $httpBackend.flush();
         expect(Auth.getUser).toHaveBeenCalled();
       });
 
       it('populates the _cupboard array with the user\'s cupboard', function() {
+        $httpBackend.flush();
         expect(Cupboard.getCupboard()).toBe(userMock.cupboard);
       });
 
@@ -70,16 +78,19 @@ describe('Service: Cupboard', function() {
 
 
     it('is has a \'get\' method', function() {
+      $httpBackend.flush();
         expect(Cupboard.get).not.toBeUndefined();
     });
 
     describe('\'get\' method', function() {
       it('returns the user\'s cupboard', function(){
+        $httpBackend.flush();
         expect(Cupboard.get()).toBe(userMock.cupboard);
-      });   
+      });
     });
 
     it('is has a \'add\' method', function() {
+      $httpBackend.flush();
         expect(Cupboard.add).not.toBeUndefined();
     });
 
@@ -105,6 +116,7 @@ describe('Service: Cupboard', function() {
     });
 
     it('is has a \'remove\' method', function() {
+      $httpBackend.flush();
         expect(Cupboard.remove).not.toBeUndefined();
     });
 
@@ -138,6 +150,7 @@ describe('Service: Cupboard', function() {
     // });
 
     it('is has a \'process\' method', function() {
+      $httpBackend.flush();
         expect(Cupboard.process).not.toBeUndefined();
     });
 
@@ -150,13 +163,13 @@ describe('Service: Cupboard', function() {
         it('which removes what you have', function(){
           Cupboard.process(idsArray);
 
-          
+
         });
 
         // it('calls the ShoppingList service to add the missing ingredients', function(){
 
         // });
-    });   
+    });
 
 
 });

@@ -19,6 +19,7 @@ describe('Service: Ingredients', function() {
         Auth,
         Ingredients,
         response,
+        userMock,
         toastr;
 
 
@@ -41,6 +42,15 @@ describe('Service: Ingredients', function() {
 
     beforeEach(function() {
     	ingsRequestHandler = $httpBackend.when('GET', '/api/ingredients').respond([{'name': 'init'}]);
+      userMock = {
+        _id: "55c6f7b1253d754d387d270c",
+        cupboard: [{_id: '1'}, {_id: '2'}, {_id: '3'}]
+      };
+
+      spyOn(Auth, "getUser").and.returnValue(userMock);
+
+      $httpBackend.expectGET('/api/users/me').respond(userMock);
+      $httpBackend.expectGET('/api/ingredients').respond([{'name': 'init'}]);
     });
 
     afterEach(function() {

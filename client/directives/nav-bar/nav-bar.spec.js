@@ -64,13 +64,22 @@
 
                 mobileButton = element.find('button[data-target="#bs-example-navbar-collapse-1"]');
 
+                userMock = {
+                  _id: "55c6f7b1253d754d387d270c",
+                  cupboard: [{_id: '1'}, {_id: '2'}, {_id: '3'}]
+                };
+
+                $httpBackend.expectGET('/api/users/me').respond(userMock);
+
             }));
 
             it('should have a mobile button', function(){
+              $httpBackend.flush();
               expect(mobileButton.length).toEqual(1);
             });
 
             it('\'s brand link should be titled \'KitchenApp\' and should navigate to the root address when clicked', function() {
+                $httpBackend.flush();
                 var titleLink = links.filter('.navbar-brand');
                 expect(titleLink.length).toEqual(1);
                 expect(titleLink.attr('ui-sref')).toEqual('home');
@@ -79,6 +88,7 @@
             });
 
             it('the next link should be a link to the food calendar view', function() {
+                $httpBackend.flush();
                 var foodCalendarLink = links.eq(1),
                     sref = foodCalendarLink.attr('ui-sref');
                 expect(foodCalendarLink.length).toEqual(1);
@@ -87,6 +97,7 @@
             });
 
             it('the next link should be a link to the meals view', function() {
+                $httpBackend.flush();
                 var buildMealsLink = links.eq(2),
                     sref = buildMealsLink.attr('ui-sref');
                 expect(buildMealsLink.length).toEqual(1);
@@ -95,6 +106,7 @@
             });
 
             it('the next link should be a link to the cupboard view', function() {
+                $httpBackend.flush();
                 var cupboardLink = links.eq(3),
                     sref = cupboardLink.attr('ui-sref');
                 expect(cupboardLink.length).toEqual(1);
@@ -103,6 +115,7 @@
             });
 
             it('the next link should be a link to the shop view', function() {
+                $httpBackend.flush();
                 var inventoryLink = links.eq(4);
                 expect(inventoryLink.length).toEqual(1);
                 expect(inventoryLink.attr('ui-sref')).toEqual('shop');
@@ -110,6 +123,7 @@
             });
 
             it('should have a dropdown link for recipes', function() {
+                $httpBackend.flush();
                 expect(recipesToggle.length).toEqual(1);
                 expect(recipesToggle.attr('ui-sref')).toBeUndefined();
                 expect(recipesToggle.attr('href')).toEqual('#');
@@ -117,6 +131,7 @@
             });
 
             it('which should have a menu item for \'List Recipes\'', function() {
+                $httpBackend.flush();
                 var listRecipesLink = recipesMenuLinks.eq(0);
                 expect(listRecipesLink.length).toEqual(1);
                 expect(listRecipesLink.attr('ui-sref')).toEqual('recipes');
@@ -125,6 +140,7 @@
             });
 
             it('should have a menu item for \'Add Recipes\'', function() {
+                $httpBackend.flush();
                 var addRecipesLink = recipesMenuLinks.eq(1);
                 expect(addRecipesLink.length).toEqual(1);
                 expect(addRecipesLink.attr('ui-sref')).toEqual('addRecipe');
@@ -133,6 +149,7 @@
             });
 
             it('should have a dropdown link for ingredients', function() {
+                $httpBackend.flush();
                 expect(ingredientsToggle.length).toEqual(1);
                 expect(ingredientsToggle.attr('ui-sref')).toBeUndefined();
                 expect(ingredientsToggle.attr('href')).toEqual('#');
@@ -140,6 +157,7 @@
             });
 
             it('which should have a menu item for \'List Ingredients\'', function() {
+                $httpBackend.flush();
                 var listIngredientsLink = ingredientsMenuLinks.eq(0);
                 expect(listIngredientsLink.length).toEqual(1);
                 expect(listIngredientsLink.attr('ui-sref')).toEqual('ingredients');
@@ -148,6 +166,7 @@
             });
 
             it('should have a menu item for \'Add Ingredients\'', function() {
+                $httpBackend.flush();
                 var addIngredientsLink = ingredientsMenuLinks.eq(1);
                 expect(addIngredientsLink.length).toEqual(1);
                 expect(addIngredientsLink.attr('ui-sref')).toEqual('addIngredient');
