@@ -98,7 +98,7 @@ angular.module('kitchenapp')
             $location.path('/');
           })
           .catch(function (err) {
-            if(err.errors && error.errors.email && error.errors.email.property && error.errors.email.property.type === "user defined"){
+            if(err.errors && err.errors.email && err.errors.email.property && err.errors.email.property.type === "user defined"){
               toastr.error('That email is already registerd with us.')
             }
             vm.error = err;
