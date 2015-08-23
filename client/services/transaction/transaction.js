@@ -88,7 +88,7 @@
                 "key": "Remaining Budget",
                 "values": remValues
               }, {
-                "key": 'Amount Spent so far',
+                "key": 'Amount Spent (in total)',
                 "values": spentValues
               }]);
           });
