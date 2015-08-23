@@ -11,11 +11,11 @@
 <div class="row">
 	<div class="col-md-12">
 		<div ng-if="vm.items.length > 1" class="col-md-6 col-md-offset-6">
-			<div class="pull-right sorts">
+			<div class="pull-right sorts" ng-if="vm.meals.complete.length > 0 || vm.meals.pending.length > 0">
 				<p>Sort by: </p>
 				<div class="btn-group  btn-group-lg" role="group" aria-label="sorting choices">
 					<button type="button" class="btn btn-primary" ng-click="vm.sortBy('name')">Name</button>
-					<button type="button" class="btn btn-primary" ng-click="vm.sortBy('reservation')" ng-if="vm.meals.complete.length > 0 || vm.meals.pending.length > 0">Reservation</button>
+					<button type="button" class="btn btn-primary" ng-click="vm.sortBy('reservation')">Reservation</button>
 				</div>
 			</div>
 		</div>
