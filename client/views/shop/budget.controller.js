@@ -18,6 +18,8 @@ $q.when(data, function(dada){
   var testdate = dada[0].values[0].x;
   $log.log('dada', dada, moment.isDate(testdate));
   $scope.data = dada;
+  d3.select(".nv-controlsWrap")
+.attr("transform","translate(-50,-50)");
 });
 
 $scope.options = {
@@ -36,9 +38,9 @@ $scope.options = {
               stacked: true,
               xAxis: {
                   axisLabel: 'Day',
+                  axisLabelDistance: 50,
                   showMaxMin: false,
                   tickFormat: function(d){
-                    //console.log(d, moment(d), moment(d).format('dddd Do'));
                       return moment(d).format('dddd Do');
                   }
               },
@@ -51,6 +53,8 @@ $scope.options = {
               }
           }
       };
+
+
 
     angular.extend(vm, {
       name: 'BudgetCtrl'
