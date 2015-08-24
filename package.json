@@ -82,6 +82,6 @@
   "scripts": {
     "start": "node ./server/server.js",
     "postinstall": "bower install && gulp build",
-    "test": "gulp test && gulp e2e"
+    "test": "gulp test"
   }
 }
