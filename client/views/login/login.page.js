@@ -1,7 +1,7 @@
 "use strict";
 
 module.exports = function(){
-	this.username = element.all(by.id('username'));
-	this.password = element.all(by.css('password'));
-	this.submitButton = element.all(bycss('button[type=submit]'));
+	this.email = element.all(by.id('email'));
+	this.password = element.all(by.id('password'));
+	this.submitButton = element.all(by.css('button[type=submit]'));
 };

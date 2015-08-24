@@ -58,6 +58,7 @@ module.exports = function (config) {
       'bower_components/d3/d3.js',
       'bower_components/nvd3/nv.d3.js',
       'bower_components/angular-nvd3/dist/angular-nvd3.min.js',
+      'bower_components/angular-ui-select/dist/select.js',
       'app.js',
       'views/**/*.js',
       'views/**/*.html',
