@@ -1,6 +1,18 @@
-# Kitchenapp [![Generated with](https://img.shields.io/badge/generated%20with-bangular-blue.svg?style=flat-square)](https://github.com/42Zavattas/generator-bangular) [![Build Status](https://travis-ci.org/jmsherry/kitchenapp.svg?branch=master)](https://travis-ci.org/jmsherry/kitchenapp) [![Code Climate](https://codeclimate.com/repos/55daafc9e30ba0552200973d/badges/d7ac6feef42a15537e3b/gpa.svg)](https://codeclimate.com/repos/55daafc9e30ba0552200973d/feed) [![Test Coverage](https://codeclimate.com/repos/55daafc9e30ba0552200973d/badges/d7ac6feef42a15537e3b/coverage.svg)](https://codeclimate.com/repos/55daafc9e30ba0552200973d/coverage)
+# Kitchenapp
+
+[![Generated with](https://img.shields.io/badge/generated%20with-bangular-blue.svg?style=flat-square)](https://github.com/42Zavattas/generator-bangular)
+[![Build Status](https://travis-ci.org/jmsherry/kitchenapp.svg?branch=master)](https://travis-ci.org/jmsherry/kitchenapp) [![Code Climate](https://codeclimate.com/repos/55daafc9e30ba0552200973d/badges/d7ac6feef42a15537e3b/gpa.svg)](https://codeclimate.com/repos/55daafc9e30ba0552200973d/feed)
+[![Test Coverage](https://codeclimate.com/repos/55daafc9e30ba0552200973d/badges/d7ac6feef42a15537e3b/coverage.svg)](https://codeclimate.com/repos/55daafc9e30ba0552200973d/coverage)
 
 [ ![Codeship Status for jmsherry/kitchenapp](https://codeship.com/projects/2eabc9b0-2ace-0133-8c51-622b866f1c07/status?branch=master)](https://codeship.com/projects/98338)
+
+[![Codacy Badge](https://www.codacy.com/project/badge/01f2c1ccfd1147f8a7e449c8de41a712)](https://www.codacy.com/app/james-m-sherry/kitchenapp)
+
+[![Dependency Status](https://david-dm.org/jmsherry/kitchenapp.svg?style=flat)](https://david-dm.org/jmsherry/kitchenapp)
+
+[![devDependency Status](https://david-dm.org/jmsherry/kitchenapp/dev-status.svg)](https://david-dm.org/jmsherry/kitchenapp#info=devDependencies)
+
+
 
 Kitchenapp is a MEAN (Mongodb [with Mongoose ODM], Express js, Angular and Node) stack demo created using the bangular yeoman template.
 
