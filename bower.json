@@ -24,8 +24,7 @@
     "angular": "~1.4.3",
     "angular-nvd3": "~0.1.1",
     "fastdom": "~0.8.6",
-    "angular-ui-select": "~0.12.1",
-    "select2": "~3.4.5"
+    "angular-ui-select": "~0.12.1"
   },
   "devDependencies": {
     "angular-mocks": "~1.4.3",
