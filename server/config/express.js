@@ -17,6 +17,13 @@ var config = require('./environment');
 module.exports = function (app) {
 
   var env = config.env;
+  var appPath;
+
+  if(env === 'production'){
+    appPath = 'dist';
+  } else {
+    appPath = 'client';
+  }
 
   app.set('view engine', 'html');
   app.use(bodyParser.urlencoded({ extended: false }));
@@ -24,8 +31,8 @@ module.exports = function (app) {
   app.use(compression());
   app.use(morgan('dev'));
   app.use(passport.initialize());
-  app.use(express.static(path.join(config.root, 'client')));
-  app.set('appPath', 'client');
+  app.use(express.static(path.join(config.root, appPath)));
+  app.set('appPath', appPath);
 
   app.use(session({
     secret: config.secrets.session,
