@@ -192,15 +192,11 @@ to prevent collapsing during animation*/
     }
     .meal {
       border-width: 2px;
-background-color: #dff0d8;
-/* border-color: #3c763d; */
-color: #3c763d;
+      background-color: #dff0d8;
+      /* border-color: #3c763d; */
+      color: #3c763d;
     }
   }
-}
-
-p.responsive-table {
-  display: none;
 }
 
 @media  (max-width: 480px) {
@@ -223,8 +219,7 @@ p.responsive-table {
     min-width:600px;
   }
 
-  p.responsive-banner {
-    display: block;
+  .responsive-banner {
     padding: 0 15px;
   }
 
