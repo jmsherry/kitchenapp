@@ -1,6 +1,6 @@
 'use strict';
 
-describe('Service: Shoppinglist', function() {
+describe('Service: Transaction', function() {
 
     beforeEach(module('ngMock'));
     beforeEach(module('ui.router'));
