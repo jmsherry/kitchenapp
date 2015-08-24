@@ -191,8 +191,10 @@ to prevent collapsing during animation*/
       /*margin-bottom: 30px;*/
     }
     .meal {
-      border-width:2px;
-      background-color:#eee;
+      border-width: 2px;
+background-color: #dff0d8;
+/* border-color: #3c763d; */
+color: #3c763d;
     }
   }
 }
@@ -233,6 +235,8 @@ p.responsive-table {
     transform: translateX(-70%) translateY(-360%);
   }*/
 }
+
+
 
 
 .cupboardList,
