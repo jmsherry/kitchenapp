@@ -1,0 +1,13 @@
+{"__v":0,"_id":{"$oid":"5549475f0b1fb36c1e205664"},"description":"Box of eggs","imageURL":"http://www.beingabusinesscelebrity.com/wp-content/uploads/2013/06/Sometimes-it-looks-like-an-eggbox.jpg","name":"Eggs","price":1,"quantity":"6"}
+{"__v":0,"_id":{"$oid":"55494a6d0b1fb36c1e205665"},"description":"Beef Burgers","imageURL":"http://www.roamingroosters.co.uk/images/uploads/grass_fed_beef/roaming-roosters-beef-burgers.jpg","name":"Burgers","price":1.95,"quantity":"2"}
+{"__v":0,"_id":{"$oid":"55494f800b1fb36c1e205666"},"description":"Pack of Bacon","imageURL":"http://www.scobiesdirect.com/scobiesdirectimages/MainPictures/OG30002.jpg","name":"Bacon","price":2.5,"quantity":"6"}
+{"__v":0,"_id":{"$oid":"554955340b1fb36c1e205667"},"description":"Bag of Baby Leaf Herb Salad","imageURL":"http://img.tesco.com/Groceries/pi/956/0000010083956/IDShot_225x225.jpg","name":"Salad","price":1.5,"quantity":"5"}
+{"__v":0,"_id":{"$oid":"554959030b1fb36c1e205669"},"description":"Cooking Onions Brown Onions (2.5kg sack)","imageURL":"http://img.tesco.com/Groceries/pi/735/0000003239735/IDShot_225x225.jpghttp://img.tesco.com/Groceries/pi/735/0000003239735/IDShot_225x225.jpg","name":"Onions","price":1.95,"quantity":"30"}
+{"__v":0,"_id":{"$oid":"554959a40b1fb36c1e20566a"},"description":"Tesco Family Pack Mushrooms 625G","imageURL":"http://img.tesco.com/Groceries/pi/833/0000003236833/IDShot_225x225.jpg","name":"Mushrooms","price":2,"quantity":"8"}
+{"__v":0,"_id":{"$oid":"55495bdd0b1fb36c1e20566b"},"description":"Tesco Chef's Choice Garlic Each","imageURL":"http://img.tesco.com/Groceries/pi/023/0000003204023/IDShot_225x225.jpg","name":"Garlic","price":0.5,"quantity":"6"}
+{"__v":0,"_id":{"$oid":"55495c770b1fb36c1e20566c"},"description":"Tesco Wholefoods Pine Nuts","imageURL":"http://img.tesco.com/Groceries/pi/552/5010204370552/IDShot_225x225.jpg","name":"Pine Nuts","price":2.8,"quantity":"20"}
+{"__v":0,"_id":{"$oid":"55495e320b1fb36c1e20566d"},"description":"Tesco British Chicken Breast Portions 490G","imageURL":"http://img.tesco.com/Groceries/pi/971/5054269444971/IDShot_225x225.jpg","name":"Chicken","price":4,"quantity":"2"}
+{"__v":0,"_id":{"$oid":"55d8e6121a6181f09e313b32"},"description":"Beef steak, sirloin","name":"Steak","price":4,"quantity":"1"}
+{"__v":0,"_id":{"$oid":"55d8ef421a6181f09e313b33"},"description":"Anchor","name":"Butter","price":1,"quantity":"200g"}
+{"__v":0,"_id":{"$oid":"55d8ef9a1a6181f09e313b34"},"description":"Red","name":"Kidney Beans","price":0.5,"quantity":"4"}
+{"__v":0,"_id":{"$oid":"55d8f0941a6181f09e313b35"},"description":"Bag of","name":"Sweet Potato","price":1,"quantity":"10"}
