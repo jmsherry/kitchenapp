@@ -6,4 +6,4 @@ Kitchenapp is a MEAN (Mongodb [with Mongoose ODM], Express js, Angular and Node)
 
 Use `gulp` to run in development and `gulp preview` to run the optimised project. `gulp test` will allow you to run the tests (which are currently locked to a limited set for demo purposes) and you can specify whether to test the client or server-side code by adding the flag `--server` or `--client`. `gulp e2e` will perform protractor tests. All tests are set to one suite for demo purposes.
 
-To populate the database with some initial ingredients and recipes type ```$ seed``` (N.B. it will blow away all the data in your current collections)
+To populate the database with some initial ingredients and recipes type `$ seed` (N.B. it will blow away all the data in your current collections)
