@@ -20,7 +20,7 @@ module.exports = function (app) {
   var appPath;
 
   if(env === 'production'){
-    appPath = 'dist';
+    appPath = 'dist/client';
   } else {
     appPath = 'client';
   }
