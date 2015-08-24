@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for views/food-calendar/food-calendar.controller.js</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../../prettify.css">
+    <link rel="stylesheet" href="../../base.css">
+    <style type='text/css'>
+        div.coverage-summary .sorter {
+            background-image: url(../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class="header low">
+    <h1>Code coverage report for <span class="entity">views/food-calendar/food-calendar.controller.js</span></h1>
+    <h2>
+        Statements: <span class="metric">6% <small>(3 / 50)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Branches: <span class="metric">0% <small>(0 / 2)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Functions: <span class="metric">0% <small>(0 / 11)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Lines: <span class="metric">6.12% <small>(3 / 49)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Ignored: <span class="metric"><span class="ignore-none">none</span></span> &nbsp;&nbsp;&nbsp;&nbsp;
+    </h2>
+    <div class="path"><a href="../../index.html">All files</a> &#187; <a href="index.html">views/food-calendar/</a> &#187; food-calendar.controller.js</div>
+</div>
+<div class="body">
+<pre><table class="coverage">
+<tr><td class="line-count">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91</td><td class="line-coverage"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">'use strict';
+&nbsp;
+angular.module('kitchenapp')
+  .controller('FoodCalendarCtrl', FoodCalendarCtrl);
+&nbsp;
+  FoodCalendarCtrl.$inject = ['$scope', '$modal', 'Meals', 'Auth', '$log', '$q'];
+&nbsp;
+&nbsp;
+<span class="fstat-no" title="function not covered" >  function FoodCalendarCtrl($scope, $modal, Meals, Auth, $log, $q) {</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  Auth.checkAuthorised();</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >	var meals, completeMeals, placedMeals;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  meals = Meals.get();</span>
+<span class="cstat-no" title="statement not covered" >  $q.when(meals, <span class="fstat-no" title="function not covered" >function(data){</span></span>
+<span class="cstat-no" title="statement not covered" >    var mls = data.complete;</span>
+<span class="cstat-no" title="statement not covered" >    completeMeals = _.filter(mls, 'starts_at', null),</span>
+    placedMeals = _.reject(mls, 'starts_at', null);
+&nbsp;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  	$log.log("meals data: ", data);</span>
+<span class="cstat-no" title="statement not covered" >    $log.log("mls", mls);</span>
+<span class="cstat-no" title="statement not covered" >  	$log.log("completeMeals: ", completeMeals);</span>
+<span class="cstat-no" title="statement not covered" >  	$log.log("placedMeals: ", placedMeals);</span>
+&nbsp;
+    //These variables MUST be set as a minimum for the calendar to work
+<span class="cstat-no" title="statement not covered" >    $scope.calendarView = 'month';</span>
+<span class="cstat-no" title="statement not covered" >    $scope.calendarDay = new Date();</span>
+&nbsp;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    $scope.events = placedMeals;</span>
+<span class="cstat-no" title="statement not covered" >    $scope.completeMeals = completeMeals;</span>
+&nbsp;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    $scope.showModal = <span class="fstat-no" title="function not covered" >function showModal(date) {</span></span>
+<span class="cstat-no" title="statement not covered" >      $log.log('showModal', arguments);</span>
+<span class="cstat-no" title="statement not covered" >      $modal.open({</span>
+        templateUrl: '/views/modals/food-calendar-modal.html',
+        controller: <span class="fstat-no" title="function not covered" >function modalController($scope, $modalInstance) {</span>
+<span class="cstat-no" title="statement not covered" >          $log.log('modal controller running', arguments, placedMeals);</span>
+<span class="cstat-no" title="statement not covered" >          $scope.$modalInstance = $modalInstance;</span>
+<span class="cstat-no" title="statement not covered" >          $scope.selectedDate = date;</span>
+<span class="cstat-no" title="statement not covered" >          $scope.completeMeals = completeMeals;</span>
+<span class="cstat-no" title="statement not covered" >          $scope.placeMeal = <span class="fstat-no" title="function not covered" >function(meal, date){</span></span>
+<span class="cstat-no" title="statement not covered" >            console.log('Placing', arguments);</span>
+<span class="cstat-no" title="statement not covered" >            meal.starts_at = date;</span>
+<span class="cstat-no" title="statement not covered" >            Meals.update(meal);</span>
+          }
+<span class="cstat-no" title="statement not covered" >          $log.log('modal scope', $scope);</span>
+        }
+      });
+    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    $scope.eventClicked = <span class="fstat-no" title="function not covered" >function eventClicked() {</span></span>
+<span class="cstat-no" title="statement not covered" >    	$log.log('event clicked', event);</span>
+      //showModal('Clicked', event);
+<span class="cstat-no" title="statement not covered" >      event.preventDefault();</span>
+<span class="cstat-no" title="statement not covered" >      event.stopPropagation();</span>
+    };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    $scope.eventEdited = <span class="fstat-no" title="function not covered" >function eventEdited() {</span></span>
+<span class="cstat-no" title="statement not covered" >      showModal('Edited', event);</span>
+    };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    $scope.eventDeleted = <span class="fstat-no" title="function not covered" >function eventDeleted() {</span></span>
+<span class="cstat-no" title="statement not covered" >      showModal('Deleted', event);</span>
+    };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    $scope.calclickalert = <span class="fstat-no" title="function not covered" >function calclickalert(calendarDate){</span></span>
+<span class="cstat-no" title="statement not covered" >      if($(event.target).hasClass('cal-day-past')){ <span class="cstat-no" title="statement not covered" >return false;}</span></span>
+<span class="cstat-no" title="statement not covered" >    	$log.log('day clicked', event);</span>
+<span class="cstat-no" title="statement not covered" >    	$log.log(calendarDate);</span>
+<span class="cstat-no" title="statement not covered" >    	$scope.showModal(calendarDate);</span>
+<span class="cstat-no" title="statement not covered" >      event.preventDefault();</span>
+<span class="cstat-no" title="statement not covered" >      event.stopPropagation();</span>
+    };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    $scope.setCalendarToToday = <span class="fstat-no" title="function not covered" >function setCalendarToToday() {</span></span>
+<span class="cstat-no" title="statement not covered" >      $scope.calendarDay = new Date();</span>
+    };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    $scope.drillDownClick = <span class="fstat-no" title="function not covered" >function drillDownClick(){</span></span>
+<span class="cstat-no" title="statement not covered" >      alert('yes');</span>
+<span class="cstat-no" title="statement not covered" >      return false;</span>
+    };
+&nbsp;
+&nbsp;
+});
+  }
+&nbsp;</pre></td></tr>
+</table></pre>
+
+</div>
+<div class="footer">
+    <div class="meta">Generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Mon Aug 24 2015 07:22:10 GMT+0100 (BST)</div>
+</div>
+<script src="../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../sorter.js"></script>
+</body>
+</html>
