@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for views/ingredients/ingredients.add.controller.js</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../../prettify.css">
+    <link rel="stylesheet" href="../../base.css">
+    <style type='text/css'>
+        div.coverage-summary .sorter {
+            background-image: url(../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class="header low">
+    <h1>Code coverage report for <span class="entity">views/ingredients/ingredients.add.controller.js</span></h1>
+    <h2>
+        Statements: <span class="metric">27.27% <small>(6 / 22)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Branches: <span class="metric">0% <small>(0 / 4)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Functions: <span class="metric">25% <small>(1 / 4)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Lines: <span class="metric">27.27% <small>(6 / 22)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Ignored: <span class="metric"><span class="ignore-none">none</span></span> &nbsp;&nbsp;&nbsp;&nbsp;
+    </h2>
+    <div class="path"><a href="../../index.html">All files</a> &#187; <a href="index.html">views/ingredients/</a> &#187; ingredients.add.controller.js</div>
+</div>
+<div class="body">
+<pre><table class="coverage">
+<tr><td class="line-count">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55</td><td class="line-coverage"><span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">(function(){
+'use strict';
+&nbsp;
+angular.module('kitchenapp')
+  .controller('IngredientsAddCtrl', IngredientsAddCtrl);
+&nbsp;
+IngredientsAddCtrl.$inject = ['Ingredients', '$scope'];
+&nbsp;
+<span class="fstat-no" title="function not covered" >function IngredientsAddCtrl(Ingredients, $scope) {</span>
+// console.log(stateMap);
+&nbsp;
+<span class="cstat-no" title="statement not covered" >	var vm = this, ingredients, data = [];</span>
+&nbsp;
+<span class="fstat-no" title="function not covered" >  function handlePrice(){</span>
+<span class="cstat-no" title="statement not covered" >    console.log('handlePrice');</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    var price, pounds = vm.newIngredient.pounds, pence = vm.newIngredient.pence;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    if(!pounds){</span>
+<span class="cstat-no" title="statement not covered" >      pounds = 0;</span>
+    }
+<span class="cstat-no" title="statement not covered" >    if(!pence){</span>
+<span class="cstat-no" title="statement not covered" >      pence = 0;</span>
+    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    price = parseFloat(pounds + pence/100);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    vm.newIngredient.price = price.toFixed(2) * 1;</span>
+  }
+&nbsp;
+&nbsp;
+<span class="fstat-no" title="function not covered" >	function addIngredient(childScope){</span>
+<span class="cstat-no" title="statement not covered" >		console.log(arguments);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    var newIng = vm.newIngredient;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >		Ingredients.save(newIng);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >		childScope.ingredientForm.$setPristine();</span>
+<span class="cstat-no" title="statement not covered" >		childScope.ingredientForm.$setUntouched();</span>
+<span class="cstat-no" title="statement not covered" >		vm.newIngredient = {};</span>
+&nbsp;
+	}
+&nbsp;
+<span class="cstat-no" title="statement not covered" >	angular.extend(vm, {</span>
+	  addIngredient: addIngredient,
+    handlePrice: handlePrice,
+    newIngredient: {}
+	});
+&nbsp;
+&nbsp;
+}
+&nbsp;
+}());
+&nbsp;</pre></td></tr>
+</table></pre>
+
+</div>
+<div class="footer">
+    <div class="meta">Generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Mon Aug 24 2015 08:51:50 GMT+0100 (BST)</div>
+</div>
+<script src="../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../sorter.js"></script>
+</body>
+</html>
