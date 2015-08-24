@@ -1,4 +1,4 @@
-# Kitchenapp [![Generated with](https://img.shields.io/badge/generated%20with-bangular-blue.svg?style=flat-square)](https://github.com/42Zavattas/generator-bangular)
+# Kitchenapp [![Generated with](https://img.shields.io/badge/generated%20with-bangular-blue.svg?style=flat-square)](https://github.com/42Zavattas/generator-bangular)[![Build Status](https://travis-ci.org/jmsherry/kitchenapp.svg?branch=master)](https://travis-ci.org/jmsherry/kitchenapp) [![Code Climate](https://codeclimate.com/repos/55daafc9e30ba0552200973d/badges/d7ac6feef42a15537e3b/gpa.svg)](https://codeclimate.com/repos/55daafc9e30ba0552200973d/feed)[![Test Coverage](https://codeclimate.com/repos/55daafc9e30ba0552200973d/badges/d7ac6feef42a15537e3b/coverage.svg)](https://codeclimate.com/repos/55daafc9e30ba0552200973d/coverage)
 
 [ ![Codeship Status for jmsherry/kitchenapp](https://codeship.com/projects/2eabc9b0-2ace-0133-8c51-622b866f1c07/status?branch=master)](https://codeship.com/projects/98338)
 
