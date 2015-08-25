@@ -1,19 +1,21 @@
-'use strict';
+(function(){
+  'use strict';
 
-angular.module('kitchenapp')
-  .controller('ProfileCtrl', ProfileCtrl);
+  angular.module('kitchenapp')
+    .controller('ProfileCtrl', ProfileCtrl);
 
-ProfileCtrl.$inject = ['Auth', '$location'];
+  ProfileCtrl.$inject = ['Auth', '$location'];
 
-function ProfileCtrl(Auth, $location) {
+  function ProfileCtrl(Auth, $location) {
 
-	Auth.checkAuthorised();
+  	Auth.checkAuthorised();
 
-	var vm = this, user = Auth.getUser();
+  	var vm = this, user = Auth.getUser();
 
-	angular.extend(vm, {
-	  name: 'ProfileCtrl',
-	  user: user
-	});
+  	angular.extend(vm, {
+  	  name: 'ProfileCtrl',
+  	  user: user
+  	});
 
-}
+  }
+}());

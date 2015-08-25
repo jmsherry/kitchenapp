@@ -1,12 +1,14 @@
-'use strict';
+(function(){
+  'use strict';
 
-angular.module('kitchenapp')
-  .config(function ($stateProvider) {
-    $stateProvider
-      .state('login', {
-      	url: '/login',
-        templateUrl: 'views/login/login.html',
-        controller: 'LoginCtrl',
-        controllerAs: 'vm'
-      });
-  });
+  angular.module('kitchenapp')
+    .config(function ($stateProvider) {
+      $stateProvider
+        .state('login', {
+        	url: '/login',
+          templateUrl: 'views/login/login.html',
+          controller: 'LoginCtrl',
+          controllerAs: 'vm'
+        });
+    });
+}());

@@ -1,17 +1,19 @@
-'use strict';
+(function(){
+  'use strict';
 
-describe('Controller: SignupCtrl', function () {
+  describe('Controller: SignupCtrl', function () {
 
-  //beforeEach(module('kitchenapp'));
+    //beforeEach(module('kitchenapp'));
 
-  // var SignupCtrl;
+    // var SignupCtrl;
 
-  // beforeEach(inject(function ($controller) {
-  //   SignupCtrl = $controller('SignupCtrl', {});
-  // }));
+    // beforeEach(inject(function ($controller) {
+    //   SignupCtrl = $controller('SignupCtrl', {});
+    // }));
 
-  // it('should ...', function () {
-  //   expect(1).toBe(1);
-  // });
+    // it('should ...', function () {
+    //   expect(1).toBe(1);
+    // });
 
-});
+  });
+}());

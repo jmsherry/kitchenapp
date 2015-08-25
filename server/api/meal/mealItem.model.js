@@ -1,61 +1,64 @@
-'use strict';
+(function(){
+  'use strict';
 
-var crypto = require('crypto');
-var mongoose = require('mongoose');
-var validators = require('mongoose-validators');
-var Schema = mongoose.Schema;
-var ObjectId = Schema.ObjectId;
-
-
-var mealItemSchema = new Schema({
-  owner: {type: ObjectId, ref: 'User'},
-  name: {type: String, required: true},
-  description: {type: String, required: true},
-  imageURL: {type: String, validate: validators.isURL({skipEmpty: true})},
-  ingredients: {
-    present:[{
-        type: ObjectId,
-        ref: 'CupboardItem'
-    }],
-    missing:[{
-        type: ObjectId,
-        ref: 'Ingredient'
-    }]
-  },
-  isComplete: {type:Boolean, required: true},
-  recipe: {type: ObjectId, ref: 'Recipe', required: true},
-  starts_at: {type: Date, default: null}
-});
-
-/**
- * Virtuals
- */
+  var crypto = require('crypto');
+  var mongoose = require('mongoose');
+  var validators = require('mongoose-validators');
+  var Schema = mongoose.Schema;
+  var ObjectId = Schema.ObjectId;
 
 
-/**
- * Validations
- */
+  var mealItemSchema = new Schema({
+    owner: {type: ObjectId, ref: 'User'},
+    name: {type: String, required: true},
+    description: {type: String, required: true},
+    imageURL: {type: String, validate: validators.isURL({skipEmpty: true})},
+    ingredients: {
+      present:[{
+          type: ObjectId,
+          ref: 'CupboardItem'
+      }],
+      missing:[{
+          type: ObjectId,
+          ref: 'Ingredient'
+      }]
+    },
+    isComplete: {type:Boolean, required: true},
+    recipe: {type: ObjectId, ref: 'Recipe', required: true},
+    starts_at: {type: Date, default: null}
+  });
 
-// mealItemSchema
-//   .path('name')
-//   .validate(function (value, respond) {
-//     var self = this;
-//     this.constructor.findOne({ name: value }, function (err, ingredient) {
-//       if (err) { throw err; }
-//       if (ingredient) {
-//         if (self.id === ingredient.id) { return respond(true); }
-//         return respond(false);
-//       }
-//       respond(true);
-//     });
-//   }, 'Ingredient already entered');
+  /**
+   * Virtuals
+   */
 
-/**
- * Methods
- */
 
-mealItemSchema.methods = {
+  /**
+   * Validations
+   */
 
-};
+  // mealItemSchema
+  //   .path('name')
+  //   .validate(function (value, respond) {
+  //     var self = this;
+  //     this.constructor.findOne({ name: value }, function (err, ingredient) {
+  //       if (err) { throw err; }
+  //       if (ingredient) {
+  //         if (self.id === ingredient.id) { return respond(true); }
+  //         return respond(false);
+  //       }
+  //       respond(true);
+  //     });
+  //   }, 'Ingredient already entered');
 
-module.exports = mongoose.model('MealItem', mealItemSchema);
+  /**
+   * Methods
+   */
+
+  mealItemSchema.methods = {
+
+  };
+
+  module.exports = mongoose.model('MealItem', mealItemSchema);
+
+}());

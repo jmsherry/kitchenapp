@@ -1,10 +1,12 @@
-'use strict';
+(function(){
+  'use strict';
 
-var express = require('express');
-var router = express.Router();
-var controller = require('./ingredient.controller');
+  var express = require('express');
+  var router = express.Router();
+  var controller = require('./ingredient.controller');
 
-router.get('/', controller.getIngredients);
-router.post('/', controller.create);
+  router.get('/', controller.getIngredients);
+  router.post('/', controller.create);
 
-module.exports = router;
+  module.exports = router;
+}());

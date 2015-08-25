@@ -1,21 +1,23 @@
-'use strict';
+(function(){
+  'use strict';
 
-describe('Controller: RecipesCtrl', function () {
+  describe('Controller: RecipesCtrl', function () {
 
-  // beforeEach(module('kitchenapp'));
+    // beforeEach(module('kitchenapp'));
 
-  // var RecipesCtrl,
-  //   scope;
+    // var RecipesCtrl,
+    //   scope;
 
-  // beforeEach(inject(function ($controller, $rootScope) {
-  //   scope = $rootScope.$new();
-  //   RecipesCtrl = $controller('RecipesCtrl', {
-  //     $scope: scope
-  //   });
-  // }));
+    // beforeEach(inject(function ($controller, $rootScope) {
+    //   scope = $rootScope.$new();
+    //   RecipesCtrl = $controller('RecipesCtrl', {
+    //     $scope: scope
+    //   });
+    // }));
 
-  // it('should ...', function () {
-  //   expect(1).toBe(1);
-  // });
+    // it('should ...', function () {
+    //   expect(1).toBe(1);
+    // });
 
-});
+  });
+}());

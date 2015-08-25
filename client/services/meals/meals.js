@@ -322,5 +322,5 @@ angular.module('kitchenapp')
           depopulate: depopulate
         };
 
-    }
+    };
 }());

@@ -306,7 +306,6 @@
      */
     Shopping.prototype.buy = function buy(item) {
 
-
         var self = this,
         deferred = self.$q.defer(), user, added;
 

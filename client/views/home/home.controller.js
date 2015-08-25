@@ -1,12 +1,14 @@
-'use strict';
+(function(){
+  'use strict';
 
-angular.module('kitchenapp')
-  .controller('HomeCtrl', function (Auth) {
+  angular.module('kitchenapp')
+    .controller('HomeCtrl', function (Auth) {
 
-    var vm = this;
+      var vm = this;
 
-    angular.extend(vm, {
-      name: 'HomeCtrl'
+      angular.extend(vm, {
+        name: 'HomeCtrl'
+      });
+
     });
-
-  });
+}());

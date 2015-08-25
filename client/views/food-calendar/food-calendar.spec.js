@@ -1,21 +1,23 @@
-'use strict';
+(function(){
+  'use strict';
 
-describe('Controller: FoodCalendarCtrl', function () {
+  describe('Controller: FoodCalendarCtrl', function () {
 
-  // beforeEach(module('kitchenapp'));
+    // beforeEach(module('kitchenapp'));
 
-  // var MealsCtrl,
-  //   scope;
+    // var MealsCtrl,
+    //   scope;
 
-  // beforeEach(inject(function ($controller, $rootScope) {
-  //   scope = $rootScope.$new();
-  //   MealsCtrl = $controller('MealsCtrl', {
-  //     $scope: scope
-  //   });
-  // }));
+    // beforeEach(inject(function ($controller, $rootScope) {
+    //   scope = $rootScope.$new();
+    //   MealsCtrl = $controller('MealsCtrl', {
+    //     $scope: scope
+    //   });
+    // }));
 
-  // it('should ...', function () {
-  //   expect(1).toBe(1);
-  // });
+    // it('should ...', function () {
+    //   expect(1).toBe(1);
+    // });
 
-});
+  });
+}());

@@ -1,7 +1,9 @@
-'use strict';
+(function(){
+  'use strict';
 
-describe('Controller: MealsCtrl', function () {
+  describe('Controller: MealsCtrl', function () {
 
 
 
-});
+  });
+}());

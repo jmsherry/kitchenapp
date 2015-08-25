@@ -1,13 +1,15 @@
-'use strict';
+(function(){
+  'use strict';
 
-var express = require('express');
-var router = express.Router();
-var controller = require('./cupboard.controller');
+  var express = require('express');
+  var router = express.Router();
+  var controller = require('./cupboard.controller');
 
-router.get('/', controller.getCupboard);
-router.get('/:itemid', controller.getCupboardItem);
-router.post('/', controller.addToCupboard);
-router.put('/:itemid', controller.updateCupboard);
-router.delete('/:itemid', controller.removeFromCupboard);
+  router.get('/', controller.getCupboard);
+  router.get('/:itemid', controller.getCupboardItem);
+  router.post('/', controller.addToCupboard);
+  router.put('/:itemid', controller.updateCupboard);
+  router.delete('/:itemid', controller.removeFromCupboard);
 
-module.exports = router;
+  module.exports = router;
+}());

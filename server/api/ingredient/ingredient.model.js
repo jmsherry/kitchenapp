@@ -1,45 +1,48 @@
-'use strict';
+(function(){
+  'use strict';
 
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+  var mongoose = require('mongoose');
+  var Schema = mongoose.Schema;
 
-var IngredientSchema = new Schema({
-  name: {type: String, required: true},
-  description: {type: String, required: true},
-  imageURL: String,
-  quantity: {type: String, required: true},
-  price: {type: Number, required: true}
-});
+  var IngredientSchema = new Schema({
+    name: {type: String, required: true},
+    description: {type: String, required: true},
+    imageURL: String,
+    quantity: {type: String, required: true},
+    price: {type: Number, required: true}
+  });
 
-/**
- * Virtuals
- */
+  /**
+   * Virtuals
+   */
 
 
-/**
- * Validations
- */
+  /**
+   * Validations
+   */
 
-// IngredientSchema
-//   .path('title')
-//   .validate(function (value, respond) {
-//     var self = this;
-//     this.constructor.findOne({ title: value }, function (err, ingredient) {
-//       if (err) { throw err; }
-//       if (ingredient) {
-//         if (self.id === ingredient.id) { return respond(true); }
-//         return respond(false);
-//       }
-//       respond(true);
-//     });
-//   }, 'ingredient already present');
+  // IngredientSchema
+  //   .path('title')
+  //   .validate(function (value, respond) {
+  //     var self = this;
+  //     this.constructor.findOne({ title: value }, function (err, ingredient) {
+  //       if (err) { throw err; }
+  //       if (ingredient) {
+  //         if (self.id === ingredient.id) { return respond(true); }
+  //         return respond(false);
+  //       }
+  //       respond(true);
+  //     });
+  //   }, 'ingredient already present');
 
-/**
- * Methods
- */
+  /**
+   * Methods
+   */
 
-IngredientSchema.methods = {
+  IngredientSchema.methods = {
 
-};
+  };
 
-module.exports = mongoose.model('Ingredient', IngredientSchema);
+  module.exports = mongoose.model('Ingredient', IngredientSchema);
+
+}());

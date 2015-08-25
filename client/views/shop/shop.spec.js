@@ -1,21 +1,23 @@
-'use strict';
+(function(){
+  'use strict';
 
-describe('Controller: HomeCtrl', function () {
+  describe('Controller: HomeCtrl', function () {
 
-  // beforeEach(module('kitchenapp'));
+    // beforeEach(module('kitchenapp'));
 
-  // var InventoryCtrl,
-  //   scope;
+    // var InventoryCtrl,
+    //   scope;
 
-  // beforeEach(inject(function ($controller, $rootScope) {
-  //   scope = $rootScope.$new();
-  //   InventoryCtrl = $controller('InventoryCtrl', {
-  //     $scope: scope
-  //   });
-  // }));
+    // beforeEach(inject(function ($controller, $rootScope) {
+    //   scope = $rootScope.$new();
+    //   InventoryCtrl = $controller('InventoryCtrl', {
+    //     $scope: scope
+    //   });
+    // }));
 
-  // it('should ...', function () {
-  //   expect(1).toBe(1);
-  // });
+    // it('should ...', function () {
+    //   expect(1).toBe(1);
+    // });
 
-});
+  });
+}());

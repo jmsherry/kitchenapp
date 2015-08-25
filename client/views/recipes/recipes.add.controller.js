@@ -1,39 +1,41 @@
-'use strict';
+(function(){
+  'use strict';
 
-angular.module('kitchenapp')
-  .controller('RecipesAddCtrl', RecipesAddCtrl);
+  angular.module('kitchenapp')
+    .controller('RecipesAddCtrl', RecipesAddCtrl);
 
-RecipesAddCtrl.$inject = ['$scope', 'Recipes', 'Ingredients', '$q'];
-
-
-function RecipesAddCtrl($scope, Recipes, Ingredients, $q) {
-
-	var vm = this,
-	recipes,
-	ingredients,
-	rowTemplate,
-	data = [];
+  RecipesAddCtrl.$inject = ['$scope', 'Recipes', 'Ingredients', '$q'];
 
 
-	function saveRecipe(childScope){
-		console.log(arguments);
+  function RecipesAddCtrl($scope, Recipes, Ingredients, $q) {
 
-		Recipes.save(vm.newRecipe);
-		childScope.recipeForm.$setPristine();
-		childScope.recipeForm.$setUntouched();
-		vm.newRecipe = {};
-	}
-
-	ingredients = Ingredients.get();
-
-	$q.when(ingredients, function(newData){
-		vm.ingredients = newData;
-	});
+  	var vm = this,
+  	recipes,
+  	ingredients,
+  	rowTemplate,
+  	data = [];
 
 
-	angular.extend(vm, {
-	  name: 'RecipesCtrl',
-	  saveRecipe: saveRecipe
-	});
+  	function saveRecipe(childScope){
+  		console.log(arguments);
 
-}
+  		Recipes.save(vm.newRecipe);
+  		childScope.recipeForm.$setPristine();
+  		childScope.recipeForm.$setUntouched();
+  		vm.newRecipe = {};
+  	}
+
+  	ingredients = Ingredients.get();
+
+  	$q.when(ingredients, function(newData){
+  		vm.ingredients = newData;
+  	});
+
+
+  	angular.extend(vm, {
+  	  name: 'RecipesCtrl',
+  	  saveRecipe: saveRecipe
+  	});
+
+  }
+}());
