@@ -5,10 +5,6 @@
     "url": "git@github.com:jmsherry/kitchenapp",
     "type": "git"
   },
-  "cacheDirectories": [
-    "node_modules",
-    "bower_components"
-  ],
   "version": "0.1.0",
   "description": "MEAN stack demo of a kitchen inventory app",
   "devDependencies": {
@@ -83,6 +79,6 @@
   "scripts": {
     "start": "node ./server/server.js",
     "postinstall": "bower install && gulp build",
-    "test": "gulp test && CODECLIMATE_REPO_TOKEN=affe217365a00fc559f33ce44f77798ddd78146cceb88aadf3dbf408e761acc0 codeclimate-test-reporter < ./build/reports/coverage/report-lcov/lcov.info"
+    "test": "gulp test"
   }
 }
