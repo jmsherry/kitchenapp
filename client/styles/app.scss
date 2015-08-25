@@ -2,8 +2,9 @@ body {
   font-family: sans-serif;
 }
 
-#main-content {
+.main-content {
   margin-top:50px;
+  padding-bottom: 20px;
 }
 
 .banner {
@@ -310,8 +311,9 @@ select {
    }
  }
 
- .modal-contaner {
+ .modal-container {
    overflow: hidden;
+   padding: 5px;
  }
 
  .info-messages p {

@@ -73,7 +73,7 @@ angular.module('kitchenapp')
 
         }
 
-        function getRecipe(id){
+        function getRecipeById(id){
           var self = this, recs = self.get(), requiredRec;
           requiredRec = _.find(recs, {_id: id});
           return requiredRec;
@@ -86,7 +86,7 @@ angular.module('kitchenapp')
           get: get,
           add: add,
           save: save,
-          getRecipe: getRecipe
+          getRecipeById: getRecipeById
         }
 
     }

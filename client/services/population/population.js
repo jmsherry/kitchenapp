@@ -1,83 +1,145 @@
-(function(){
-'use strict';
+(function () {
+    'use strict';
 
-angular.module('kitchenapp')
-    .factory('Populate', Populate);
+    angular.module('kitchenapp')
+        .factory('Populate', Populate);
 
-    Populate.$inject = ['$rootScope', '$cookieStore', '$q', '$log', '$resource', 'toastr', 'Auth', 'Recipes', 'Cupboard', 'Shopping', 'Ingredients'];
+    Populate.$inject = ['$q', '$log', 'Recipes', 'Ingredients', 'Meals'];
 
-    function Populate($rootScope, $cookieStore, $q, $log, $resource, toastr, Auth, Recipes, Cupboard, Shopping, Ingredients) {
+    function Populate($q, $log, Recipes, Ingredients, Meals) {
 
-      /**
-       * Return the current logged user.
-       *
-       * @param obj {}: Target object to be treated
-       * @param expand Bool: Whether to populate or depopulate
-       */
+        /**
+         * Return the current logged user.
+         *
+         * @param obj {}: Target object to be treated
+         * @param expand Bool: Whether to populate or depopulate
+         */
 
-        function populate(obj, expand){
+        function populate(obj) {
 
-          if(typeof obj !== 'object'){
-            throw Error('wrong argument type supplied for object in populate');
-          } else if(typeof expand !== 'boolean'){
-            throw Error('wrong argument type supplied for expand in populate');
-          }
+            var deferred, keys, promises = [],
+                ings = [],
+                thisPromise, found, thisProp;
 
-          var deferred = $q.defer();
-          var keys = ['ingredient', 'ingredients', 'reservedFor', 'recipe']
+            if (typeof obj !== 'object') {
+                throw Error('wrong argument type supplied for object in populate');
+            } else if (typeof expand !== 'boolean') {
+                throw Error('wrong argument type supplied for expand in populate');
+            }
 
-          for(var key in obj){
-            var found = keys.indexOf(key);
-            var thisProp = keys[found];
+            deferred = $q.defer();
+            keys = ['ingredient', 'ingredients', 'reservedFor', 'recipe'];
 
+            for (var key in obj) {
+                found = keys.indexOf(key);
+                thisProp = keys[found];
 
+                if (thisProp) {
+                    switch (thisProp) {
 
-            if(thisProp){
-              switch(thisProp){
+                    case 'ingredient':
+                        if (typeof obj.ingredient === 'string') {
+                            thisPromise = Ingredients.getIngredientById(obj.ingredient);
+                            obj.ingredient = thisPromise;
+                        }
+                        break;
+
+                    case 'recipe':
+                        if (typeof obj.recipe === 'string') {
+                            thisPromise = Recipes.getRecipeById(obj.recipe);
+                            obj.recipe = thisPromise;
+                        }
+                        break;
+
+                    case 'ingredients':
+                        //find missing and present
+                        ings = obj.missing.ingredients.concat(obj.present.ingredients);
+                        if (typeof ings[0] === 'string') {
+
+                        }
+                        break;
+
+                    case 'reservedFor':
+                        if (typeof obj.reservedFor === 'string') {
+                            thisPromise = Meals.getMealById();
+                            obj.reservedFor = thisPromise;
+                        }
+                        break;
+
+                    default:
+                        $log.warn('Errors populating object:', obj, 'expand: ', expand);
+                        throw new Error('Errors populating');
+                        break;
+                    }
+
+                }
+            }
+            if (_.isArray(thisPromise)) {
+                promises = promises.concat(thisPromise);
+            } else {
+                promises.push(thisPromise);
+            }
+
+            $q.all(promises).then(function (data) {
+                defer.resolve(data);
+            });
+
+            return defer.promise;
+        }
+
+        function depopulate(obj) {
+            var keys, found, thisProp;
+
+            if (typeof obj !== 'object') {
+                throw Error('wrong argument type supplied for object in populate');
+            }
+
+            keys = ['ingredient', 'ingredients', 'reservedFor', 'recipe'];
+
+            for (var key in obj) {
+                found = keys.indexOf(key);
+                thisProp = keys[found];
+
+                switch (thisProp) {
 
                 case 'ingredient':
-                if(expand){
-
-                } else {
-                  obj.ingredient = ingredient._id
-                }
-                break;
+                    if (typeof obj[thisProp] === 'object') {
+                        obj.ingredient = obj.ingredient._id;
+                    }
+                    break;
 
                 case 'recipe':
-                if(expand){
-
-                } else {
-                  obj.recipe = recipe._id
-                }
-                break;
+                    if (typeof obj[thisProp] === 'object') {
+                        obj.recipe = obj.recipe._id;
+                    }
+                    break;
 
                 case 'ingredients':
-                if(expand){
+                    ings = obj.missing.ingredients.concat(obj.present.ingredients);
+                    if (typeof ings[0] === 'object') {
 
-                } else {
-                  ingredient = ingredient._id
-                }
-                break;
+                    }
+                    break;
 
                 case 'reservedFor':
-                if(expand){
-
-                } else {
-                  obj.reservedFor = obj.reservedFor._id
-                }
-                break;
+                    if (typeof obj.reservedFor === 'object') {
+                        obj.reservedFor = obj.reservedFor._id;
+                    }
+                    break;
 
                 default:
-                console.warn('check this for errors - OBJ:', obj, 'expand: ', expand);
-              }
-            }
-          }
+                    $log.warn('Errors depopulating object:', obj, 'expand: ', expand);
+                    throw new Error('Errors depopulating');
+                    break;
+                }
 
-          return defer.promise;
+            }
+            return obj;
         }
 
         return {
-          populate: populate
+            populate: populate,
+            depopulate: depopulate
         };
 
     }

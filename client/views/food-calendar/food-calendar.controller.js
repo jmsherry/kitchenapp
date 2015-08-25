@@ -4,14 +4,14 @@
   angular.module('kitchenapp')
     .controller('FoodCalendarCtrl', FoodCalendarCtrl);
 
-    FoodCalendarCtrl.$inject = ['$scope', '$modal', 'Meals', 'Auth', '$log', '$q'];
+    FoodCalendarCtrl.$inject = ['$modal', 'Meals', 'Auth', '$log', '$q', '$scope'];
 
 
-    function FoodCalendarCtrl($scope, $modal, Meals, Auth, $log, $q) {
+    function FoodCalendarCtrl($modal, Meals, Auth, $log, $q, $scope) {
 
     Auth.checkAuthorised();
 
-  	var meals, completeMeals, placedMeals;
+  	var meals, completeMeals, placedMeals, vm = this;
 
     meals = Meals.get();
     $q.when(meals, function(data){
@@ -26,66 +26,99 @@
     	$log.log("placedMeals: ", placedMeals);
 
       //These variables MUST be set as a minimum for the calendar to work
-      $scope.calendarView = 'month';
-      $scope.calendarDay = new Date();
+      vm.calendarView = 'month';
+      vm.calendarDay = new Date();
+      //vm.nowString = 'This month';
+
+      // $scope.$watch('vm.calendarView', function(currentView) {
+      //    $log.log(arguments);
+      //    switch(currentView){
+      //      case 'day':
+      //      vm.nowString = 'Today';
+      //      break;
+      //      case 'week':
+      //      vm.nowString = 'This Week';
+      //      break;
+      //      case 'month':
+      //      vm.nowString = 'This month';
+      //      break;
+      //      case 'year':
+      //      vm.nowString = 'This Year';
+      //      break;
+      //    }
+      // });
 
 
-      $scope.events = placedMeals;
-      $scope.completeMeals = completeMeals;
+      vm.events = placedMeals || [];
+      vm.completeMeals = completeMeals;
 
 
-      $scope.showModal = function showModal(date) {
+      function showModal(date) {
         $log.log('showModal', arguments);
         $modal.open({
           templateUrl: '/views/modals/food-calendar-modal.html',
-          controller: function modalController($scope, $modalInstance) {
+          controller: function modalController($modalInstance) {
+            var vm = this;
             $log.log('modal controller running', arguments, placedMeals);
-            $scope.$modalInstance = $modalInstance;
-            $scope.selectedDate = date;
-            $scope.completeMeals = completeMeals;
-            $scope.placeMeal = function(meal, date){
+            vm.$modalInstance = $modalInstance;
+            vm.selectedDate = date;
+            vm.completeMeals = completeMeals;
+            vm.placeMeal = function(meal, date){
               console.log('Placing', arguments);
               meal.starts_at = date;
               Meals.update(meal);
             }
-            $log.log('modal scope', $scope);
-          }
+            $log.log('modal scope', vm);
+          },
+          contollerAs: 'vm'
         });
       }
 
-      $scope.eventClicked = function eventClicked() {
+      function eventClicked() {
       	$log.log('event clicked', event);
         //showModal('Clicked', event);
         event.preventDefault();
         event.stopPropagation();
       };
 
-      $scope.eventEdited = function eventEdited() {
-        showModal('Edited', event);
+      function eventEdited() {
+        vm.showModal('Edited', event);
       };
 
-      $scope.eventDeleted = function eventDeleted() {
-        showModal('Deleted', event);
+      function eventDeleted() {
+        vm.showModal('Deleted', event);
       };
 
-      $scope.calclickalert = function calclickalert(calendarDate){
+      function timespanClick(calendarDate){
         if($(event.target).hasClass('cal-day-past')){ return false;}
       	$log.log('day clicked', event);
-      	$log.log(calendarDate);
-      	$scope.showModal(calendarDate);
-        event.preventDefault();
-        event.stopPropagation();
+      	$log.log(arguments);
+      	vm.showModal(calendarDate);
+        // event.preventDefault();
+        // event.stopPropagation();
+        // return false;
       };
 
-      $scope.setCalendarToToday = function setCalendarToToday() {
-        $scope.calendarDay = new Date();
+      function setCalendarToToday() {
+        vm.calendarDay = new Date();
       };
 
-      $scope.drillDownClick = function drillDownClick(){
-        alert('yes');
+      function drillDownClick(){
+        $log.log(arguments);
+
         return false;
       };
 
+      angular.extend(vm, {
+        name: 'FoodCalendarCtrl',
+        showModal: showModal,
+        eventClicked: eventClicked,
+        eventEdited: eventEdited,
+        eventDeleted: eventDeleted,
+        timespanClick: timespanClick,
+        setCalendarToToday: setCalendarToToday,
+        drillDownClick: drillDownClick
+      });
 
     });
   }

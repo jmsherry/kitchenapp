@@ -107,7 +107,7 @@ angular.module('kitchenapp')
         function createMealObject(id){
           var deferred = $q.defer(),
           user = Auth.getUser(),
-          recipe = Recipes.getRecipe(id),
+          recipe = Recipes.getRecipeById(id),
           mealObj = _.clone(recipe),
           ingredients = Cupboard.process(mealObj.ingredients);
           $log.log('Ingredients for new meal', ingredients);

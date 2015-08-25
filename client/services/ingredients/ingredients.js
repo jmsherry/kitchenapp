@@ -86,7 +86,7 @@ angular.module('kitchenapp')
           return populated;
         }
 
-        function getById(id){
+        function getIngredientById(id){
           var self = this, deferred = $q.defer(), ings;
           ings = self.get();
 
@@ -104,7 +104,7 @@ angular.module('kitchenapp')
           _ings: _ingredients,
           init: init,
           get: get,
-          getById: getById,
+          getIngredientById: getIngredientById,
           add: add,
           save: save,
           populate: populate

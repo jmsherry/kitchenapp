@@ -38,13 +38,13 @@
 
       uiSelectConfig.theme = 'select2';
 
-      calendarConfigProvider.configureDateFormats({
-        hour: 'HH:mm' //this will configure the hour view to display in 24 hour format rather than the default of 12 hour
-      });
-
-      calendarConfigProvider.configureTitleFormats({
-        day: 'ddd D MMM' //this will configure the day view title to be shorter
-      });
+      // calendarConfigProvider.configureDateFormats({
+      //   hour: 'HH:mm' //this will configure the hour view to display in 24 hour format rather than the default of 12 hour
+      // });
+      //
+      // calendarConfigProvider.configureTitleFormats({
+      //   day: 'ddd D MMM' //this will configure the day view title to be shorter
+      // });
 
       angular.extend(toastrConfig, {
         timeOut: 1500,

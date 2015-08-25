@@ -2,58 +2,78 @@
 	<div class="col-xs-12">
 		<h1>Meal Planner</h1>
 		<p class="ng-cloak">You have
-			<span ng-class="completeMeals.length > 0 ?  'completeCount text-success' : 'completeCount text-info'">
-					{{completeMeals.length}} complete meal<span ng-if="completeMeals.length !== 1">s</span>
-			</span>.
-			<span ng-if="completeMeals.length > 0">Click on a date to place a meal.</span>
-			<span ng-if="completeMeals.length === 0">Go to <a href="#" ui-sref="meals">Build Meals</a> to create more...</span>
+			<span ng-class="vm.completeMeals.length > 0 ?  'completeCount text-success' : 'completeCount text-info'">
+					{{vm.completeMeals.length}} complete meal<span ng-if="vm.completeMeals.length !== 1">s</span></span>.
+			<span ng-if="vm.completeMeals.length > 0">Click on a date to place a meal.</span>
+			<span ng-if="vm.completeMeals.length === 0">Go to <a href="#" ui-sref="meals">Build Meals</a> to create more...</span>
+
+
 		</p>
 	</div>
 </div>
 <div class="row">
-	<div class="col-xs-12">
+	<div class="col-md-4">
 		<div class="form-group">
 			<button
 			  class="btn btn-primary"
 			  mwl-date-modifier
-			  date="calendarDay"
-			  decrement="calendarView">
+			  date="vm.calendarDay"
+			  decrement="vm.calendarView">
 			  Previous
 			</button>
 
 			<button
 			  class="btn btn-default"
 			  mwl-date-modifier
-			  date="calendarDay"
-			  set-to-today>
-			  Today
+			  date="vm.calendarDay"
+			  set-to-today
+				ng-cloak>
+			  Now
 			</button>
 
 			<button
 			  class="btn btn-primary"
 			  mwl-date-modifier
-			  date="calendarDay"
-			  increment="calendarView">
+			  date="vm.calendarDay"
+			  increment="vm.calendarView">
 			  Next
 			</button>
+		</div>
+	</div>
+	<div class="col-md-4">
+	<h2>{{vm.calendarTitle}}</h2>
+	</div>
+	<div class="col-md-4">
+		<div class="btn-group pull-right">
+			<button class="btn btn-primary" ng-model="vm.calendarView" btn-radio="'year'">Year</button>
+			<button class="btn btn-primary" ng-model="vm.calendarView" btn-radio="'month'">Month</button>
+			<button class="btn btn-primary" ng-model="vm.calendarView" btn-radio="'week'">Week</button>
+			<button class="btn btn-primary" ng-model="vm.calendarView" btn-radio="'day'">Day</button>
 		</div>
 	</div>
 </div>
 	<div class="grid-wrapper">
 		<p class="bg-info responsive-banner visible-xs-block">Scroll the calendar to the left to see all the days <span class="glyphicon glyphicon-arrow-right"></span></p>
-				<mwl-calendar
-			    calendar-events="events"
-			    calendar-view="calendarView"
-			    calendar-current-day="calendarDay"
-			    calendar-control="calendarControl"
-			    calendar-event-click="eventClicked(calendarEvent)"
-			    calendar-edit-event-html="'<i class=\'glyphicon glyphicon-pencil\'></i>'"
-			    calendar-delete-event-html="'<i class=\'glyphicon glyphicon-remove\'></i>'"
-			    calendar-edit-event-click="eventEdited(calendarEvent)"
-			    calendar-delete-event-click="eventDeleted(calendarEvent)"
-			    calendar-timespan-click="calclickalert(calendarDate)",
-			    calendar-auto-open="true",
-					calendar-drill-down-click="drillDownClick()"
-			    ></mwl-calendar>
+
+		<mwl-calendar
+		    view="vm.calendarView"
+		    current-day="vm.calendarDay"
+		    events="vm.events"
+		    view-title="vm.calendarTitle"
+		    on-event-click="vm.eventClicked(calendarEvent)"
+		    on-event-times-changed="vm.eventTimesChanged(calendarEvent); calendarEvent.startsAt = calendarNewEventStart; calendarEvent.endsAt = calendarNewEventEnd"
+		    edit-event-html="'<i class=\'glyphicon glyphicon-pencil\'></i>'"
+		    delete-event-html="'<i class=\'glyphicon glyphicon-remove\'></i>'"
+		    on-edit-event-click="vm.eventEdited(calendarEvent)"
+		    on-delete-event-click="vm.eventDeleted(calendarEvent)"
+				on-drill-down-click="vm.drillDownClick(calendarEvent)"
+				on-timespan-click="vm.timespanClick(calendarEvent)"
+				day-view-start="06:00"
+				day-view-end="22:00"
+				day-view-split="30"
+				use-iso-week="true"
+				week-title-label=""
+		    auto-open="true">
+		</mwl-calendar>
 
 	</div>

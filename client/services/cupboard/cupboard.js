@@ -59,7 +59,7 @@
 
       for (i = 0; i < len; i+=1) {
         thisIng = items[i].ingredient;
-        thisIng = self.Ingredients.getById(thisIng); //returns a promise
+        thisIng = self.Ingredients.getIngredientById(thisIng); //returns a promise
         promises.push(thisIng);
       }
 
@@ -307,7 +307,7 @@
         } else {
           //Deal with unpopulated
           ing = item.ingredient;
-          fullIng = self.Ingredients.getById(ing);
+          fullIng = self.Ingredients.getIngredientById(ing);
 
 
           self.$q.when(fullIng, function(ingData){

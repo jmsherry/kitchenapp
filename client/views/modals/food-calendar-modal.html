@@ -1,22 +1,16 @@
-<div class="modal-contaner">
+<div class="modal-container">
 	<button type="button" class="close" aria-label="Close" ng-click="$close(null)"><span aria-hidden="true">&times;</span></button>
-	<div class="row">
-		<div class="col-xs-12">
+
 			<h1>Place a meal</h1>
-		</div>
-	</div>
-	<div class="row">
+
 		<ul class="list-unstyled modal-meals-list">
-			<li ng-repeat="meal in completeMeals">
+			<li ng-repeat="meal in vm.completeMeals">
 				<button class="btn btn-block btn-info" ng-click="placeMeal(meal, selectedDate)">{{meal.name}}</button>
 			</li>
 		</ul>
-	</div>
-	<div class="row">
-		<div class="col-xs-12">
+
 			<div class="actions">
 				<button type="button" class="btn btn-primary pull-right" aria-label="Close" ng-click="$close(null)">Done</button>
 			</div>
-		</div>
-	</div>
+
 </div>

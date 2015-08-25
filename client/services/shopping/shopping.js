@@ -66,7 +66,7 @@
     Shopping.prototype.populate = function populate(items){
       var self = this, i, len = items.length;
       for (i = 0; i < len; i+=1) {
-        items[i].ingredient = self.Ingredients.getById(items[i].ingredient);
+        items[i].ingredient = self.Ingredients.getIngredientById(items[i].ingredient);
       }
       return items;
     };
