@@ -9,13 +9,13 @@ exports.config = {
    *
    * @env NEW_RELIC_APP_NAME
    */
-  app_name: [],
+  app_name: ['kitchenapp2'],
   /**
    * The user's license key. Must be set by per-app configuration file.
    *
    * @env NEW_RELIC_LICENSE_KEY
    */
-  license_key: '',
+  license_key: '5648be775b147ed486f014faadf7a7521a5601e6',
   /**
    * Hostname for the New Relic collector proxy.
    *
@@ -142,7 +142,7 @@ exports.config = {
      *
      * @env NEW_RELIC_LOG_LEVEL
      */
-    level: 'info',
+    level: 'trace',
     /**
      * Where to put the log file -- by default just uses process.cwd +
      * 'newrelic_agent.log'. A special case is a filepath of 'stdout',
