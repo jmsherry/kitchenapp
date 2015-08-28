@@ -9,3 +9,4 @@ docs/
 Clear all.js
 .DS_Store
 client/build/
+newrelic_agent.log
