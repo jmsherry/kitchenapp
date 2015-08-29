@@ -28,6 +28,7 @@ module.exports = function (done) {
     ['clean:dist', 'sass'],
     ['usemin', 'copy:dist'],
     ['scripts', 'cssmin'],
+    'images',
     'rev',
     'clean:finish',
     done);
@@ -52,7 +53,7 @@ gulp.task('copy:dist', function () {
     'client/bower_components/angular-ui-grid/*.svg',
     'client/bower_components/angular-ui-grid/*.ttf',
     'client/bower_components/angular-ui-grid/*.woff'
-    ], { base: './' }).pipe(gulp.dest('dist/'));
+  ], { base: './' }).pipe(gulp.dest('dist/'));
 
   return sq({ objectMode: true }, main, assets)
     .pipe(gulp.dest('dist/'));
