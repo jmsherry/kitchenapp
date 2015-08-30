@@ -16,6 +16,7 @@ gulp.task('build',                    require('./tasks/build'));
 gulp.task('bump',       ['version'],  require('./tasks/chore').bump);
 gulp.task('version',                  require('./tasks/chore').version);
 gulp.task('control',                  require('./tasks/control'));
+gulp.task('templates',                  require('./tasks/templates'));
 gulp.task('updateKarmaConf',          require('./tasks/updateKarmaConf'));
 gulp.task('e2e:update',               require('./tasks/test').e2eUpdate);
 gulp.task('e2e',        ['serve'],    require('./tasks/test').e2eTests);
