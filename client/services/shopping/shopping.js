@@ -365,7 +365,7 @@
             spentValues.push(dayObj);
           }
 
-          for(var i=0; i < 7; i+=1){
+          for(i=0; i < 7; i+=1){
             remValues[i].y = budget - AmountSpent;
             remValues[i].series = 0
             spentValues[i].y = AmountSpent;

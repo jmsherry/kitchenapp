@@ -29,7 +29,7 @@
       function getBudgetInformation(date){
 
           var self = this, deferred, startOfWeek, endOfWeek, remValues = [], spentValues = [], dayObj, holder = 0,
-          budget = Auth.getUser().budget, amountSpent, data, weeksPurchases = [], wpLen = weeksPurchases.length,
+          budget = Auth.getUser().budget, data, weeksPurchases = [], wpLen = weeksPurchases.length,
           pdLen, wpCondensed = [], thisPurchase, amountSpent = 0;
 
           data = self.getPurchases();
@@ -58,14 +58,16 @@
 
             //make the value an array of amounts
             for(var prop in wpCondensed){
-               wpCondensed[prop] = _.pluck(wpCondensed[prop], 'amount');
-               wpCondensed[prop] = _.sum(wpCondensed[prop]);
-               wpCondensed[moment(prop).isoWeekday()] = wpCondensed[prop];
-               delete(wpCondensed[prop]);
+              if (wpCondensed.hasOwnProperty(prop)) {
+                 wpCondensed[prop] = _.pluck(wpCondensed[prop], 'amount');
+                 wpCondensed[prop] = _.sum(wpCondensed[prop]);
+                 wpCondensed[moment(prop).isoWeekday()] = wpCondensed[prop];
+                 delete(wpCondensed[prop]);
+              }
             }
 
 
-            for(var i=0, thisDay, amountSpent = 0; i < 7; i+=1){
+            for(i=0, thisDay, amountSpent = 0; i < 7; i+=1){
               thisDay = moment(startOfWeek);
               amountSpent += wpCondensed[i+1] || 0; // +1 because isoWeekday is not zero based
               thisDay.add(i, 'd');

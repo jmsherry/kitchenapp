@@ -158,7 +158,7 @@ angular.module('kitchenapp')
             present[i] = present[i]._id;
           }
 
-          for(var i=0; i< mlen; i+=1){
+          for(i=0; i< mlen; i+=1){
             missing[i] = missing[i]._id;
           }
 

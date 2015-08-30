@@ -350,14 +350,14 @@
 
       cupboard = self.getCupboard();
       self.$q.when(cupboard, function (data) {
-	      var items = data;
+	      var items = data, name;
 
         //adjust for wrappers - Maybe convert to shopping list items
-        if(item.ingredient && item.ingredient.name){
-          name = item.ingredient.name;
-        } else {
-          name = item.name;
-        }
+        // if(item.ingredient && item.ingredient.name){
+        //   name = item.ingredient.name;
+        // } else {
+        //   name = item.name;
+        // }
 
         items.splice(items.indexOf(item), 1);
         self.toastr.success(name + ' has been removed from your cupboard');

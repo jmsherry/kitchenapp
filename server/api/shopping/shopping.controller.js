@@ -74,7 +74,7 @@
       {safe: true, upsert: true},
       function(err, item){
         console.log('in updateShoppingList results', err, item);
-        var item;
+        //var item;
 
         if(err){
           handleError(res, err);

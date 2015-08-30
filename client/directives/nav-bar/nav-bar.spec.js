@@ -18,6 +18,7 @@
             element,
             $scope,
             links,
+            userMock,
             recipesToggle,
             recipesMenu,
             recipesMenuLinks,
