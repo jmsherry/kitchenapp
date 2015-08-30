@@ -24,13 +24,13 @@ module.exports = function(){
     return match;
   });
 
-  console.log(bowerBodyScripts, bowerBodyScripts.length);
+  console.log('all', bowerBodyScripts, bowerBodyScripts.length);
 
   for(var i=0; i<headScripts.length; i+=1){
     bowerBodyScripts = _.pull(bowerBodyScripts, headScripts[i]);
   }
 
-  console.log(bowerBodyScripts.length);
+  console.log('filtered', bowerBodyScripts, bowerBodyScripts.length);
 
   scripts = headScripts.concat(bowerBodyScripts).concat(jsToInject);
 
@@ -40,7 +40,7 @@ module.exports = function(){
     endtag: ']',
     ignorePath: toExclude,
     transform: function (filepath, file, i, length) {
-      return '  "' + filepath + '"' + (i + 1 < length ? ',' : '');
+      return '  "' + filepath.replace(/^(\/client\/\.)/,"") + '"' + (i + 1 < length ? ',' : '');
     }
   }))
   .pipe(gulp.dest('./'));
