@@ -53,7 +53,7 @@
     "karma-ng-html2js-preprocessor": "^0.1.2",
     "karma-nyan-reporter": "0.0.60",
     "karma-phantomjs-launcher": "^0.1.4",
-    "main-bower-files": "^2.5.0",
+    "main-bower-files": "^2.9.0",
     "run-sequence": "^1.0.2",
     "sassdoc": "^2.1.8",
     "should": "^5.1.0",
