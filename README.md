@@ -10,7 +10,10 @@
 [![devDependency Status](https://david-dm.org/jmsherry/kitchenapp/dev-status.svg)](https://david-dm.org/jmsherry/kitchenapp#info=devDependencies)
 
 
+## Demo
+[On Heroku](https://kitchenapp2.herokuapp.com/)
 
+## Write Up
 Kitchenapp is a MEAN (Mongodb [with Mongoose ODM], Express js, Angular and Node) stack demo created using the bangular yeoman template.
 
 Use `gulp` to run in development and `gulp preview` to run the optimised project.
