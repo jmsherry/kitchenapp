@@ -12,19 +12,18 @@
          * Populates the ObjectId s in the target object
          *
          * @param obj {}: Target object to be treated
-         * @param expand Bool: Whether to populate or depopulate
+         *
          */
 
         function populate(obj) {
 
             var deferred, keys, promises = [],
                 ings = [],
-                thisPromise, found, thisProp;
+                thisPromise, thesePromises = [], found, thisProp,
+                misIngs, presIngs, mLen, pLen;
 
             if (typeof obj !== 'object') {
                 throw Error('wrong argument type supplied for object in populate');
-            } else if (typeof expand !== 'boolean') {
-                throw Error('wrong argument type supplied for expand in populate');
             }
 
             deferred = $q.defer();
@@ -53,10 +52,24 @@
                         break;
 
                     case 'ingredients':
-                        //find missing and present
-                        ings = obj.missing.ingredients.concat(obj.present.ingredients);
-                        if (typeof ings[0] === 'string') {
+                        misIngs = obj.missing.ingredients;
+                        mLen = misIngs.length;
+                        presIngs = obj.present.ingredients;
+                        pLen = presIngs.length;
 
+                        if (misIngs.length && typeof misIngs[0] === 'string') {
+                          for (var i=0; i <mLen; i+=1){
+                            thisPromise = Ingredient.getIngredientById(misIngs[0]);
+                            misIngs[0] = thisPromise;
+                            thesePromises.push(thisPromise);
+                          }
+                        }
+                        if (presIngs.length && typeof presIngs[0] === 'string') {
+                          for (var i=0; i <mLen; i+=1){
+                            thisPromise = Ingredient.getIngredientById(presIngs[0]);
+                            presIngs[0] = thisPromise;
+                            thesePromises.push(thisPromise);
+                          }
                         }
                         break;
 
@@ -76,22 +89,35 @@
                 }
               }
             }
-            if (_.isArray(thisPromise)) {
-                promises = promises.concat(thisPromise);
+            if (_.isArray(thesePromises)) {
+                promises = promises.concat(thesePromises);
             } else {
                 promises.push(thisPromise);
             }
 
             $q.all(promises).then(function (data) {
-                defer.resolve(data);
+                deferred.resolve(data);
             });
 
-            return defer.promise;
+            return deferred.promise;
+        }
+
+        function bulkPopulate(arr){
+          var promises = [], i, len = arr.length, deferred = $q.defer();
+          for (i=0; i <len; i+=1){
+            arr[i] = this.populate(arr[i]);
+            promises.push(arr[i]);
+          }
+          $q.all(promises).then(function(data){
+            deferred.resolve(data);
+          });
+          return deferred.promise;
         }
 
 
         return {
-            populate: populate
+            populate: populate,
+            bulkPopulate: bulkPopulate
         };
 
     }
