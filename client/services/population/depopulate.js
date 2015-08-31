@@ -2,9 +2,9 @@
     'use strict';
 
     angular.module('kitchenapp')
-        .factory('Populate', Populate);
+        .factory('Depopulate', Depopulate);
 
-    Populate.$inject = ['$log'];
+    Depopulate.$inject = ['$log'];
 
     function Depopulate($log) {
 
@@ -12,14 +12,16 @@
        * Depopulates the target object, reducing objects to ObjectIds before saving to server
        *
        * @param obj {}: Target object to be treated
-       * @param expand Bool: Whether to populate or depopulate
+       *
        */
 
         function depopulate(obj) {
-            var keys, key, ings, found, thisProp;
+            var keys, key, ings, found, thisProp
+            misIngs, presIngs, mLen, pLen;
 
             if (typeof obj !== 'object') {
-                throw Error('wrong argument type supplied for object in populate');
+                $log.error('wrong argument type supplied for object in depopulate');
+                return;
             }
 
             keys = ['ingredient', 'ingredients', 'reservedFor', 'recipe'];
@@ -44,9 +46,19 @@
                     break;
 
                 case 'ingredients':
-                    ings = obj.missing.ingredients.concat(obj.present.ingredients);
-                    if (typeof ings[0] === 'object') {
-
+                    misIngs = obj.missing.ingredients;
+                    mLen = misIngs.length;
+                    presIngs = obj.present.ingredients;
+                    pLen = presIngs.length;
+                    if (misIngs[i] && typeof misIngs[i] === 'object') {
+                      for (var i=0; i <mLen; i+=1){
+                        ings[i] = ings[i]._id;
+                      }
+                    }
+                    if (presIngs[0] && typeof presIngs[0] === 'object') {
+                      for (var i=0; i <mLen; i+=1){
+                        presIngs[i] = presIngs[i]._id;
+                      }
                     }
                     break;
 
@@ -67,8 +79,16 @@
           }
         }
 
+        function bulkDepopulate(arr){
+          for (i=0; i <len; i+=1){
+            arr[i] = this.depopulate(arr[i]);
+          }
+          return arr;
+        }
+
         return {
-            depopulate: depopulate
+            depopulate: depopulate,
+            bulkDepopulate: bulkDepopulate
         };
 
     }
