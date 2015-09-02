@@ -14,7 +14,7 @@ var plumber    = require('gulp-plumber');
 var sass       = require('gulp-sass');
 var bowerFiles = require('main-bower-files');
 
-var toInject   = require('./config/filesToInject');
+var toInject   = require('./config/filesToInject').js;
 var toExclude  = require('./config/bowerFilesToExclude');
 
 module.exports = function () {
