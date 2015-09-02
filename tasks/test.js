@@ -57,7 +57,7 @@ function testClient (done) {
 
   new Karma ({
       configFile: __dirname + './../karma.conf.js'
-  }).start()
+  }).start();
 
   // karma.start({
   //   configFile: __dirname + '/../karma.conf.js'
