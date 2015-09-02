@@ -3,16 +3,22 @@
 		<h1>My Cupboard</h1>
 	</div>
 </div>
-<div class="row">
+<div class="row" ng-if="gridOptions.data.length === 0" ng-show="vm.loading">
+  <div class="col-xs-12">
+    <div class="loader">Loading...</div>
+  </div>
+</div>
+<div class="row" ng-show="!vm.loading">
 	<div class="col-xs-12">
 		<p ng-if="!vm.items.length > 0">Your cupboard is empty!! Go to <a ui-sref="ingredients">ingredients</a> to register ingredients or <a ui-sref="shop">shop</a> to buy more.</p>
 	</div>
 </div>
-<div class="row">
+<div class="row" ng-show="!vm.loading">
 	<div class="col-xs-12 info-messages">
 		<p ng-if="!vm.meals.complete.length > 0 && !vm.meals.pending.length > 0 && vm.items.length > 0" class="bg-warning">There are no meals currently in the system. Go <a ui-sref="meals" title="Go to meals page">here</a> to create some<span  ng-if="vm.items.length > 0"> and put your ingredients to good use</span>!!</p>
 	</div>
 </div>
+
 <div class="row">
 	<div ng-class="vm.items.length > 1 ? 'col-md-6' : 'col-md-12'">
 		<button type="button" class="btn btn-warning" ng-if="!vm.editing  && vm.items.length > 0" ng-click="vm.toggleEdit()">Remove spolied or lost items</button>
@@ -34,6 +40,8 @@
   	<ul class="list-unstyled cupboardList">
   		<li ng-repeat="item in vm.items track by $index" ng-class="item.reservedFor ? 'reserved bg-success' : ''">
 				<div ng-class="vm.editing ? 'col-md-10 description' : 'col-md-12 description'">
+					<img ng-if="item.ingredient.imageURL" src="{{item.ingredient.imageURL}}" width="50px" height="50px">
+					<img ng-if="!item.ingredient.imageURL" src="/assets/images/item-img-placeholder.png" width="50px" height="50px">
 					<h2>{{ item.ingredient.name }}</h2>
 					<div>
 						<p ng-if="item.reservedFor">Reserved for meal: {{ item.reservedFor.name }}<span ng-if="item.reservedFor.starts_at"> on {{ item.reservedFor.date | date : 'd MMMM y' : GMT }}</span>.</p>

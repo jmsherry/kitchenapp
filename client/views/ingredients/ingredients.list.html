@@ -3,9 +3,14 @@
     <h1>Ingredients List</h1>
   </div>
 </div>
-<div class="row">
+<div class="row" ng-if="gridOptions.data.length === 0" ng-show="vm.loading">
   <div class="col-xs-12">
-    <strong ng-if="gridOptions.data.length === 0">There are no ingredients in memory. Please create a new one <a ui-sref="addIngredient">here</a></strong>
+    <div class="loader">Loading...</div>
+  </div>
+</div>
+<div class="row" ng-if="gridOptions.data.length === 0" ng-show="!vm.loading">
+  <div class="col-xs-12">
+    <strong>There are no ingredients in memory. Please create a new one <a ui-sref="addIngredient">here</a></strong>
   </div>
 </div>
 <div class="controls row" ng-if="gridOptions.data.length > 0">
