@@ -6,6 +6,7 @@
 module.exports = {
   js: [
     'client/app.js',
+    'client/constants.js',
     'client/templates/templates.js',
     'client/animations/*.js',
     'client/directives/**/*.js', '!client/directives/**/*.spec.js',
