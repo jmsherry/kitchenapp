@@ -1,4 +1,4 @@
-(function(){
+(function () {
 
   'use strict';
   var mongoose = require('mongoose');
@@ -9,7 +9,7 @@
   var MealItem = require('./mealItem.model');
   var _ = require('lodash');
 
-  function handleError (res, err) {
+  function handleError(res, err) {
     console.log(err);
     return res.sendStatus(500).send(err);
   }
@@ -22,16 +22,19 @@
    */
   exports.addToMeals = function addToMeals(req, res) {
 
-    console.log('in addToMeal \nreq.params',  req.params, '\nreq._params', req._params,  '\nreq.body: ', req.body);
+    console.log('in addToMeal \nreq.params', req.params, '\nreq._params', req._params, '\nreq.body: ', req.body);
 
-    var meal = new MealItem(req.body);
-    meal.owner = req._params.userid;
+    var meal = _.extend(req.body, {
+      owner: req._params.userid
+    });
+
+    meal = new MealItem(meal);
 
     console.log('meal: ', meal);
 
-    meal.save(function(err, ml){
+    meal.save(function (err, ml) {
       console.log('in addToMeals results', err, ml);
-      if(err){
+      if (err) {
         handleError(res, err);
       }
       return res.status(201).json(ml);
@@ -46,16 +49,17 @@
    * @param res
    */
   exports.getMeals = function getMeals(req, res) {
-    console.log('in getMeals \nreq.params', req.params, '\nreq._params', req._params,  '\nreq.body: ', req.body);
-    MealItem.find(
-      {'owner': req._params.userid},
-    function(err, meals){
-      console.log('in getMeals results', err, meals);
-      if(err){
-        handleError(res, err);
-      }
-      return res.status(200).json(meals);
-    });
+    console.log('in getMeals \nreq.params', req.params, '\nreq._params', req._params, '\nreq.body: ', req.body);
+    MealItem.find({
+        'owner': req._params.userid
+      },
+      function (err, meals) {
+        console.log('in getMeals results', err, meals);
+        if (err) {
+          handleError(res, err);
+        }
+        return res.status(200).json(meals);
+      });
   };
 
   /**
@@ -66,17 +70,18 @@
    */
   exports.updateMeal = function updateMeal(req, res) {
 
-    console.log('in updateMeal \nreq.params', req.params, '\nreq._params', req._params,  '\nreq.body: ', req.body);
-    var newMeal = req.body.meal;
+    console.log('in updateMeal \nreq.params', req.params, '\nreq._params', req._params, '\nreq.body: ', req.body);
+
 
     MealItem.findByIdAndUpdate(
       req.params.mealid,
-      newMeal,
-      {new: true},
-      function(err, meal){
+      req.body, {
+        new: true
+      },
+      function (err, meal) {
         console.log('in updateMeal results', err, meal);
 
-        if(err){
+        if (err) {
           handleError(res, err);
         }
         return res.status(200).json(meal);
@@ -94,19 +99,16 @@
   exports.removeFromMeals = function removeFromMeals(req, res) {
     console.log('in removeFromMeal \nreq.params', req.params, '\nreq._params', req._params, '\nreq.body: ', req.body);
     MealItem.findByIdAndRemove(
-      req.params.mealid,
-      {},
-      function(err, item){
+      req.params.mealid, {},
+      function (err, item) {
         console.log(err, item);
-        if(err){
+        if (err) {
           handleError(res, err);
         }
         return res.status(200).json(item);
       }
     );
   };
-
-
 
   /**
    * Return an item from the users cuboard.
@@ -116,12 +118,12 @@
    */
   exports.getMeal = function getMeal(req, res) {
     console.log('getMealItem req.params', req.params);
-    MealItem.findById(req.params.itemid, function(err, meal){
-      if(err){
+    MealItem.findById(req.params.itemid, function (err, meal) {
+      if (err) {
         handleError(res, err);
       }
 
-      if(!meal){
+      if (!meal) {
         return res.status(404).json({});
       }
       return res.status(200).json(meal);
