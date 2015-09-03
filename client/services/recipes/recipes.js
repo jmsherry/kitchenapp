@@ -9,7 +9,9 @@ angular.module('kitchenapp.services')
     function Recipes($rootScope, $cookieStore, $q, $http, $resource, toastr, _) {
 
         var _recipes = [],
-        _resource = $resource('/api/recipes');
+        _resource = $resource('/api/recipes/:itemid', {
+          itemid: '@_id'
+        });
 
          function init() {
           console.log('recipes init');
