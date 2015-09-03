@@ -41,7 +41,9 @@
 		</div>
 	</div>
 	<div class="col-md-4">
+		<div class="calendarTitle">
 	<h2>{{vm.calendarTitle}}</h2>
+</div>
 	</div>
 	<div class="col-md-4">
 		<div class="btn-group pull-right">
@@ -67,7 +69,8 @@
 		    on-edit-event-click="vm.eventEdited(calendarEvent)"
 		    on-delete-event-click="vm.eventDeleted(calendarEvent)"
 				on-drill-down-click="vm.drillDownClick(calendarEvent)"
-				on-timespan-click="vm.timespanClick(calendarEvent)"
+				on-timespan-click="vm.timespanClick(calendarEvent)",
+				on-weekday-click="vm.weekdayClick(calendarEvent)",
 				day-view-start="06:00"
 				day-view-end="22:00"
 				day-view-split="30"

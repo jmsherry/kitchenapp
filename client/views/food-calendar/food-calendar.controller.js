@@ -1,13 +1,13 @@
 (function(){
   'use strict';
 
-  angular.module('kitchenapp')
+  angular.module('kitchenapp.controllers')
     .controller('FoodCalendarCtrl', FoodCalendarCtrl);
 
-    FoodCalendarCtrl.$inject = ['$modal', 'Meals', 'Auth', '$log', '$q', '$scope'];
+    FoodCalendarCtrl.$inject = ['$modal', 'Meals', 'Auth', '$log', '$q', '$', '_'];
 
 
-    function FoodCalendarCtrl($modal, Meals, Auth, $log, $q, $scope) {
+    function FoodCalendarCtrl($modal, Meals, Auth, $log, $q, $, _) {
 
     Auth.checkAuthorised();
 
@@ -16,7 +16,7 @@
     meals = Meals.get();
     $q.when(meals, function(data){
       var mls = data.complete;
-      completeMeals = _.filter(mls, 'starts_at', null),
+      completeMeals = _.filter(mls, 'starts_at', null);
       placedMeals = _.reject(mls, 'starts_at', null);
 
 
@@ -26,7 +26,7 @@
     	$log.log("placedMeals: ", placedMeals);
 
       //These variables MUST be set as a minimum for the calendar to work
-      vm.calendarView = 'month';
+      vm.calendarView = 'week';
       vm.calendarDay = new Date();
       //vm.nowString = 'This month';
 
@@ -49,7 +49,34 @@
       // });
 
 
-      vm.events = placedMeals || [];
+      //vm.events = placedMeals || [];
+      vm.events = [
+        {
+    title: 'My event title', // The title of the event
+    type: 'info', // The type of the event (determines its color). Can be important, warning, info, inverse, success or special
+    startsAt: new Date(2015,8,28,1), // A javascript date object for when the event starts
+    endsAt: new Date(2015,8,28,2), // Optional - a javascript date object for when the event ends
+    editable: true, // If edit-event-html is set and this field is explicitly set to false then dont make it editable.
+    deletable: true, // If delete-event-html is set and this field is explicitly set to false then dont make it deleteable
+    draggable: true, //Allow an event to be dragged and dropped
+    resizable: true, //Allow an event to be resizable
+    incrementsBadgeTotal: true, //If set to false then will not count towards the badge total amount on the month and year view
+    //recursOn: 'week', // If set the event will recur on the given period. Valid values are year or month
+    cssClass: 'balls' //A CSS class (or more, just separate with spaces) that will be added to the event when it is displayed on each view. Useful for marking an event as selected / active etc
+  }, {
+title: 'My other event title', // The title of the event
+type: 'info', // The type of the event (determines its color). Can be important, warning, info, inverse, success or special
+startsAt: new Date(2015,8,29,1), // A javascript date object for when the event starts
+endsAt: new Date(2015,8,29,2), // Optional - a javascript date object for when the event ends
+editable: true, // If edit-event-html is set and this field is explicitly set to false then dont make it editable.
+deletable: true, // If delete-event-html is set and this field is explicitly set to false then dont make it deleteable
+draggable: true, //Allow an event to be dragged and dropped
+resizable: true, //Allow an event to be resizable
+incrementsBadgeTotal: true, //If set to false then will not count towards the badge total amount on the month and year view
+//recursOn: 'week', // If set the event will recur on the given period. Valid values are year or month
+cssClass: 'balls' //A CSS class (or more, just separate with spaces) that will be added to the event when it is displayed on each view. Useful for marking an event as selected / active etc
+}
+      ];
       vm.completeMeals = completeMeals;
 
 
@@ -67,27 +94,27 @@
               console.log('Placing', arguments);
               meal.starts_at = date;
               Meals.update(meal);
-            }
+            };
             $log.log('modal scope', vm);
           },
           contollerAs: 'vm'
         });
       }
 
-      function eventClicked() {
-      	$log.log('event clicked', event);
+      function eventClicked(calendarEvent) {
+      	$log.log('event clicked', event, calendarEvent);
         //showModal('Clicked', event);
         event.preventDefault();
         event.stopPropagation();
-      };
+      }
 
       function eventEdited() {
         vm.showModal('Edited', event);
-      };
+      }
 
       function eventDeleted() {
         vm.showModal('Deleted', event);
-      };
+      }
 
       function timespanClick(calendarDate){
         if($(event.target).hasClass('cal-day-past')){ return false;}
@@ -97,17 +124,22 @@
         // event.preventDefault();
         // event.stopPropagation();
         // return false;
-      };
+      }
 
       function setCalendarToToday() {
         vm.calendarDay = new Date();
-      };
+      }
 
       function drillDownClick(){
         $log.log(arguments);
 
         return false;
-      };
+      }
+
+      function weekdayClick(day){
+        $log.log(day);
+        alert('yes!');
+      }
 
       angular.extend(vm, {
         name: 'FoodCalendarCtrl',
@@ -117,7 +149,8 @@
         eventDeleted: eventDeleted,
         timespanClick: timespanClick,
         setCalendarToToday: setCalendarToToday,
-        drillDownClick: drillDownClick
+        drillDownClick: drillDownClick,
+        weekdayClick: weekdayClick
       });
 
     });

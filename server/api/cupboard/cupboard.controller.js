@@ -35,15 +35,7 @@
 
     console.log('new constructed item: ', item);
 
-    item.save(function(err, item){
-      console.log('in addToCupboard results', err, item);
-      if(err){
-        handleError(res, err);
-      }
-      console.log('sent item: ', item);
-      return res.status(201).json(item);
-    });
-
+    //if the item is bought then log the transaction
     if(req.body.bought){
       Ingredient.findOne({
         _id: req.body.ingId
@@ -57,10 +49,28 @@
         transaction.save(function(err, item){
           console.log('saving transaction', err, item);
           if(err){
-            //handleError(res, err);
-            //throw new Error('transaction wasn\'t saved');
+            handleError(res, err);
+          } else {
+            //if all is well then save the
+            item.save(function(err, item){
+              console.log('in addToCupboard results', err, item);
+              if(err){
+                handleError(res, err);
+              }
+              console.log('sent item: ', item);
+              return res.status(201).json(item);
+            });
           }
         });
+      });
+    } else {
+      item.save(function(err, item){
+        console.log('in addToCupboard results', err, item);
+        if(err){
+          handleError(res, err);
+        }
+        console.log('sent item: ', item);
+        return res.status(201).json(item);
       });
     }
 

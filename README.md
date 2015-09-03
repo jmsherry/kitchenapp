@@ -18,3 +18,6 @@ Use `gulp` to run in development and `gulp preview` to run the optimised project
 `gulp test` will allow you to run the tests (which are currently locked to a limited set for demo purposes) and you can specify whether to test the client or server-side code by adding the flag `--server` or `--client`. `gulp e2e` will perform protractor tests. As you can see from the badges the project uses CI service at Codeship (Travis is hooked up for practice) Coverage (istanbul) is used through gulp and reported via Code Climate. e2e as a service is to be handled by Saucelabs.
 
 To populate the database with some initial ingredients and recipes type `$ seed` (N.B. it will blow away all the data in your current collections).
+
+## Disclaimer
+The app in this repository is a demo, as stated above, and it is worth mentioning that the information is fictional and the images are not my own and I hold no rights to them.

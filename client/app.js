@@ -1,6 +1,12 @@
 (function(){
   'use strict';
 
+  angular.module('kitchenapp.controllers',[]);
+  angular.module('kitchenapp.directives',[]);
+  angular.module('kitchenapp.services',[]);
+  angular.module('kitchenapp.filters',[]);
+  angular.module('kitchenapp.templates',[]);
+
   angular.module('kitchenapp', [
     //Native services
     'ngCookies',
@@ -8,6 +14,14 @@
     'ngSanitize',
     'ngAnimate',
     'ngTouch',
+    'ngMessages',
+
+    //AppCode
+    'kitchenapp.controllers',
+    'kitchenapp.directives',
+    'kitchenapp.services',
+    'kitchenapp.filters',
+    'kitchenapp.templates',
 
     //3rd party
     'btford.socket-io',
@@ -20,8 +34,7 @@
     'toastr',
     'nvd3',
     'ui.select'
-  ])
-    .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, calendarConfigProvider, toastrConfig, uiSelectConfig) {
+  ]).config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpProvider', 'calendarConfigProvider', 'toastrConfig', 'uiSelectConfig', function Configurator($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, calendarConfigProvider, toastrConfig, uiSelectConfig) {
       var positionClass;
 
       if($(window).width() < 992){
@@ -47,13 +60,12 @@
       // });
 
       angular.extend(toastrConfig, {
-        timeOut: 1500,
+        timeOut: 10000,
         positionClass: positionClass
       });
 
-    })
-    .factory('authInterceptor',
-    function ($rootScope, $q, $cookieStore, $location) {
+    }])
+    .factory('authInterceptor', ['$rootScope', '$q', '$cookieStore', '$location', function authInterceptor($rootScope, $q, $cookieStore, $location) {
       return {
 
         request: function (config) {
@@ -76,9 +88,8 @@
         }
 
       };
-    })
-
-    .run(function ($rootScope, Auth) {
+    }])
+    .run(['$rootScope', 'Auth', function runBlock($rootScope, Auth) {
 
       $rootScope.Auth = Auth;
 
@@ -86,7 +97,11 @@
           $(this).addClass("active").siblings().removeClass("active");
       }).on('click.menuSelected', '.navbar-collapse ul a:not(.dropdown-toggle)', function () {
           $('.navbar-toggle:visible').click();
+      }).on('click.button', 'button', function(){
+        $(this).blur();
       });
 
-    });
+    }]);
+
+
 }());

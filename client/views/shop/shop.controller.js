@@ -1,65 +1,62 @@
-(function(){
-  'use strict';
+(function () {
+    'use strict';
 
-  angular.module('kitchenapp')
-    .controller('ShopCtrl', ShopCtrl);
+    angular.module('kitchenapp.controllers')
+        .controller('ShopCtrl', ShopCtrl);
 
-  ShopCtrl.$inject = ['Shopping', 'Auth', '$q', 'Meals', '$log'];
+    ShopCtrl.$inject = ['Shopping', 'Auth', '$q', 'Meals', '$log', 'Cupboard', 'toastr'];
 
-    function ShopCtrl(Shopping, Auth, $q, Meals, $log) {
+    function ShopCtrl(Shopping, Auth, $q, Meals, $log, Cupboard, toastr) {
 
-      Auth.checkAuthorised();
+        Auth.checkAuthorised();
 
-      var vm = this,
-      items = Shopping.get(),
-      meals = Meals.get();
+        var vm = this,
+            items = Shopping.get();
 
-      $log.log(items);
-
-      function buy(item){
-        $log.log('Buying ', item);
-        var bought = Shopping.buy(item);
-        $log.log('bought', bought);
-        $q.when(bought, function(data){
-          if(item.reservedFor){
-            Meals.itemBought(data);
+        $q.when(items, function (SL) {
+          if(!SL){
+            vm.items = [];
+            $log.warn('SL not correct', SL);
+            toastr.error('Error retrieving shopping list!')
+          } else {
+            vm.items = SL;
           }
         });
-      }
 
-      function remove(item){
-        $log.log('Removing ', item);
-        Shopping.remove(item);
-      }
 
-      $q.when(items, function(data){
-        $q.when(meals, function(mls){
+        function buy(item) {
+            // Buy it and remove from shopping list
+            $log.log('Buying ', item);
+            var bought = Shopping.buy(item);
 
-          var item, len = data.length, i, ings = [];
-          mls = mls.pending.concat(mls.complete);
-          for(i = 0; i < len; i+=1){
-            item = data[i];
-            ings.push(item.ingredient);
-            if(!item.reservedFor.name){
-              item.reservedFor = _.find(mls, {_id: item.reservedFor});
-            }
-          }
+            $q.when(bought, function (boughtItem) {
+                $log.log('bought', boughtItem);
+                //Add it to the cupboard
+                var addedToCupboard = Cupboard.add(boughtItem, true); //true indicates it was bought not acquired
+                $q.when(addedToCupboard, function (cupboardItem) {
 
-          $q.all(ings).then(function(ingData){
-            for(i=0; i<len; i+=1){
-              data[i].ingredient = ingData[i];
-            }
-            vm.items = data;
-          });
+                  // Now tell meals service that you've bought it so meals can be updated
+                  if (populatedItem.reservedFor) {
+                      Meals.itemBought(cupboardItem);
+                  }
 
+                });
+            });
+        }
+
+        function remove(item) {
+            $log.log('Removing ', item);
+            var removed = Shopping.remove(item);
+            $q.when(removed, function(removedItem){
+              vm.items.splice(vm.items.indexOf(removedItem, 1));
+            });
+        }
+
+        angular.extend(vm, {
+            name: 'ShopCtrl',
+            buy: buy,
+            remove: remove
         });
-      });
-
-      angular.extend(vm, {
-        name: 'ShopCtrl',
-        buy: buy,
-        remove: remove
-      });
 
     }
 }());

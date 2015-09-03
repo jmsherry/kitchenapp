@@ -2,24 +2,41 @@
 (function() {
     'use strict';
 
+    var moment = window.moment;
+    var d3 = window.d3;
+    var nv = window.nv;
+    var $ = window.$;
+    var _ = window._;
+
+
+    if(!moment){
+      console.warn('moment not loaded');
+    }
+
+    if(!d3){
+      console.warn('d3 not loaded');
+    }
+
+    if(!nv){
+      console.warn('nv not loaded');
+    }
+
+    if(!$){
+      console.warn('jQuery not loaded');
+    }
+
+    if(!_){
+      console.warn('Lodash not loaded');
+    }
+
     // Constants used by the entire app
     angular
         .module('kitchenapp')
-        .constant('toastr', toastr)
         .constant('moment', moment)
         .constant('d3', d3)
         .constant('nv', nv)
         .constant('$', $)
         .constant('_', _);
 
-
-
-    // Constants used only by the sales module
-    // angular
-    //   .module('app.sales')
-    //   .constant('events', {
-    //       ORDER_CREATED: 'event_order_created',
-    //       INVENTORY_DEPLETED: 'event_inventory_depleted'
-    //   });
 
 })();

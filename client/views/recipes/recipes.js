@@ -14,5 +14,5 @@ angular.module('kitchenapp')
         templateUrl: 'views/recipes/recipes.add.html',
         controller: 'RecipesAddCtrl',
         controllerAs: 'vm'
-      })
+      });
   });

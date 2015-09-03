@@ -1,16 +1,15 @@
 (function () {
     'use strict';
 
-    angular.module('kitchenapp')
+    angular.module('kitchenapp.services')
         .factory('Transaction', Transaction);
 
-    Transaction.$inject = ['$q', '$resource', 'Auth', 'Ingredients', 'toastr', 'Cupboard', '$log', '$injector'];
+    Transaction.$inject = ['$q', '$resource', 'Auth', 'Ingredients', 'toastr', 'Cupboard', '$log', 'moment', '_'];
 
-    function Transaction($q, $resource, Auth, Ingredients, toastr, Cupboard, $log, $injector) {
+    function Transaction($q, $resource, Auth, Ingredients, toastr, Cupboard, $log, moment, _) {
 
       function getPurchases(){
-        var self = this,
-            user = Auth.getUser(),
+        var user = Auth.getUser(),
             deferred = $q.defer();
 
 
@@ -24,15 +23,15 @@
             });
 
             return deferred.promise;
-      };
+      }
 
       function getBudgetInformation(date){
 
-          var self = this, deferred, startOfWeek, endOfWeek, remValues = [], spentValues = [], dayObj, holder = 0,
-          budget = Auth.getUser().budget, data, weeksPurchases = [], wpLen = weeksPurchases.length,
-          pdLen, wpCondensed = [], thisPurchase, amountSpent = 0;
+          var deferred, startOfWeek, endOfWeek, remValues = [], spentValues = [],
+          budget = Auth.getUser().budget, data, weeksPurchases = [],
+          pdLen, wpCondensed = [], thisPurchase, amountSpent = 0, thisDay;
 
-          data = self.getPurchases();
+          data = this.getPurchases();
           deferred = $q.defer();
 
           $q.when(data, function(purchaseData){
@@ -46,7 +45,7 @@
             //collect the relevant purchases
             for(var i=0; i < pdLen; i+=1){
               thisPurchase = purchaseData[i];
-              console.log('thisPurchase', thisPurchase);
+              $log.log('thisPurchase', thisPurchase);
               if(moment(thisPurchase.dateAdded).isBetween(startOfWeek, endOfWeek)){
                 weeksPurchases.push(thisPurchase);
               }
@@ -67,7 +66,7 @@
             }
 
 
-            for(i=0, thisDay, amountSpent = 0; i < 7; i+=1){
+            for(i=0, thisDay = null, amountSpent = 0; i < 7; i+=1){
               thisDay = moment(startOfWeek);
               amountSpent += wpCondensed[i+1] || 0; // +1 because isoWeekday is not zero based
               thisDay.add(i, 'd');
@@ -97,7 +96,7 @@
 
           return deferred.promise;
 
-      };
+      }
 
         return {
           getPurchases: getPurchases,

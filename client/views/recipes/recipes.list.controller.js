@@ -1,20 +1,21 @@
 (function(){
   'use strict';
 
-  angular.module('kitchenapp')
+  angular.module('kitchenapp.controllers')
     .controller('RecipesCtrl', RecipesCtrl);
 
-    RecipesCtrl.$inject = ['$scope', 'Recipes', 'Ingredients', '$q'];
+    RecipesCtrl.$inject = ['$scope', 'Recipes', 'Ingredients', '$q', '_'];
 
 
-    function RecipesCtrl($scope, Recipes, Ingredients, $q) {
+    function RecipesCtrl($scope, Recipes, Ingredients, $q, _) {
 
     	var vm = this,
     	recipes,
-    	ingredients,
     	rowTemplate,
     	data = [],
     	editing;
+
+      vm.loading = true;
 
   		recipes = Recipes.get();
 
@@ -48,6 +49,7 @@
   			});
 
   			$scope.gridOptions.data = newData;
+        vm.loading = false;
   		});
 
 

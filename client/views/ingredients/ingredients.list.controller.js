@@ -1,14 +1,16 @@
 (function(){
 'use strict';
 
-angular.module('kitchenapp')
+angular.module('kitchenapp.controllers')
   .controller('IngredientsCtrl', IngredientsCtrl);
 
-IngredientsCtrl.$inject = ['Ingredients', '$scope', '$q', '$log', 'uiGridConstants', 'Shopping', 'Cupboard'];
+IngredientsCtrl.$inject = ['Ingredients', '$scope', '$q', '$log', 'uiGridConstants', 'Shopping', 'Cupboard', '$', '_'];
 
-function IngredientsCtrl(Ingredients, $scope, $q, $log, uiGridConstants, Shopping, Cupboard) {
+function IngredientsCtrl(Ingredients, $scope, $q, $log, uiGridConstants, Shopping, Cupboard, $, _) {
 
 	var vm = this, ingredients, rowTemplate, data = [];
+
+  vm.loading = true;
 
 		ingredients = Ingredients.get();
 		$log.log('list controller ings', ingredients);
@@ -52,39 +54,25 @@ function IngredientsCtrl(Ingredients, $scope, $q, $log, uiGridConstants, Shoppin
 
 		$q.when(ingredients, function(newData){
 			$scope.gridOptions.data = newData;
+      vm.loading = false;
 		});
 
     function addToCupboard(){
-      var selectedIngs = $scope.gridApi.selection.getSelectedGridRows(), i, len = selectedIngs.length, thisIng;
-      $log.log(selectedIngs);
+      var selectedIngs = $scope.gridApi.selection.getSelectedGridRows();
       selectedIngs = _.pluck(selectedIngs, 'entity');
-      $log.log(selectedIngs);
-
-      for(i=0; i<len; i+=1){
-        thisIng = {
-          ingredient: selectedIngs[i]._id,
-          reservedFor: null
-        };
-
-        selectedIngs[i] = thisIng;
-
-      }
-
+      $log.log('addToCupboard selectedIngs', selectedIngs);
       Cupboard.bulkAdd(selectedIngs, false);
-
     }
 
     function addToShopping(){
       var selectedIngs = $scope.gridApi.selection.getSelectedGridRows();
-      $log.log(selectedIngs);
       selectedIngs = _.pluck(selectedIngs, 'entity');
-      $log.log(selectedIngs);
+      $log.log('addToShopping selectedIngs', selectedIngs);
       Shopping.bulkAdd(selectedIngs);
     }
 
     function clear(){
       $scope.gridApi.selection.clearSelectedRows();
-      $('button').blur();
     }
 
 

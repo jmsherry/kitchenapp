@@ -1,13 +1,13 @@
 (function(){
   'use strict';
 
-  angular.module('kitchenapp')
+  angular.module('kitchenapp.controllers')
     .controller('LoginCtrl', LoginCtrl);
 
     LoginCtrl.$inject = ['$location', 'Auth', 'toastr'];
 
     function LoginCtrl($location, Auth, toastr) {
-  console.log(arguments);
+  //console.log(arguments);
       var vm = this;
 
       angular.extend(vm, {

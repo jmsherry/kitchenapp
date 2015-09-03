@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * Inject css/js files in karma.conf
+ * Preprocess the angular templates
  */
 
 var gulp          = require('gulp');
@@ -9,6 +9,6 @@ var templateCache = require('gulp-angular-templatecache');
 
 module.exports = function () {
   return gulp.src(['client/views/**/*.html', 'client/directives/**/*.html'])
-    .pipe(templateCache())
+    .pipe(templateCache('templates.js', {module: 'kitchenapp.templates'}))
     .pipe(gulp.dest('client/templates'));
 };

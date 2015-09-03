@@ -20,11 +20,11 @@
     var env = config.env;
     var appPath;
 
-    if(env === 'production'){
-      appPath = 'dist/client';
-    } else {
+    // if(env === 'production'){
+    //   appPath = 'dist/client';
+    // } else {
       appPath = 'client';
-    }
+    //}
 
     app.set('view engine', 'html');
     app.use(bodyParser.urlencoded({ extended: false }));

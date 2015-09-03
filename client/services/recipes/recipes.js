@@ -1,12 +1,12 @@
 (function(){
 'use strict';
 
-angular.module('kitchenapp')
+angular.module('kitchenapp.services')
     .factory('Recipes', Recipes);
 
-    Recipes.$inject = ['$rootScope', '$cookieStore', '$q', '$http', '$resource', 'toastr'];
+    Recipes.$inject = ['$rootScope', '$cookieStore', '$q', '$http', '$resource', 'toastr', '_'];
 
-    function Recipes($rootScope, $cookieStore, $q, $http, $resource, toastr) {
+    function Recipes($rootScope, $cookieStore, $q, $http, $resource, toastr, _) {
 
         var _recipes = [],
         _resource = $resource('/api/recipes');
@@ -87,7 +87,7 @@ angular.module('kitchenapp')
           add: add,
           save: save,
           getRecipeById: getRecipeById
-        }
+        };
 
     }
 }());

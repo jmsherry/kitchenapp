@@ -10,6 +10,7 @@ var sq                   = require('streamqueue');
 var runSequence          = require('run-sequence');
 var del                  = require('del');
 var plumber              = require('gulp-plumber');
+var sourcemaps           = require('gulp-sourcemaps');
 var usemin               = require('gulp-usemin');
 var cssRebaseUrls        = require('gulp-css-rebase-urls');
 var autoprefixer         = require('gulp-autoprefixer');
@@ -89,9 +90,11 @@ gulp.task('scripts', function () {
   var app = gulp.src('dist/client/app.js');
 
   return sq({ objectMode: true }, app, views, tpls)
+    .pipe(sourcemaps.init())
     .pipe(concat('app.js'))
     .pipe(ngAnnotate())
     .pipe(uglify())
+    .pipe(sourcemaps.write('../maps'))
     .pipe(gulp.dest('dist/client/'));
 });
 

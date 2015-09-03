@@ -1,13 +1,13 @@
 (function(){
 
     'use strict';
-
+    var require = require || function(){};
     var LoginPage = require('./login.page.js');
     LoginPage = new LoginPage();
 
     describe('login route', function() {
 
-    	var elements, emailInput, passwordInput, submitButton;
+    	var emailInput, passwordInput, submitButton;
 
         beforeEach(function() {
             browser.get('/login');

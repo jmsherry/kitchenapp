@@ -41,7 +41,7 @@ module.exports = function(){
     endtag: ']',
     ignorePath: toExclude,
     transform: function (filepath, file, i, length) {
-      return '  "' + filepath.replace(/^(\/client\/)/,"") + '"' + (i + 1 < length ? ',' : '');
+      return '  "./' + filepath.replace(/^(\/client\/)/,"") + '"' + (i + 1 < length ? ',' : '');
     }
   }))
   .pipe(gulp.dest('./'));

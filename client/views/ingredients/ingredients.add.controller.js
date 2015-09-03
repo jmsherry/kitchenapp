@@ -1,15 +1,15 @@
 (function(){
 'use strict';
 
-angular.module('kitchenapp')
+angular.module('kitchenapp.controllers')
   .controller('IngredientsAddCtrl', IngredientsAddCtrl);
 
 IngredientsAddCtrl.$inject = ['Ingredients', '$scope'];
 
-function IngredientsAddCtrl(Ingredients, $scope) {
+function IngredientsAddCtrl(Ingredients) {
 // console.log(stateMap);
 
-	var vm = this, ingredients, data = [];
+	var vm = this;
 
   function handlePrice(){
     console.log('handlePrice');
