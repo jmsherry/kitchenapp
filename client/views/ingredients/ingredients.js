@@ -16,7 +16,7 @@
           templateUrl: 'views/ingredients/ingredients.add.html',
           controller: 'IngredientsAddCtrl',
           controllerAs: 'vm'
-        })
+        });
     });
 
 }());

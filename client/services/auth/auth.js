@@ -1,7 +1,7 @@
 (function(){
   'use strict';
 
-  angular.module('kitchenapp')
+  angular.module('kitchenapp.services')
     .service('Auth', function ($rootScope, $cookieStore, $q, $http, $location) {
 
       var _user = {};
@@ -48,7 +48,7 @@
           .then(function (res) {
             _user = res.data.user;
             $cookieStore.put('token', res.data.token);
-            deferred.resolve();
+            deferred.resolve(_user);
           })
           .catch(function (err) {
             deferred.reject(err.data);
@@ -80,7 +80,11 @@
        * @returns {object}
        */
       this.getUser = function () {
-        return _user;
+        var deferred = $q.defer();
+        $q.when(_user, function(usr){
+          deferred.resolve(usr);
+        });
+        return deferred.promise;
       };
 
 
@@ -90,19 +94,19 @@
        * @param user
        * @returns {promise}
        */
-      // this.updateUser = function updateUser(user) {
-      //   var deferred = $q.defer();
-      //   $http.put('/api/users', user)
-      //     .then(function (res) {
-      //       _user = res.data.user;
-      //       $cookieStore.put('token', res.data.token);
-      //       deferred.resolve();
-      //     })
-      //     .catch(function (err) {
-      //       deferred.reject(err.data);
-      //     });
-      //   return deferred.promise;
-      // };
+      this.updateUser = function updateUser(user) {
+        var deferred = $q.defer();
+        $http.put('/api/users', user)
+          .then(function (res) {
+            _user = res.data.user;
+            $cookieStore.put('token', res.data.token);
+            deferred.resolve(_user);
+          })
+          .catch(function (err) {
+            deferred.reject(err.data);
+          });
+        return deferred.promise;
+      };
 
       /**
        * Checks if a user is logged in, and if not redirects them to the home view.

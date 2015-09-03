@@ -1,8 +1,8 @@
 (function(){
   'use strict';
 
-  angular.module('kitchenapp')
-    .controller('HomeCtrl', function (Auth) {
+  angular.module('kitchenapp.controllers')
+    .controller('HomeCtrl', function () {
 
       var vm = this;
 

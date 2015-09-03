@@ -1,12 +1,12 @@
 (function(){
   'use strict';
 
-  angular.module('kitchenapp')
+  angular.module('kitchenapp.controllers')
     .controller('BudgetCtrl', BudgetCtrl);
 
-  BudgetCtrl.$inject = ['Shopping', 'Transaction', 'Auth', '$q', 'Meals', '$log', '$scope'];
+  BudgetCtrl.$inject = ['Shopping', 'Transaction', 'Auth', '$q', 'Meals', '$log', '$scope', 'd3', 'moment'];
 
-    function BudgetCtrl(Shopping, Transaction, Auth, $q, Meals, $log, $scope) {
+    function BudgetCtrl(Shopping, Transaction, Auth, $q, Meals, $log, $scope, d3, moment) {
 
       Auth.checkAuthorised();
 
@@ -15,13 +15,15 @@
       budget = user.budget;
 
       var data = Transaction.getBudgetInformation();
-  $q.when(data, function(dada){
-    var testdate = dada[0].values[0].x;
-    $log.log('dada', dada, moment.isDate(testdate));
-    $scope.data = dada;
-    d3.select(".nv-controlsWrap")
-  .attr("transform","translate(-50,-50)");
-  });
+      $q.when(data, function(dada){
+
+        var testdate = dada[0].values[0].x;
+        $log.log('dada', dada, moment.isDate(testdate));
+        $scope.data = dada;
+
+        d3.select(".nv-controlsWrap")
+        .attr("transform","translate(-50,-50)");
+      });
 
   $scope.options = {
             chart: {
@@ -58,7 +60,8 @@
 
 
       angular.extend(vm, {
-        name: 'BudgetCtrl'
+        name: 'BudgetCtrl',
+        budget: budget
       });
 
 

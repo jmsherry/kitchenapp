@@ -1,17 +1,16 @@
 (function(){
   'use strict';
 
-  angular.module('kitchenapp')
+  angular.module('kitchenapp.controllers')
     .controller('MealsCtrl', MealsCtrl);
 
-  MealsCtrl.$inject = ['$scope', 'Meals', 'Auth', 'Recipes', '$modal', '$window', '$q', '$log'];
+  MealsCtrl.$inject = ['$scope', 'Meals', 'Auth', 'Recipes', '$modal', '$window', '$q', '$log', '_'];
 
-    function MealsCtrl($scope, Meals, Auth, Recipes, $modal, $window, $q, $log) {
+    function MealsCtrl($scope, Meals, Auth, Recipes, $modal, $window, $q, $log, _) {
 
     	Auth.checkAuthorised();
 
       var vm = this,
-      user = Auth.getUser(),
       meals = Meals.get(),
       recipes = Recipes.get(),
       chosenRecipe = "";

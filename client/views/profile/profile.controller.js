@@ -1,12 +1,12 @@
 (function(){
   'use strict';
 
-  angular.module('kitchenapp')
+  angular.module('kitchenapp.controllers')
     .controller('ProfileCtrl', ProfileCtrl);
 
-  ProfileCtrl.$inject = ['Auth', '$location'];
+  ProfileCtrl.$inject = ['Auth'];
 
-  function ProfileCtrl(Auth, $location) {
+  function ProfileCtrl(Auth) {
 
   	Auth.checkAuthorised();
 

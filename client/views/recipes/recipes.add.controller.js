@@ -1,35 +1,30 @@
 (function(){
   'use strict';
 
-  angular.module('kitchenapp')
+  angular.module('kitchenapp.controllers')
     .controller('RecipesAddCtrl', RecipesAddCtrl);
 
-  RecipesAddCtrl.$inject = ['$scope', 'Recipes', 'Ingredients', '$q'];
+  RecipesAddCtrl.$inject = ['$scope', 'Recipes', 'Ingredients', '$q', '$log'];
 
 
-  function RecipesAddCtrl($scope, Recipes, Ingredients, $q) {
+  function RecipesAddCtrl($scope, Recipes, Ingredients, $q, $log) {
 
   	var vm = this,
-  	recipes,
-  	ingredients,
-  	rowTemplate,
-  	data = [];
-
-
-  	function saveRecipe(childScope){
-  		console.log(arguments);
-
-  		Recipes.save(vm.newRecipe);
-  		childScope.recipeForm.$setPristine();
-  		childScope.recipeForm.$setUntouched();
-  		vm.newRecipe = {};
-  	}
+  	ingredients;
 
   	ingredients = Ingredients.get();
-
   	$q.when(ingredients, function(newData){
   		vm.ingredients = newData;
   	});
+
+    function saveRecipe(childScope){
+      $log.log(arguments);
+
+      Recipes.save(vm.newRecipe);
+      childScope.recipeForm.$setPristine();
+      childScope.recipeForm.$setUntouched();
+      vm.newRecipe = {};
+    }
 
 
   	angular.extend(vm, {

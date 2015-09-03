@@ -1,7 +1,7 @@
 (function(){
   'use strict';
 
-  angular.module('kitchenapp')
+  angular.module('kitchenapp.services')
     .factory('Socket', function (socketFactory) {
 
       var ioSocket = io('', {

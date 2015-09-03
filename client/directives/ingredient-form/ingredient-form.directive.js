@@ -1,7 +1,7 @@
 (function(){
   'use strict';
 
-  angular.module('kitchenapp')
+  angular.module('kitchenapp.directives')
     .directive('editingredientform', function () {
       return {
         restrict: 'E',

@@ -1,55 +1,30 @@
 (function(){
   'use strict';
 
-  angular.module('kitchenapp')
+  angular.module('kitchenapp.controllers')
     .controller('CupboardCtrl', CupboardCtrl);
 
-  CupboardCtrl.$inject = ['Cupboard', 'Auth', '$q', '$filter', 'Meals', '$modal', '$log'];
+  CupboardCtrl.$inject = ['Cupboard', 'Auth', '$q', '$filter', 'Meals', '$modal', '$log', '_', '$'];
 
-    function CupboardCtrl(Cupboard, Auth, $q, $filter, Meals, $modal, $log) {
+    function CupboardCtrl(Cupboard, Auth, $q, $filter, Meals, $modal, $log, _, $) {
 
-    	Auth.checkAuthorised();
+    	 Auth.checkAuthorised();
 
-      var vm = this,
-      cupboard = Cupboard.get();
+        var vm = this, cupboard, meals;
+        vm.loading = true;
 
-
-      $q.when(cupboard, function(data){
-
-            $log.log('HERERERERE', data, Meals);
-            var i, len = data.length, thisItem, theseItems = [], meals, reservedForPromise;
-
-            for(i=0;i<len;i+=1){
-              thisItem = data[i];
-              $log.log(thisItem);
-              if(typeof thisItem.reservedFor === 'string'){
-                reservedForPromise = Meals.getMealById(thisItem.reservedFor); //returns a promise
-                $log.log(thisItem);
-                theseItems.push(reservedForPromise);
-              }
-            }
-
-            $q.all(theseItems).then(function(fullData){
-              var thisItem, reservedForMeal;
-              $log.log('all called', fullData);
-              for(i=0;i<len;i+=1){
-                thisItem = data[i];
-                if(thisItem.reservedFor && typeof thisItem.reservedFor === 'string'){
-                  thisItem.reservedFor = _.find(fullData, {_id: thisItem.reservedFor});
-                }
-              }
-
-              vm.items = data;
-            });
+        cupboard = Cupboard.get();
+        $q.when(cupboard, function(cupboardItems){
+            vm.items = cupboardItems;
+            vm.loading = false;
+        });
 
 
         meals = Meals.get();
         $q.when(meals, function(mealsData){
-          vm.meals = mealsData;
+            vm.meals = mealsData;
         });
 
-
-      });
 
       function remove(item){
         Cupboard.remove(item);
@@ -85,7 +60,7 @@
         }
 
         vm.predicate = predicate;
-
+        //$(event.srcElement).blur();
       }
 
       function unreserve(item){
@@ -96,7 +71,7 @@
 
       function showReserveModal(item){
         $log.log("manuallyReserve", arguments);
-        var self = this;
+
         vm.selectedItem = item;
 
         var modal = $modal.open({

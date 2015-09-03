@@ -1,7 +1,7 @@
 (function(){
   'use strict';
 
-  angular.module('kitchenapp')
+  angular.module('kitchenapp.directives')
     .directive('addRecipeForm', function () {
       return {
         restrict: 'E',

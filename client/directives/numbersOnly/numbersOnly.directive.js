@@ -1,7 +1,7 @@
 (function(){
   'use strict';
 
-  angular.module('kitchenapp')
+  angular.module('kitchenapp.directives')
     .directive('numbersOnly', function () {
       return {
         restrict: 'A',

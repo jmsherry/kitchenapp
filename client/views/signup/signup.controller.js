@@ -1,7 +1,7 @@
 (function(){
   'use strict';
 
-  angular.module('kitchenapp')
+  angular.module('kitchenapp.controllers')
     .controller('SignupCtrl', function ($location, Auth, toastr) {
 
       var vm = this;

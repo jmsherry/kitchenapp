@@ -1,6 +1,12 @@
 (function(){
   'use strict';
 
+  angular.module('kitchenapp.controllers',[]);
+  angular.module('kitchenapp.directives',[]);
+  angular.module('kitchenapp.services',[]);
+  angular.module('kitchenapp.filters',[]);
+  angular.module('kitchenapp.templates',[]);
+
   angular.module('kitchenapp', [
     //Native services
     'ngCookies',
@@ -9,6 +15,13 @@
     'ngAnimate',
     'ngTouch',
     'ngMessages',
+
+    //AppCode
+    'kitchenapp.controllers',
+    'kitchenapp.directives',
+    'kitchenapp.services',
+    'kitchenapp.filters',
+    'kitchenapp.templates',
 
     //3rd party
     'btford.socket-io',
@@ -21,8 +34,7 @@
     'toastr',
     'nvd3',
     'ui.select'
-  ])
-    .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpProvider', 'calendarConfigProvider', 'toastrConfig', 'uiSelectConfig', function Configurator($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, calendarConfigProvider, toastrConfig, uiSelectConfig) {
+  ]).config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpProvider', 'calendarConfigProvider', 'toastrConfig', 'uiSelectConfig', function Configurator($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, calendarConfigProvider, toastrConfig, uiSelectConfig) {
       var positionClass;
 
       if($(window).width() < 992){
@@ -90,5 +102,6 @@
       });
 
     }]);
+
 
 }());
