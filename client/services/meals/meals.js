@@ -9,23 +9,25 @@
   function Meals($rootScope, $cookieStore, $q, $log, $resource, toastr, Auth, Recipes, Cupboard, Shopping, Ingredients, _) {
 
     var $deferred = $q.defer(),
-      _meals = $deferred.promise;
+      _meals = $deferred.promise,
+      server;
 
     function init() {
       $log.log('meals init');
 
-      var self = this, owner = Auth.getUser();
+      var owner = Auth.getUser();
 
       function successCB(mealsList) {
         $log.log('in successCB', arguments);
 
         var completeMeals, pendingMeals, promises = [],
           missingIngs, presentIngs;
+
         _.each(mealsList, function (meal) {
           missingIngs = meal.ingredients.missing;
           presentIngs = meal.ingredients.present;
-          missingIngs = Ingredients.populate(missingIngs);
-          presentIngs = Cupboard.populate(presentIngs);
+          missingIngs = Ingredients.populate(missingIngs, meal);
+          presentIngs = Cupboard.populate(presentIngs, meal);
           promises.push(missingIngs);
           promises.push(presentIngs);
         });
@@ -59,18 +61,22 @@
         toastr.error('Failed to load meals!', 'Server Error ' + err.status + ' ' + err.data.message);
       }
 
-      $q.when(owner, function(ownerData){
-        $resource('/api/users/:userid/meals/:itemid', {
-            userid: ownerData._id,
-            itemid: '@_id'
-          }, {
-            update: {
-              method: 'PUT',
-              isArray: false
-            }
-          }).query(_.bind(successCB, self), _.bind(errCB, self));
-      });
+      $q.when(owner, function (ownerData) {
 
+        //setup server
+        server = $resource('/api/users/:userid/meals/:itemid', {
+          userid: ownerData._id,
+          itemid: '@_id'
+        }, {
+          update: {
+            method: 'PUT',
+            isArray: false
+          }
+        });
+
+        //setup local
+        server.query(_.bind(successCB, self), _.bind(errCB, self));
+      });
 
     }
 
@@ -80,29 +86,55 @@
 
     function add(newMeal) {
       $log.log('save args', arguments);
-      $log.log('SAVE _meals: ', _meals);
+
       var user = Auth.getUser(),
+        deferred = $q.defer(),
         self = this;
 
       function successCB(response) {
-        var addedIngredients, reservedItems;
 
-        $.when(response, function (savedMeal) {
+        $q.when(response, _.bind(function (savedMeal) {
+          var addedIngredients, reservedItems, mealSaved, missingIngs, presentIngs, ings, self = this;
+
           $log.log('addMeal save successCB: ', savedMeal);
 
-          //add missing ingredients to shopping list
-          addedIngredients = Shopping.bulkAdd(response.ingredients.missing, response);
-          $q.when(addedIngredients, function (SLItems) {
-            savedMeal.ingredients.missing = SLItems;
-          });
+          //populate ingredients
+          missingIngs = Ingredients.populate(savedMeal.ingredients.missing);
+          presentIngs = Ingredients.populate(savedMeal.ingredients.present);
 
-          //reserve items in cupboard
-          reservedItems = Cupboard.bulkReserve(response.items.present, response);
-          $q.when(reservedItems, function (cupboardItems) {
-            savedMeal.ingredients.present = cupboardItems;
-          });
+          ings = [missingIngs, presentIngs];
 
-        });
+          $q.all(ings).then(_.bind(function (ingredients) {
+            var misIngs = ingredients[0],
+              presIngs = ingredients[1],
+              promises, self = this;
+
+            //add missing ingredients to shopping list
+            addedIngredients = Shopping.bulkAdd(misIngs, savedMeal);
+
+            //reserve items in cupboard
+            reservedItems = Cupboard.bulkReserve(presIngs, savedMeal);
+
+
+            promises = [addedIngredients, reservedItems];
+
+            $q.all(promises).then(_.bind(function (items) {
+              var self = this, mIngs = items[0],
+                pIngs = items[1];
+
+              savedMeal.ingredients.missing = mIngs;
+              savedMeal.ingredients.present = pIngs;
+
+              //save the meal locally
+              mealSaved = self.addLocal(savedMeal);
+              $q.when(mealSaved, _.bind(function (mealData) {
+                deferred.resolve(mealData); //mealData is an object with the meal and the meals array in
+              }, self));
+            }, self));
+
+          }, self));
+
+        }, self));
 
       }
 
@@ -111,51 +143,54 @@
         toastr.error('Failed to add ' + err.config.data.name + "!", 'Server Error ' + err.status + ' ' + err.data.message);
       }
 
-      $resource('/api/users/:userid/meals', {
-          userid: user._id
-        })
-        .save(newMeal, _.bind(successCB, self), _.bind(errCB, self));
+      server.save(newMeal, _.bind(successCB, self), _.bind(errCB, self));
+
+      return deferred.promise;
 
     }
 
     function addLocal(newMeal) {
       $log.log('in add:', arguments);
       var meals = this.get(),
-        ings;
+        ings, deferred = $q.defer();
 
       ings = newMeal.ingredients;
 
-      $q.when(meals, function (meals) {
+      $q.when(meals, function (mealsObj) {
         if (newMeal.isComplete) {
-          meals.complete.push(newMeal);
+          mealsObj.complete.push(newMeal);
         } else {
-          meals.pending.push(newMeal);
+          mealsObj.pending.push(newMeal);
         }
-
+        deferred.resolve(newMeal);
         toastr.success(newMeal.name + " added to your meals list!");
       });
+
+      return deferred.promise;
+
     }
 
     // Turns a recipe id into a meal object
     function createMealObject(id) {
       var deferred = $q.defer(),
-        user = Auth.getUser(),
-        recipe = Recipes.getRecipeById(id),
-        mealObj = _.clone(recipe),
-        ingredients = Cupboard.process(mealObj.ingredients);
-      $log.log('Ingredients for new meal', ingredients);
+        user, recipe, mealObj
 
-      $q.when(ingredients, function (data) {
+      user = Auth.getUser();
+      recipe = Recipes.getRecipeById(id);
+      mealObj = _.clone(recipe);
+      mealObj.ingredients = Cupboard.process(mealObj.ingredients);
+
+      $q.when(mealObj.ingredients, function (ingredients) {
+        $log.log('Ingredients for new meal', ingredients);
 
         mealObj = angular.extend(mealObj, {
           _id: undefined,
           isComplete: false,
-          ingredients: data,
-          recipe: id,
-          owner: user
+          ingredients: ingredients,
+          recipe: id
         });
 
-        if (data.missing.length === 0) {
+        if (ingredients.missing.length === 0) {
           mealObj.isComplete = true;
         }
 
@@ -170,8 +205,8 @@
     function create(id) {
       var self = this,
         meal;
-      meal = self.createMealObject(id);
 
+      meal = self.createMealObject(id);
       $q.when(meal, function (ml) {
         $q.when(ml.ingredients, function (ings) {
           ml.ings = ings; //an array ids at this point
@@ -181,23 +216,29 @@
 
     }
 
-    function depopulate(meal) {
-      var missing = meal.ingredients.missing,
+    function depopulate(originalMealObj) {
+      var meal, missing, present, mlen, plen, i;
+
+      if (!originalMealObj) {
+        toastr.error('Error depolulating: No item sent');
+        throw new Error('Error in Meal.depopulation');
+      } else if (item.$promise || item.$resolved) {
+        throw new Error('Promise sent to Meal.depopulation');
+      }
+
+      meal = angular.copy(originalMealObj),
+        missing = meal.ingredients.missing,
         present = meal.ingredients.present,
         mlen = missing.length,
         plen = present.length;
 
-      for (var i = 0; i < plen; i += 1) {
+      for (i = 0; i < plen; i += 1) {
         present[i] = present[i]._id;
       }
 
       for (i = 0; i < mlen; i += 1) {
         missing[i] = missing[i]._id;
       }
-
-      //For safety remove any promise cruft
-      delete(meal.$promise);
-      delete(meal.$resolved);
 
       return meal;
     }
@@ -209,8 +250,7 @@
         mealid = meal._id,
         flatMeal;
 
-      //Copy the meal and depopulate it to itemIds
-      flatMeal = _.cloneDeep(meal);
+      //depopulate prior to saving
       flatMeal = self.depopulate(flatMeal);
 
       function successCB(meal, response) {
@@ -228,66 +268,59 @@
         toastr.error('Failed to update ' + meal.name + "!", 'Server Error ' + err.status + ' ' + err.data.message);
       }
 
-      $resource('/api/users/:userid/meals/:mealid', {
-          userid: userid,
-          mealid: mealid
-        }, {
-          update: {
-            method: 'PUT'
-          }
-        })
-        .update({
-          meal: flatMeal
-        }, _.bind(successCB, self, meal), _.bind(errCB, self, meal));
+      flatMeal
+        .$update(_.bind(successCB, self, meal), _.bind(errCB, self, meal));
 
       return deferred.promise;
     }
 
     function updateLocal(meal) {
-      var self = this,
-        meals;
-      meals = self.get();
+      var meals = self.get(),
+        deferred = $q.defer();
+
       $q.when(meals, function (mealData) {
         mealData = mealData.complete.concat(mealData.pending);
         var oldMeal = _.find(mealData, {
           _id: meal._id
         });
         oldMeal = meal;
+        deferred.resolve(oldMeal);
+        toastr.success(oldMeal.name + ' sucessfully updated!');
       });
+
+      return deferred.promise;
+
     }
 
-    function remove(item) {
-      var self = this,
-        userid;
+    function remove(meal) {
+      var self = this;
 
-      Cupboard.handleMealDelete(item);
-      Shopping.handleMealDelete(item);
-
-      userid = Auth.getUser()._id;
-
-      function CBSuccess(item) {
-        $log.log('removed meal item, removing locally', item);
-        self.removeLocal(item);
+      function CBSuccess(meal, response) {
+        $log.log('removed meal item, removing locally', meal);
+        var removedLocally = self.removeLocal(meal);
+        $q.when(removedLocally, function (removedMeal) {
+          toastr.success(meal.name + ' succesfully deleted!');
+          toastr.info('Updating your cupboard and shopping list...')
+          Cupboard.handleMealDelete(removedMeal);
+          Shopping.handleMealDelete(removedMeal);
+        });
       }
 
       function CBError(item) {
-        toastr.error('could not remove ' + item.name + ' from meals');
+        toastr.error('Could not remove ' + item.name + ' from meals.');
       }
 
-      $resource('/api/users/:userid/meals/:itemid', {
-          userid: userid,
-          itemid: item._id
-        })
-        .remove(_.bind(CBSuccess, self, item), _.bind(CBError, self, item));
+      meal.$remove(_.bind(CBSuccess, self, meal), _.bind(CBError, self, meal));
     }
 
     function removeLocal(meal) {
       var self = this,
+        deferred = $q.defer(),
         meals;
 
       meals = self.get();
       $q.when(meals, function (data) {
-        var items;
+        var items, mealItem;
 
         if (meal.isComplete) {
           items = data.complete;
@@ -295,9 +328,14 @@
           items = data.pending;
         }
 
-        items.splice(items.indexOf(meal), 1);
-        toastr.success(meal.name + ' has been removed from your meals list.');
+        mealItem = items.splice(items.indexOf(meal), 1);
+        mealItem = mealItem[0];
+        toastr.success(mealItem.name + ' has been removed from your meals list.');
+        deferred.resolve(mealItem);
+
       });
+
+      return deferred.promise;
     }
 
     function getMealById(id) {
