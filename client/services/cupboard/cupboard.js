@@ -85,7 +85,7 @@
 
   };
 
-  Cupboard.prototype.populate = function populate(items) {
+  Cupboard.prototype.populate = function populate(items, meal) {
     var self = this,
       i, len = items.length,
       deferred = self.$q.defer(),
@@ -108,6 +108,9 @@
       var i, len = data.length;
       for (i = 0; i < len; i += 1) {
         items[i].ingredient = data[i];
+        if(meal){
+          items[i].reservedFor = meal;
+        }
       }
       deferred.resolve(items);
     });

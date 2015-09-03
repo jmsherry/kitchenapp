@@ -89,7 +89,7 @@
 
   };
 
-  Shopping.prototype.populate = function populate(items) {
+  Shopping.prototype.populate = function populate(items, meal) {
     var self = this,
       i, len = items.length,
       deferred = self.$q.defer(),
@@ -111,6 +111,9 @@
     self.$q.all(promises).then(function (popdItems) {
       for (i = 0; i < len; i += 1) {
         items[i].ingredient = popdItems[i];
+        if(meal){
+          items[i].reservedFor = meal;
+        }
       }
       deferred.resolve(items);
     });
