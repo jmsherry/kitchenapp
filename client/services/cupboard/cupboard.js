@@ -85,7 +85,7 @@
 
   };
 
-  Cupboard.prototype.populate = function populate(items) {
+  Cupboard.prototype.populate = function populate(items, meal) {
     var self = this,
       i, len = items.length,
       deferred = self.$q.defer(),
@@ -98,6 +98,8 @@
       throw new Error('Wrong type of argument passed to Shopping.populate');
     }
 
+
+
     for (i = 0; i < len; i += 1) {
       thisIng = items[i].ingredient;
       thisIng = self.Ingredients.getIngredientById(thisIng); //returns a promise
@@ -108,6 +110,9 @@
       var i, len = data.length;
       for (i = 0; i < len; i += 1) {
         items[i].ingredient = data[i];
+        if(meal){
+          items[i].reservedFor = meal;
+        }
       }
       deferred.resolve(items);
     });
@@ -282,12 +287,14 @@
       mealId = meal._id;
 
     self.$q.when(cupboard, function (data) {
-      self._.forEach(data, function (item) {
-        if (item.reservedFor === mealId) {
+      var itemsToBeUnreserved, i, len, item;
+        itemsToBeUnreserved = _.filter(data, {reservedFor: meal._id});
+        len = itemsToBeUnreserved.length;
+        for(i=0; i < len; i+=1){
+          item = itemsToBeUnreserved[i];
           item.reservedFor = null;
           self.update(item);
         }
-      });
     });
 
     return meal;

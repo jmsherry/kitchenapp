@@ -89,7 +89,7 @@
 
   };
 
-  Shopping.prototype.populate = function populate(items) {
+  Shopping.prototype.populate = function populate(items, meal) {
     var self = this,
       i, len = items.length,
       deferred = self.$q.defer(),
@@ -111,6 +111,9 @@
     self.$q.all(promises).then(function (popdItems) {
       for (i = 0; i < len; i += 1) {
         items[i].ingredient = popdItems[i];
+        if(meal){
+          items[i].reservedFor = meal;
+        }
       }
       deferred.resolve(items);
     });
@@ -274,14 +277,14 @@
   };
 
   Shopping.prototype.handleMealDelete = function handleMealDelete(meal) {
-    var self = this, deferred = self.$q.defer()
+    var self = this, deferred = self.$q.defer(),
       shoppingList = self.getShopping(),
       mealId = meal._id;
 
 
     self.$q.when(shoppingList, function (SL) {
     var itemsToBeRemoved, removedItems;
-      itemsToBeRemoved = SL.filter({reservedFor: meal._id});
+      itemsToBeRemoved = self._.filter(SL, {reservedFor: meal._id});
       removedItems = self.bulkRemove(itemsToBeRemoved);
       deferred.resolve({removedItems: removedItems, meal: meal});
     });
