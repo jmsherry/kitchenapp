@@ -47,40 +47,56 @@
    **/
 
   Shopping.prototype.init = function init() {
+
     var self = this,
       owner = self.getOwner(),
       shopping;
 
-          self.$log.log('shopping init');
+    self.$log.log('shopping init');
 
     function successCB(shopping) {
       self.$q.when(shopping, function (data) {
         self.$log.log('shopping init SL returned: ', data);
         var populated = self.populate(data);
-        self.$q.when(populated, function(fullData){
+        self.$q.when(populated, function (fullData) {
           self.deferred.resolve(fullData);
         });
       });
     }
 
-    function errorCB(err){
+    function errorCB(err) {
       self.toastr.error(err.message);
       self.deferred.reject(err);
     }
-    self.$q.when(owner, function(ownerData){
-      shopping = self.$resource('/api/users/:userid/shopping/:itemid', {
-          userid: ownerData._id,
-          itemid: '@_id'
-        })
-        .query(self._.bind(successCB, self), self._.bind(errorCB, self));
+
+    self.$q.when(owner, function (ownerData) {
+
+      //set resource
+      self.server = self.$resource('/api/users/:userid/shopping/:itemid', {
+        userid: ownerData._id,
+        itemid: '@_id'
+      }, {
+        update: {
+          method: 'PUT',
+          isArray: false
+        }
+      });
+
+      //set local
+      self.server.query(self._.bind(successCB, self), self._.bind(errorCB, self));
+
     });
+
   };
 
   Shopping.prototype.populate = function populate(items) {
     var self = this,
-      i, len = items.length, deferred = self.$q.defer(), promises = [], thisIng;
+      i, len = items.length,
+      deferred = self.$q.defer(),
+      promises = [],
+      thisIng;
 
-    if(self._.isPlainObject(items)){
+    if (self._.isPlainObject(items)) {
       items = [items];
     } else if (!self._.isArray(items)) {
       throw new Error('Wrong type of argument passed to Shopping.populate');
@@ -92,7 +108,7 @@
       promises.push(thisIng);
     }
 
-    self.$q.all(promises).then(function(popdItems){
+    self.$q.all(promises).then(function (popdItems) {
       for (i = 0; i < len; i += 1) {
         items[i].ingredient = popdItems[i];
       }
@@ -130,52 +146,53 @@
       userid, reservedFor = null,
       $log = self.$log,
       deferred = self.$q.defer(),
-      SL = self.getShopping();
+      SL = self.getShopping(),
+      item = {};
+
+    item.ingredient = ing;
 
     if (meal) {
-      reservedFor = meal._id;
+      item.reservedFor = meal._id;
     }
 
     $log.log('Shopping service add', arguments);
 
-    userid = self.getOwner()._id;
+    function CBSuccess(ing, meal, response) {
+      self.$log.log('in Shopping Add CBSuccess: ', arguments);
+      self.$q.when(response, function (data) {
+        var addedLocally;
 
-    function CBSuccess(ing, meal, item) {
-      //item = item.toJSON();
-      item.ingredient = ing;
-      if (meal) {
-        item.reservedFor = meal;
-      }
-      deferred.resolve(item);
-      self.addLocal(item);
+        data.ingredient = item.ingredient; //fast populate
+        addedLocally = self.addLocal(data);
+        self.$log.log('returned promise from localAdd', addedLocally);
+        self.$q.when(addedLocally, function (storedItem) {
+          deferred.resolve(storedItem);
+        });
+      });
     }
 
     function CBError(ing, meal, err) {
-      $log.log(arguments);
-      self.toastr.error('Failed to add ' + err.config.data.name + "!", 'Server Error ' + err.status + ' ' + err.data.message);
+      $log.error('In Shopping service add CBError', err, ing, meal);
+      self.toastr.error('Failed to add ' + ing.name + "!", 'Server Error ' + err);
     }
 
-    self.$q.when(SL, function(shoppingList){
-      shoppingList
-        .save({
-          ing: ing._id,
-          reservedFor: reservedFor
-        }, self._.bind(CBSuccess, self, ing, meal), self._.bind(CBError, self, ing, meal));
-    });
-
+    self.server
+      .save(item, self._.bind(CBSuccess, self, ing, meal), self._.bind(CBError, self, ing, meal));
 
     return deferred.promise;
 
   };
 
   Shopping.prototype.bulkAdd = function bulkAdd(items, meal) {
-    var self = this, deferred = self.$q.defer(), items = [];
+    var self = this,
+      deferred = self.$q.defer(),
+      itemPromises = [];
     self.$.each(items, function (i, item) {
       var added = self.add(item, meal);
-      items.push(added);
+      itemPromises.push(added);
     });
 
-    self.$q.all(items).then(function(slItems){
+    self.$q.all(itemPromises).then(function (slItems) {
       deferred.resolve(slItems);
     });
     return deferred.promise;
@@ -189,28 +206,24 @@
    *
    */
 
-  // Shopping.prototype.update = function update(item) {
-  //     var self = this,
-  //         userid;
-  //
-  //     userid = self.getOwner()._id;
-  //
-  //     function CBSuccess(item, response) {
-  //         self.updateLocal(response);
-  //     }
-  //
-  //     self.$resource('/api/users/:userid/shopping', {
-  //             userid: userid
-  //         }, {
-  //             update: {
-  //                 method: 'PUT'
-  //             }
-  //         })
-  //         .update({
-  //             item: item
-  //         }, _.bind(CBSuccess, self, item));
-  //
-  // };
+  Shopping.prototype.update = function update(item) {
+    var self = this, depop;
+
+    //depopulate
+    depop = self.depopulate(item);
+
+    function CBSuccess(item, resp) {
+      self.$log.log(arguments);
+      self.updateLocal(item);
+    }
+
+    function CBError(item, err) {
+      self.$log.error('Cupboard update error', item, error);
+      self.toastr.error('Failed to add ' + item.name + "!", 'Server Error ' + err.status + ' ' + err.data.message);
+    }
+
+    depop.$update(self._.bind(CBSuccess, self, item), self._.bind(CBError, self, item));
+  };
 
   /**
    * remove
@@ -221,121 +234,133 @@
    */
 
   Shopping.prototype.remove = function remove(item) {
-    var self = this, userid = self.getOwner()._id, params;
-    self.$log.log('IN Shopping remove: ', item);
+    var self = this,  deferred = self.$q.defer(), depop;
 
-    params = {
-      itemid: item._id
-    };
+    //depopulate
+    depop = self.depopulate(item);
 
-    function CBSuccess(item) {
+    function CBSuccess(item, response) {
       self.$log.log('removed shopping item, removing locally', item);
-
-      var removedLocally = self.removeLocal(item);
-      self.$q.when(removedLocally, function(removedItem){
+      var removed = self.removeLocal(item);
+      self.$q.when(removed, function (removedItem) {
         deferred.resolve(removedItem);
       });
     }
 
-
-    if(item.$delete){
-      return item.$delete();
-    } else {
-
-      var deferred = self.$q.defer();
-
-      self.$resource('/api/users/:userid/shopping/:itemid', params).remove(self._.bind(CBSuccess, self, item));
-
-      return deferred.promise;
-
+    function CBError(item, err) {
+      self.toastr.error('could not remove ' + item.name + ' from shopping list.');
+      deferred.reject(err)
     }
+
+    depop.$delete(self._.bind(CBSuccess, self, item), self._.bind(CBError, self, item));
+
+    return deferred.promise;
 
   };
 
   Shopping.prototype.bulkRemove = function bulkRemove(items) {
-    var self = this;
+    var self = this, removedItemPromises = [], deferred = self.$q.defer();
+
     self._.forEach(items, function (item) {
-      self.remove(item);
+      var itemPromise = self.remove(item);
+      removedItemPromises.push(itemPromise);
     });
 
-    return items;
+    self.$q.all(removedItemPromises).then(function(removedItems){
+      deferred.resolve(removedItems);
+    });
+
+    return deferred.promise;
   };
 
   Shopping.prototype.handleMealDelete = function handleMealDelete(meal) {
-    var self = this,
+    var self = this, deferred = self.$q.defer()
       shoppingList = self.getShopping(),
       mealId = meal._id;
 
+
     self.$q.when(shoppingList, function (SL) {
-      self._.forEach(SL, function (item) {
-        if (item.reservedFor._id === mealId) {
-          self.remove(item);
-        }
-      });
+    var itemsToBeRemoved, removedItems;
+      itemsToBeRemoved = SL.filter({reservedFor: meal._id});
+      removedItems = self.bulkRemove(itemsToBeRemoved);
+      deferred.resolve({removedItems: removedItems, meal: meal});
     });
 
-    return meal;
-  };
-
-  Shopping.prototype.process = function process(idsArray) {
-    var self = this,
-      presentIngredients = [],
-      missingIngredients = [],
-      shopping = self.getShopping();
-
-    self.$q.when(shopping, function (data) {
-      self._.forEach(idsArray, function (thisIngID) {
-        if (data.indexOf(thisIngID) === -1) {
-          missingIngredients.push(thisIngID);
-        } else {
-          presentIngredients.push(thisIngID);
-        }
-      });
-
-      return {
-        present: presentIngredients,
-        missing: missingIngredients
-      };
-    });
+    return deferred.promise;
   };
 
   Shopping.prototype.addLocal = function addLocal(item) {
-    var self = this, shopping;
+    var self = this,
+      shopping, deferred = self.$q.defer();
 
     shopping = self.getShopping();
     self.$q.when(shopping, function (shoppingList) {
       shoppingList.push(item);
       self.toastr.success(item.ingredient.name + ' has been added to your shopping');
+      deferred.resolve(item);
     });
+
+    return deferred.promise;
 
   };
 
-  // Shopping.prototype.updateLocal = function updateLocal(item) {
-  //     var self = this,
-  //         shopping, oldItem;
-  //
-  //     shopping = self.getShopping();
-  //
-  //     this.$q.when(shopping, function (data) {
-  //       var items = data;
-  //         oldItem = _.find(data, {
-  //             _id: item._id
-  //         });
-  //         oldItem = item;
-  //
-  //         self.setShopping(data);
-  //         self.toastr.success(item.ingredient.name + ' has been added to your shopping');
-  //     });
-  // };
-
-  Shopping.prototype.removeLocal = function removeLocal(item) {
-    var self = this, shopping;
+  Shopping.prototype.updateLocal = function updateLocal(item) {
+    var self = this,
+      shopping, oldItem;
 
     shopping = self.getShopping();
-    self.$q.when(shopping, function (SL) {
-      SL.splice(SL.indexOf(item), 1);
+    self.$q.when(shopping, function (data) {
+      oldItem = self._.find(data, {
+        _id: item._id
+      });
+      oldItem = item;
+
+      self.toastr.success(item.ingredient.name + ' has been updated in your shopping');
+    });
+  };
+
+  Shopping.prototype.removeLocal = function removeLocal(item) {
+    var self = this,
+      shopping, deferred = self.$q.defer();
+
+    shopping = self.getShopping();
+    self.$q.when(shopping, function (items) {
+      var removedItem = items.splice(items.indexOf(item), 1);
+      deferred.resolve(removedItem);
       self.toastr.success(item.ingredient.name + ' has been removed from your shopping');
     });
+
+    return deferred.promise;
+
+  };
+
+  Shopping.prototype.depopulate = function depopulate(item) {
+    var self = this;
+    if (!item) {
+      self.toastr.error('Error depolulating. Please contact the maintainer');
+      throw new Error('Error in Shopping.depopulation');
+    } else if (item.$promise || item.$resolved) {
+      throw new Error('Promise sent to Shopping.depopulation');
+    }
+
+    item = angular.copy(item); //cloned so as not to depop the actual object
+
+    // depopulate owner, ingredient, reservedFor fields
+    if (item.owner && typeof item.owner === 'object' && item.owner._id) {
+      item.owner = item.owner._id;
+    }
+    if (item.ingredient && typeof item.ingredient === 'object' && item.ingredient._id) {
+      item.ingredient = item.ingredient._id;
+    }
+    if (item.reservedFor && typeof item.reservedFor === 'object' && item.reservedFor._id) {
+      item.reservedFor = item.reservedFor._id;
+    }
+
+    //For safety remove any promise cruft
+    delete(item.$promise);
+    delete(item.$resolved);
+
+    return item;
 
   };
 

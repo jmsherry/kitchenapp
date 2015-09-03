@@ -22,7 +22,7 @@
 
     var item = new ShoppingListItem({
       owner: req._params.userid,
-      ingredient: req.body.ing,
+      ingredient: req.body.ingredient,
       reservedFor: req.body.reservedFor
     });
 

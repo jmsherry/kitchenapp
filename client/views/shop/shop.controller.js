@@ -45,11 +45,7 @@
         }
 
         function remove(item) {
-            $log.log('Removing ', item);
-            var removed = Shopping.remove(item);
-            $q.when(removed, function(removedItem){
-              vm.items.splice(vm.items.indexOf(removedItem, 1));
-            });
+            Shopping.remove(item);
         }
 
         angular.extend(vm, {

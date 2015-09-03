@@ -175,8 +175,8 @@
       self.$q.when(response, function (data) {
         var addedLocally;
 
-        response.ingredient = item.ingredient; //fast populate
-        addedLocally = self.addLocal(response);
+        data.ingredient = item.ingredient; //fast populate
+        addedLocally = self.addLocal(data);
         self.$log.log('returned promise from localAdd', addedLocally);
         self.$q.when(addedLocally, function(storedItem){
           deferred.resolve(storedItem);
@@ -184,9 +184,9 @@
       });
     }
 
-    function CBError(ing, err) {
-      self.$log.log(arguments);
-      self.toastr.error('Failed to add ' + ing.name + "!", 'Server Error ' + err);
+    function CBError(item, err) {
+      self.$log.error('In cupboard add CBError', err, item);
+      self.toastr.error('Failed to add ' + item.name + "!", 'Server Error ' + err);
     }
 
 
