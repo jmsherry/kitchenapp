@@ -337,7 +337,7 @@
   Shopping.prototype.depopulate = function depopulate(item) {
     var self = this;
     if (!item) {
-      self.toastr.error('Error depolulating. Please contact the maintainer');
+      self.toastr.error('Error depolulating: No item present');
       throw new Error('Error in Shopping.depopulation');
     } else if (item.$promise || item.$resolved) {
       throw new Error('Promise sent to Shopping.depopulation');
