@@ -1,8 +1,8 @@
 'use strict';
 var gulp = require('gulp');
 var beautify = require('gulp-jsbeautify');
-var beautify_css = require('js-beautify').css;
-var beautify_html = require('js-beautify').html;
+var beautify_css = require('gulp-jsbeautify').css;
+var beautify_html = require('gulp-jsbeautify').html;
 
 module.exports = function () {
   gulp.src(['./client/*.js', '!./client/bower_components/**/*'])
