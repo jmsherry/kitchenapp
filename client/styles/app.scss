@@ -464,3 +464,13 @@ text.nv-axislabel {
     transform: rotate(360deg);
   }
 }
+
+.loading-warning {
+  padding: 10px;
+  text-align: center;
+  font-size: 1.5em;
+  font-style: oblique;
+  p {
+    margin:0;
+  }
+}

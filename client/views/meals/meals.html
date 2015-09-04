@@ -58,7 +58,7 @@
 		</div>
 	</div>
 		<div class="add-controls">
-			<select name="mealsAdder" ng-model="vm.chosenRecipe" ng-change="vm.createMeal()" class="form-control">
+			<select name="mealsAdder" ng-model="vm.chosenRecipe" ng-change="vm.createMeal()" class="form-control" ng-disabled="isLoading">
 				<option value="" ng-selected="true">Add a meal</option>
 				<option ng-repeat="recipe in vm.recipes" value="{{recipe._id}}">{{recipe.name}}</option>
 			</select>

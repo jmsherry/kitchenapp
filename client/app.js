@@ -92,6 +92,7 @@
     .run(['$rootScope', 'Auth', function runBlock($rootScope, Auth) {
 
       $rootScope.Auth = Auth;
+      $rootScope.isLoading = false;
 
       $("body").on('click.bgActive', ".btn-group > .btn", function(){
           $(this).addClass("active").siblings().removeClass("active");
