@@ -5,7 +5,8 @@
   var Schema = mongoose.Schema;
   var ObjectId = mongoose.Types.ObjectId;
   var User = require('./../user/user.model');
-  //var MealsList = require('./meal.model');
+  var CupboardItem = require('./../cupboard/cupboardItem.model');
+  var ShoppingItem = require('./../shopping/shoppingItem.model');
   var MealItem = require('./mealItem.model');
   var _ = require('lodash');
 
@@ -27,6 +28,7 @@
     var meal = _.extend(req.body, {
       owner: req._params.userid
     });
+
 
     meal = new MealItem(meal);
 

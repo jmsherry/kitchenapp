@@ -4,9 +4,9 @@
 angular.module('kitchenapp.controllers')
   .controller('IngredientsCtrl', IngredientsCtrl);
 
-IngredientsCtrl.$inject = ['Ingredients', '$scope', '$q', '$log', 'uiGridConstants', 'Shopping', 'Cupboard', '$', '_'];
+IngredientsCtrl.$inject = ['Ingredients', '$scope', '$q', '$log', 'uiGridConstants', 'Shopping', 'Cupboard'];
 
-function IngredientsCtrl(Ingredients, $scope, $q, $log, uiGridConstants, Shopping, Cupboard, $, _) {
+function IngredientsCtrl(Ingredients, $scope, $q, $log, uiGridConstants, Shopping, Cupboard) {
 
 	var vm = this, ingredients, rowTemplate, data = [];
 

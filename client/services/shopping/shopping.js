@@ -108,9 +108,8 @@
       promises.push(thisIng);
     }
 
-    self.$q.all(promises).then(_.bind(function (popdItems) {
-      var self = this;
-
+    self.$q.all(promises).then(function (popdItems) {
+      var len = popdItems.length;
       for (i = 0; i < len; i += 1) {
         items[i].ingredient = popdItems[i];
         if(meal){
@@ -118,7 +117,7 @@
         }
       }
       deferred.resolve(items);
-    }, this));
+    });
 
     return deferred.promise;
   };
@@ -152,10 +151,10 @@
       $log = self.$log,
       deferred = self.$q.defer(),
       SL = self.getShopping(),
-      item = {};
+      item = {}, mealId = meal._id;
 
     item.ingredient = ing;
-    item.reservedFor = meal || null;
+    item.reservedFor = mealId || null;
 
 
     $log.log('Shopping service add', arguments);
@@ -167,7 +166,7 @@
 
         //fast populate
         data.ingredient = item.ingredient;
-        data.reservedFor = item.reservedFor;
+        data.reservedFor = meal;
 
         //add locally
         addedLocally = self.addLocal(data);

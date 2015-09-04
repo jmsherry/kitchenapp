@@ -20,7 +20,7 @@
       }],
       missing:[{
           type: ObjectId,
-          ref: 'Ingredient'
+          ref: 'ShoppingListItem'
       }]
     },
     isComplete: {type:Boolean, required: true},
