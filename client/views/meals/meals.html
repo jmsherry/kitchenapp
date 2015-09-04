@@ -46,7 +46,7 @@
 								<h4>{{meal.name}}</h4>
 								<p class="list-intro-inline">Missing ingredients:</p>
 								<ul class="inline-list ingredients-list">
-				         <li ng-repeat="ing in meal.ingredients.missing">{{ing.name}}</li>
+				         <li ng-repeat="item in meal.ingredients.missing">{{item.ingredient.name}}</li>
 				       </ul>
 						 </div>
 						 <div class="col-xs-2">
