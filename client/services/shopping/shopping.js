@@ -151,10 +151,12 @@
       $log = self.$log,
       deferred = self.$q.defer(),
       SL = self.getShopping(),
-      item = {}, mealId = meal._id;
+      item = {};
 
     item.ingredient = ing;
-    item.reservedFor = mealId || null;
+    if(meal){
+      item.reservedFor = meal._id || null;
+    }
 
 
     $log.log('Shopping service add', arguments);
@@ -166,7 +168,9 @@
 
         //fast populate
         data.ingredient = item.ingredient;
-        data.reservedFor = meal;
+        if(meal){
+          data.reservedFor = meal;
+        }
 
         //add locally
         addedLocally = self.addLocal(data);

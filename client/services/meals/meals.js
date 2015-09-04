@@ -316,11 +316,11 @@
         deferred = $q.defer(),
         promises = [],
         missing, present,
-        mlen, plen;
+        mlen, plen, i;
 
       if (!depopdMeal) {
         throw new Error('No meal supplied to Meal.populate');
-      } else if (!_.isPlainObject(depopdMeal)) {
+      } else if (_.isObject(depopdMeal) && _.isArray(depopdMeal) || _.isFunction(depopdMeal)) {
         throw new Error('Wrong type of argument (not an object) supplied to Meal.populate');
       }
 
