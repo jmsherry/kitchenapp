@@ -302,6 +302,7 @@
     var self = this,
       deferred = self.$q.defer();
 
+    // Prevent accidental overwrite
     if (typeof item.reservedFor === 'string' && !overwrite) {
       throw new Error('Item already reserved');
     }
