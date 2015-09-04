@@ -111,7 +111,7 @@
             $q.when(savedLocally, function (finalMeal) {
               deferred.resolve(finalMeal);
             });
-          });
+          }));
 
 
         }, self));
