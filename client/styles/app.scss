@@ -286,14 +286,21 @@ to prevent collapsing during animation*/
     & .description {
       font-size: 1.2em;
       h2 {
-        margin: 0 0 0 10px;
-        display: inline-block;
+        margin:0;
       }
+      .image-container {
+        padding-right:15px;
+        display: inline-block;
+        vertical-align: top;
+      }
+
       img {
         /*border: 1px solid #ccc; */
+        display: block;
       }
-      p {
+      .details-container {
         display: inline-block;
+        vertical-align: top;
       }
     }
   }
