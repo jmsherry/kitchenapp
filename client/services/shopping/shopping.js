@@ -108,7 +108,9 @@
       promises.push(thisIng);
     }
 
-    self.$q.all(promises).then(function (popdItems) {
+    self.$q.all(promises).then(_.bind(function (popdItems) {
+      var self = this;
+
       for (i = 0; i < len; i += 1) {
         items[i].ingredient = popdItems[i];
         if(meal){
@@ -116,7 +118,7 @@
         }
       }
       deferred.resolve(items);
-    });
+    }, this));
 
     return deferred.promise;
   };
@@ -153,10 +155,8 @@
       item = {};
 
     item.ingredient = ing;
+    item.reservedFor = meal || null;
 
-    if (meal) {
-      item.reservedFor = meal._id;
-    }
 
     $log.log('Shopping service add', arguments);
 
@@ -165,7 +165,11 @@
       self.$q.when(response, function (data) {
         var addedLocally;
 
-        data.ingredient = item.ingredient; //fast populate
+        //fast populate
+        data.ingredient = item.ingredient;
+        data.reservedFor = item.reservedFor;
+
+        //add locally
         addedLocally = self.addLocal(data);
         self.$log.log('returned promise from localAdd', addedLocally);
         self.$q.when(addedLocally, function (storedItem) {
@@ -277,14 +281,14 @@
   };
 
   Shopping.prototype.handleMealDelete = function handleMealDelete(meal) {
-    var self = this, deferred = self.$q.defer()
+    var self = this, deferred = self.$q.defer(),
       shoppingList = self.getShopping(),
       mealId = meal._id;
 
 
     self.$q.when(shoppingList, function (SL) {
     var itemsToBeRemoved, removedItems;
-      itemsToBeRemoved = SL.filter({reservedFor: meal._id});
+      itemsToBeRemoved = _.filter(SL, {reservedFor: meal._id});
       removedItems = self.bulkRemove(itemsToBeRemoved);
       deferred.resolve({removedItems: removedItems, meal: meal});
     });
