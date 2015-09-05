@@ -130,15 +130,10 @@
                   present = fullSMealIngs;
 
                   //make a temporary meal object to avoid circular reference
-                  tmpMeal = {
-                    ingredients: {
-                      missing: missing,
-                      present: present
-                    },
-                    reservedFor: {
-                      _id: savedMeal._id,
-                      name: savedMeal.name
-                    }
+                  tmpMeal = angular.copy(savedMeal);
+                  tmpMeal.ingredients = {
+                    missing: missing,
+                    present: present
                   };
 
                   //strategise meal - i.e. turn ingredients into cupboard and shopping items
