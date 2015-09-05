@@ -28,7 +28,11 @@
         res.status(404).end();
       });
       
-      
+          
+      //load testing token url
+      app.route('/loaderio-133d97e6bd54d83cb2c846d835a829b4/').get(function(req, res){
+        res.sendFile(__dirname + '/loader.io.txt').end();
+      });
 
     app.route('/*')
       .get(function (req, res) {
@@ -37,11 +41,7 @@
           { root: config.root }
         );
       });
-      
-      //load testing token url
-      app.route('/loaderio-133d97e6bd54d83cb2c846d835a829b4/').get(function(req, res){
-        res.sendFile(__dirname + '/loader.io.txt').end();
-      });
+
 
   };
 }());
