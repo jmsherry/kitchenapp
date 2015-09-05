@@ -22,24 +22,36 @@
 
         var completeMeals, pendingMeals, promises = [],
           self = this,
-          missingIngs, presentIngs, meal, i, len = mealsList.length;
+          shoppingListItems, cupboardItems, meal, i, len = mealsList.length,
+          j, sLen, cLen, lengths = [];
 
         for (i = 0; i < len; i += 1) {
           meal = mealsList[i];
-          missingIngs = meal.ingredients.missing;
-          presentIngs = meal.ingredients.present;
-          missingIngs = Shopping.populate(missingIngs, meal);
-          presentIngs = Cupboard.populate(presentIngs, meal);
-          promises.push(missingIngs);
-          promises.push(presentIngs);
+          shoppingListItems = meal.ingredients.missing;
+          cupboardItems = meal.ingredients.present;
+
+          shoppingListItems = Shopping.getItemsById(shoppingListItems);
+          promises = promises.concat(shoppingListItems);
+
+          cupboardItems = Cupboard.getItemsById(cupboardItems);
+          promises = promises.concat(cupboardItems);
+
+          lengths.push([shoppingListItems.length, cupboardItems.length]);
+
         }
 
         $q.all(promises).then(function (fulfilled) {
-
+          var pointer = 0,
+            sLen, cLen;
           for (i = 0; i < len; i += 1) {
-            mealsList[i].ingredients.missing = fulfilled[i * 2];
-            mealsList[i].ingredients.present = fulfilled[i * 2 + 1];
+            sLen = lengths[i][0];
+            cLen = lengths[i][1];
+            mealsList[i].ingredients.missing = fulfilled.splice(pointer, sLen);
+            mealsList[i].ingredients.present = fulfilled.splice(pointer + sLen, cLen);
+            pointer += sLen + cLen;
           }
+
+          $log.log(mealsList);
 
           completeMeals = _.filter(mealsList, {
             isComplete: true
@@ -47,6 +59,7 @@
           pendingMeals = _.filter(mealsList, {
             isComplete: false
           });
+
           mealsList = {
             complete: completeMeals,
             pending: pendingMeals
@@ -411,13 +424,13 @@
           _id: meal._id
         });
 
-        if(!oldMeal){
+        if (!oldMeal) {
           oldMeal = _.find(mealData.complete, {
             _id: meal._id
           });
         }
 
-        if(!oldMeal && mealData.pending.length > 0 && mealData.complete.length > 0){
+        if (!oldMeal && mealData.pending.length > 0 && mealData.complete.length > 0) {
           toastr.error('Error updating meal. Please contact the maintainer');
           throw new Error('Cannot match meal to update in local data');
         }

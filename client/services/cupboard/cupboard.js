@@ -129,6 +129,29 @@
     return self.getCupboard();
   };
 
+  Cupboard.prototype.getItemById = function getItemById(id){
+    var self = this, items, deferred = self.$q.defer();
+
+    items = self.getCupboard();
+    self.$q.when(items, function(inventoryList){
+      var item = self._.find(inventoryList, {_id: id});
+      deferred.resolve(item);
+    });
+
+    return deferred.promise;
+  };
+
+  Cupboard.prototype.getItemsById = function getItemsById(idsArray){
+    var self = this, items, deferred = self.$q.defer(), promises = [], i, len = idsArray.length, itemPromise;
+
+    for(i=0; i < len; i+=1){
+      itemPromise = self.getItemById(idsArray[i]);
+      promises.push(itemPromise);
+    }
+
+    return promises;
+  };
+
   /**
    * add
    *

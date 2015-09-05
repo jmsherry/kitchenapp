@@ -293,7 +293,7 @@
 
     self.$q.when(shoppingList, function (SL) {
     var itemsToBeRemoved, removedItems;
-      itemsToBeRemoved = _.filter(SL, {reservedFor: mealId});
+      itemsToBeRemoved = _.deepFilter(SL, {'reservedFor._id': mealId});
       removedItems = self.bulkRemove(itemsToBeRemoved);
       deferred.resolve({removedItems: removedItems, meal: meal});
     });
@@ -394,6 +394,35 @@
     });
 
     return deferred.promise;
+  };
+
+  Shopping.prototype.getItemById = function getItemById(id){
+    var self = this, items, deferred = self.$q.defer();
+
+    items = self.getShopping();
+    self.$q.when(items, function(shoppingList){
+      var item = self._.find(shoppingList, {_id: id});
+      deferred.resolve(item);
+    });
+
+    return deferred.promise;
+  };
+
+  Shopping.prototype.getItemsById = function getItemsById(idsArray){
+    var self = this, items, deferred = self.$q.defer(), promises = [], i, len = idsArray.length, itemPromise;
+
+
+    for(i=0; i < len; i+=1){
+      itemPromise = self.getItemById(idsArray[i]);
+      promises.push(itemPromise);
+    }
+
+    // self.$q.when(promises, function(retrievedItems){
+    //   deferred.resolve(retrievedItems);
+    // });
+
+    //return deferred.promise;
+    return promises;
   };
 
   Shopping.prototype.getPurchases = function getPurchases() {
