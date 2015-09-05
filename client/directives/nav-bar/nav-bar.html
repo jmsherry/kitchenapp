@@ -27,7 +27,7 @@
         <li ng-show="Auth.isLogged()">
           <a ui-sref="cupboard" href="#">My Cupboard</a>
         </li>
-        <li class="dropdown">
+        <li class="dropdown" ng-show="Auth.isLogged()">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" target="_self">Shopping<span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
             <li>
