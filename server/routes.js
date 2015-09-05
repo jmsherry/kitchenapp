@@ -27,6 +27,13 @@
       .get(function (req, res) {
         res.status(404).end();
       });
+      
+          
+      //load testing token url
+      app.route('/loaderio-133d97e6bd54d83cb2c846d835a829b4/').get(function(req, res){
+        console.log('in token route');
+        res.sendFile(__dirname + '/loader.io.txt');
+      });
 
     app.route('/*')
       .get(function (req, res) {
@@ -35,6 +42,7 @@
           { root: config.root }
         );
       });
+
 
   };
 }());
