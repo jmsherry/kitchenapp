@@ -4,9 +4,9 @@
   angular.module('kitchenapp.services')
     .service('Auth', Auth);
 
-    Auth.$inject = ['$rootScope', '$cookieStore', '$q', '$http', '$location', '$timeout'];
+    Auth.$inject = ['$rootScope', '$cookieStore', '$q', '$http', '$location', '$timeout', '$state'];
 
-    function Auth($rootScope, $cookieStore, $q, $http, $location, $timeout) {
+    function Auth($rootScope, $cookieStore, $q, $http, $location, $timeout, $state) {
 
       var _user = {};
 
@@ -66,7 +66,7 @@
       this.logout = function () {
         $rootScope.isLoggingOut = true;
         $cookieStore.remove('token');
-        $location.path('/');
+        $state.go('home');
         _user = {};
         $timeout(function(){
           $rootScope.isLoggingOut = false;
