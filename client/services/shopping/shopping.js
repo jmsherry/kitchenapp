@@ -174,15 +174,16 @@
 
         //add locally
         addedLocally = self.addLocal(data);
-        self.$log.log('returned promise from localAdd', addedLocally);
+
         self.$q.when(addedLocally, function (storedItem) {
+          self.$log.log('returned promise from localAdd', storedItem);
           deferred.resolve(storedItem);
         });
       });
     }
 
     function CBError(ing, meal, err) {
-      $log.error('In Shopping service add CBError', err, ing, meal);
+      self.$log.error('In Shopping service add CBError', err, ing, meal);
       self.toastr.error('Failed to add ' + ing.name + "!", 'Server Error ' + err);
     }
 
@@ -203,6 +204,7 @@
     });
 
     self.$q.all(itemPromises).then(function (slItems) {
+      self.$log.log('bulkAdd complete', slItems);
       deferred.resolve(slItems);
     });
     return deferred.promise;
