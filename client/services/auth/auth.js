@@ -2,7 +2,11 @@
   'use strict';
 
   angular.module('kitchenapp.services')
-    .service('Auth', function ($rootScope, $cookieStore, $q, $http, $location) {
+    .service('Auth', Auth);
+
+    Auth.$inject = ['$rootScope', '$cookieStore', '$q', '$http', '$location', '$timeout'];
+
+    function Auth($rootScope, $cookieStore, $q, $http, $location, $timeout) {
 
       var _user = {};
 
@@ -60,9 +64,15 @@
        * Logout
        */
       this.logout = function () {
+        $rootScope.isLoggingOut = true;
         $cookieStore.remove('token');
         $location.path('/');
         _user = {};
+        $timeout(function(){
+          $rootScope.isLoggingOut = false;
+          console.log('logging out done');
+        }, 500);
+
       };
 
       /**
@@ -120,5 +130,6 @@
         }
       };
 
-    });
+    }
+
 }());

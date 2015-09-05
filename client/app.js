@@ -93,14 +93,16 @@
 
       $rootScope.Auth = Auth;
       $rootScope.isLoading = false;
+      $rootScope.isLoggingOut = false;
 
       $("body").on('click.bgActive', ".btn-group > .btn", function(){
           $(this).addClass("active").siblings().removeClass("active");
       }).on('click.menuSelected', '.navbar-collapse ul a:not(.dropdown-toggle)', function () {
           $('.navbar-toggle:visible').click();
-      }).on('click.button', 'button', function(){
-        $(this).blur();
-      });
+      })
+      // .on('click.button', 'button', function(){ // this could be used to remove focus from buttons but might break accessibility
+      //   $(this).blur();
+      // });
 
     }]);
 

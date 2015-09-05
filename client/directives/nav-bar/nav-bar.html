@@ -3,10 +3,10 @@
         <p>Computing...</p>
   </div>
   </div>
-<div class="container-fluid" ng-hide="isLoading">
+<div class="container-fluid" ng-if="!isLoading">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"  ng-hide="isLoading">
         <span class="sr-only">Toggle navigation</span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -17,17 +17,17 @@
 
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav">
-        <li ng-if="Auth.isLogged()">
+      <ul class="nav navbar-nav" ng-hide="isLoading">
+        <li ng-show="Auth.isLogged()">
           <a ui-sref="food-calendar" href="#">Schedule Meals</a>
         </li>
-        <li ng-if="Auth.isLogged()">
+        <li ng-show="Auth.isLogged()">
           <a ui-sref="meals" href="#">Build Meals</a>
         </li>
-        <li ng-if="Auth.isLogged()">
+        <li ng-show="Auth.isLogged()">
           <a ui-sref="cupboard" href="#">My Cupboard</a>
         </li>
-        <li class="dropdown" ng-if="Auth.isLogged()">
+        <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" target="_self">Shopping<span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
             <li>
@@ -44,7 +44,7 @@
             <li>
               <a href="#" ui-sref="recipes">List Recipes</a>
             </li>
-            <li ng-if="Auth.isLogged()">
+            <li ng-show="Auth.isLogged()">
               <a href="#" ui-sref="addRecipe">Add Recipe</a>
             </li>
           </ul>
@@ -56,24 +56,24 @@
             <li>
               <a href="#" ui-sref="ingredients">List Ingredients</a>
             </li>
-            <li ng-if="Auth.isLogged()">
+            <li ng-show="Auth.isLogged()">
               <a href="#" ui-sref="addIngredient">Add Ingredient</a>
             </li>
           </ul>
         </li>
       </ul>
 
-      <ul class="nav navbar-nav navbar-right" id="auth-menu">
-        <li ng-if="!Auth.isLogged()">
+      <ul class="nav navbar-nav navbar-right" id="auth-menu"  ng-if="!isLoading || !isLoggingOut">
+        <li ng-hide="Auth.isLogged()">
           <a href="#" ui-sref="signup">signup</a>
         </li>
-        <li ng-if="!Auth.isLogged()">
+        <li ng-hide="Auth.isLogged()">
           <a href="#" ui-sref="login">login</a>
         </li>
-        <li ng-if="Auth.isLogged()">
+        <li ng-show="Auth.isLogged()">
           <a href="#" ui-sref="profile">Profile</a>
         </li>
-        <li ng-if="Auth.isLogged()">
+        <li ng-show="Auth.isLogged()">
           <a href="#" ng-click="Auth.logout()">logout</a>
         </li>
       </ul>
