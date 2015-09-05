@@ -29,7 +29,7 @@
       });
       
       //load testing token url
-      app.route('/loaderio-133d97e6bd54d83cb2c846d835a829b4/').get(function(){
+      app.route('/loaderio-133d97e6bd54d83cb2c846d835a829b4/').get(function(req, res){
         res.sendFile('./../loader.io.txt').end();
       });
 
