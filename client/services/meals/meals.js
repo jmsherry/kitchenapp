@@ -97,7 +97,8 @@
 
         $q.when(response, _.bind(function (savedMeal) {
 
-          var self = this, recipe;
+          var self = this,
+            recipe;
           $log.log('savedMeal', savedMeal);
 
           // Get the original recipe to pull the necessary ingredients
@@ -143,23 +144,22 @@
                   //strategise meal - i.e. turn ingredients into cupboard and shopping items
                   strategisedMeal = self.ingsToItems(tmpMeal);
                   $q.when(strategisedMeal, _.bind(function (stratTmpMeal) {
-                    var self = this, saving;
+                    var self = this,
+                      saving;
                     $log.log('stratTmpMeal', stratTmpMeal);
 
+                    //update the meal on the server
+                    savedMeal.ingredients = stratTmpMeal.ingredients;
+                    savedMeal.hasBeenStrategised = true;
+                    if (savedMeal.ingredients.missing === 0 && savedMeal.ingredients.present === originalRecipe.ingredients.length) {
+                      savedMeal.isComplete = true;
+                    }
+                    saving = self.update(savedMeal);
+                    $q.when(saving, _.bind(function (updatedMeal) {
 
-                        //update the meal on the server
-                        savedMeal.ingredients = stratTmpMeal.ingredients;
-                        savedMeal.hasBeenStrategised = true;
-                        if(savedMeal.ingredients.missing === 0 && savedMeal.ingredients.present === originalRecipe.ingredients.length){
-                          savedMeal.isComplete = true;
-                        }
-                        saving = self.update(savedMeal);
-                        $q.when(saving, _.bind(function(updatedMeal){
+                      deferred.resolve(updatedMeal);
 
-                          deferred.resolve(updatedMeal);
-
-                        }, self));
-
+                    }, self));
 
                   }, self));
 
@@ -406,20 +406,33 @@
     }
 
     function updateLocal(meal) {
-      var self = this, meals = self.get(),
+      var self = this,
+        meals = self.get(),
         deferred = $q.defer();
 
       $q.when(meals, function (mealData) {
-        mealData = mealData.complete.concat(mealData.pending);
-        var oldMeal = _.find(mealData, {
+
+        var oldMeal = _.find(mealData.pending, {
           _id: meal._id
         });
 
-        // if(oldMeal){
-          oldMeal = meal;
-        // } else {
-        //   mealData.push(meal);
-        // }
+        if(!oldMeal){
+          oldMeal = _.find(mealData.complete, {
+            _id: meal._id
+          });
+        }
+
+        if(!oldMeal && mealData.pending.length > 0 && mealData.complete.length > 0){
+          toastr.error('Error updating meal. Please contact the maintainer');
+          throw new Error('Cannot match meal to update in local data');
+        }
+
+        oldMeal = meal;
+        if (oldMeal.isComplete) {
+          mealData.complete.push(oldMeal);
+        } else {
+          mealData.pending.push(oldMeal);
+        }
 
         deferred.resolve(oldMeal);
         toastr.success(oldMeal.name + ' sucessfully updated!');
