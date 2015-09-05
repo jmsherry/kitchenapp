@@ -77,4 +77,9 @@ module.exports = function () {
   watch(coreFiles, bsync.reload);
   watch(['client/index.html', 'client/app.js'], bsync.reload);
 
+  watch(['client/views/**/*.html', 'client/directives/**/*.html'], function(){
+    console.log('doing it');
+    gulp.run('templates');
+  });
+
 };

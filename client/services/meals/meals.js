@@ -96,23 +96,71 @@
       function successCB(response) {
 
         $q.when(response, _.bind(function (savedMeal) {
+          //deferred.resolve(savedMeal);
           var self = this,
-            popdMeal, savedLocally;
+            strategisedMeal, popdMeal, savedLocally, ings, recipe;
+          $log.log('savedMeal', savedMeal);
 
-          //reserve items
-          pickUpHelper(response);
+          recipe = Recipes.getRecipeById(savedMeal.recipe);
+          $q.when(recipe, _.bind(function (originalRecipe) {
+            $log.log('originalRecipe', originalRecipe);
 
-          //populate meal
-          popdMeal = self.populate(savedMeal);
+            var popdIngs = Ingredients.populate(originalRecipe.ingredients);
+            $q.when(popdIngs, _.bind(function (fullIngs) {
+              var self = this,
+                originalIngs;
 
-          $q.when(popdMeal, _.bind(function (populatedMeal) {
-            //save it locally
-            savedLocally = self.addLocal(populatedMeal);
-            $q.when(savedLocally, function (finalMeal) {
-              deferred.resolve(finalMeal);
-            });
-          }));
+              //process items
+              originalIngs = Cupboard.process(fullIngs);
+              $q.when(originalIngs, _.bind(function (sMealIngs) {
+                var self = this,
+                  popdSMealIngs, mlen = sMealIngs.missing.length;
+                $log.log('sMealIngs', sMealIngs);
 
+                popdSMealIngs = sMealIngs.missing.concat(sMealIngs.present);
+
+                popdSMealIngs = Ingredients.populate(popdSMealIngs);
+                $q.when(popdSMealIngs, _.bind(function (fullSMealIngs) {
+                  var self = this,
+                    missing, present;
+
+                  missing = fullSMealIngs.splice(0, mlen);
+                  present = fullSMealIngs;
+                  savedMeal.ingredients = {
+                    missing: missing,
+                    present: present
+                  };
+
+                  $log.log('savedMeal', savedMeal);
+
+                  //strategise meal
+                  strategisedMeal = self.ingsToItems(savedMeal);
+                  $q.when(strategisedMeal, _.bind(function (stratMeal) {
+                    var self = this;
+                    $log.log('stratMeal', stratMeal);
+                    //deferred.resolve(stratMeal);
+                    //
+                    //   //populate meal
+                    //   popdMeal = self.populate(sMeal);
+                    //   $q.when(popdMeal, _.bind(function (populatedMeal) {
+                    //
+                    //     //save it locally
+                    //     savedLocally = self.addLocal(populatedMeal);
+                    //     $q.when(savedLocally, function (finalMeal) {
+                    //       deferred.resolve(finalMeal);
+                    //     });
+                    //
+                    //   }, self));
+
+                  }, self));
+
+                }, self));
+
+              }, self));
+
+            }, self));
+
+          }, self));
 
         }, self));
 
@@ -159,27 +207,24 @@
       recipe = Recipes.getRecipeById(id);
 
       $q.when(recipe, function (rec) {
+        var i, len, thisIng;
 
-        mealObj = _.clone(recipe);
-        mealObj.ingredients = Cupboard.process(mealObj.ingredients);
+        //clone the recipe
+        mealObj = _.clone(rec);
 
-        $q.when(mealObj.ingredients, function (ingredients) {
-          $log.log('Ingredients for new meal', ingredients);
+        //depopulate ingredients
+        len = mealObj.ingredients.length;
+        for (i = 0; i < len; i += 1) {
+          mealObj.ingredients[i] = mealObj.ingredients[i]._id;
+        }
 
-          mealObj = angular.extend(mealObj, {
-            _id: undefined,
-            isComplete: false,
-            ingredients: ingredients,
-            recipe: id
-          });
-
-          if (ingredients.missing.length === 0) {
-            mealObj.isComplete = true;
-          }
-
-          deferred.resolve(mealObj);
-
+        //nullify id and store the recipe id for reference
+        mealObj = angular.extend(mealObj, {
+          _id: undefined,
+          recipe: id
         });
+
+        deferred.resolve(mealObj);
 
       });
 
@@ -187,61 +232,25 @@
 
     }
 
-    //conducts the process of turning  a recipe into a full blown meal
+    //conducts the process of turning a recipe into a full blown meal
     function create(id) {
       var self = this,
         deferred = $q.defer(),
         meal;
 
-        $rootScope.isLoading = true;
-
       //create a template meal object
       meal = self.createMealObject(id);
       $q.when(meal, function (ml) {
-        var strategisedMeal;
 
-        // use the ingredients in the recipe to create shoppingList items and reserve cupboard items
-        strategisedMeal = ingsToItems(ml);
-        $q.when(strategisedMeal, function (finalMeal) {
-          finalMeal = self.add(finalMeal);
-
-          $q.when(finalMeal, function (m) {
-          //  $rootScope.isLoading = false;
-            deferred.resolve(m);
-          });
-
+        var finalMeal = self.add(ml);
+        $q.when(finalMeal, function (m) {
+          deferred.resolve(m);
         });
 
       });
 
       return deferred.promise;
 
-    }
-
-    // Because there's no id in the meal before you save, we took the ids of potential items - now we reserve them.
-    function pickUpHelper(meal) {
-      var self = this,
-        deferred = $q.defer(),
-        cupboard, toBeReserved = meal.ingredients.present,
-        i, len = toBeReserved.length,
-        promises = [];
-
-      cupboard = Cupboard.get();
-      $q.when(cupboard, function (cupboardItems) {
-        var item;
-        for(i=0; i<len; i+=1){
-          item = _.find(cupboardItems, {_id: toBeReserved[i]._id});
-          item.reservedFor = meal._id;
-          item = Cupboard.update(item);
-          promises.push(item);
-        }
-      });
-
-      $q.all(promises).then(function(newlyReservedItems){
-        deferred.resolve(newlyReservedItems);
-      });
-
-      return deferred.promise;
     }
 
     /**
@@ -257,7 +266,7 @@
         deferred = $q.defer(),
         promises = [],
         i, plen = mealObj.ingredients.present.length,
-        cupboardItems, shoppingListItems;
+        cupboardItems, shoppingListItems, fullIngs;
 
       //reserve cupboard items for present ings
       cupboardItems = Cupboard.bulkReserve(mealObj.ingredients.present, mealObj, true);
@@ -271,17 +280,17 @@
         promises = promises.concat(SLItems);
       });
 
-      $q.all(promises).then(function (ings) {
-        var presIngs = ings.splice(0, plen - 1),
-          missingIngs = ings;
-
-        mealObj.ingredients = {
-          missing: missingIngs,
-          present: presIngs
-        };
-
-        deferred.resolve(mealObj);
-      })
+      // $q.all(promises).then(function (ings) {
+      //   var presIngs = ings.splice(0, plen - 1),
+      //     missingIngs = ings;
+      //
+      //   mealObj.ingredients = {
+      //     missing: missingIngs,
+      //     present: presIngs
+      //   };
+      //
+      //   deferred.resolve(mealObj);
+      // });
 
       return deferred.promise;
     }
@@ -290,7 +299,7 @@
       var meal, missing, present, mlen, plen, i;
 
       if (!originalMealObj) {
-        toastr.error('Error depolulating: No item sent');
+        toastr.error('We\'re sorry there\s been an error. Please contact the maintainer');
         throw new Error('Error in Meal.depopulation');
       }
 
@@ -516,6 +525,7 @@
       removeLocal: removeLocal,
       obtainItem: obtainItem,
       loseItem: loseItem,
+      ingsToItems: ingsToItems,
       itemBought: itemBought,
       populate: populate,
       depopulate: depopulate

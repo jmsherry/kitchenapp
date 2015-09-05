@@ -26,7 +26,9 @@
     console.log('in addToMeal \nreq.params', req.params, '\nreq._params', req._params, '\nreq.body: ', req.body);
 
     var meal = _.extend(req.body, {
-      owner: req._params.userid
+      owner: req._params.userid,
+      hasBeenStrategised: false,
+      isComplete: false
     });
 
 

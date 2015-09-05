@@ -40,14 +40,16 @@
 									<button class="btn btn-danger pull-left" ng-click="vm.removeMeal(meal)">
 										<span class="hidden-xs">Remove</span>
 										<span aria-hidden="true" class="visible-xs-inline glyphicon glyphicon-remove"></span>
-									</a>
+									</button>
 							</div>
 							<div class="col-xs-8">
 								<h4>{{meal.name}}</h4>
-								<p class="list-intro-inline">Missing ingredients:</p>
-								<ul class="inline-list ingredients-list">
+								<p class="list-intro-inline" ng-if="meal.hasBeenStrategised">Missing ingredients:</p>
+								<ul class="inline-list ingredients-list" ng-if="meal.hasBeenStrategised">
 				         <li ng-repeat="item in meal.ingredients.missing">{{item.ingredient.name}}</li>
 				       </ul>
+							 <p class="list-intro-inline" ng-if="!meal.hasBeenStrategised"><span class="reserving-text">Reserving:</span><span class="meal-items-loading hloader" ng-if="!meal.hasBeenStrategised">Reserving items and populating shopping list...</span></p>
+
 						 </div>
 						 <div class="col-xs-2">
 						 </div>

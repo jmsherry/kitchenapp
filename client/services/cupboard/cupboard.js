@@ -359,7 +359,20 @@
       deferred = self.$q.defer(),
       presentIngredientItems = [],
       missingIngredients = [],
-      cupboard = self.getCupboard();
+      cupboard = self.getCupboard(),
+      ingsObj = {
+        present: presentIngredientItems,
+        missing: missingIngredients
+      };
+
+    //return an empty object if the array is empty
+    if(!ings){
+      self.toastr.error('Error in processing meal. Please contact the maintainer.')
+      throw new Error('No ingredients supplied to Cupboard.process')
+    } else if (ings.length === 0) {
+      $log.warn('Empty array supplied to cupboard process');
+      return ingsObj;
+    }
 
     self.$q.when(cupboard, function (data) {
       self._.forEach(ings, function (thisIng) {
@@ -367,8 +380,8 @@
           i, thisItem, thisItemIng;
 
         for (i = 0; i < len; i += 1) {
-          thisItem = data[i];
-          thisItemIng = thisItem.ingredient;
+          thisItem = data[i]; //cupboard item
+          thisItemIng = thisItem.ingredient || thisItem; //our required ingredient
           if (thisItemIng._id === thisIng._id) {
             item = thisItem;
             break;
@@ -376,17 +389,14 @@
         }
 
         if (item) {
-          presentIngredientItems.push(item._id);
+          presentIngredientItems.push(item);
         } else {
-          missingIngredients.push(thisIng._id);
+          missingIngredients.push(thisIng._id || thisIng);
         }
 
       });
 
-      deferred.resolve({
-        present: presentIngredientItems,
-        missing: missingIngredients
-      });
+      deferred.resolve(ingsObj);
 
     });
     return deferred.promise;

@@ -286,12 +286,12 @@
   Shopping.prototype.handleMealDelete = function handleMealDelete(meal) {
     var self = this, deferred = self.$q.defer(),
       shoppingList = self.getShopping(),
-      mealId = meal._id;
+      mealId = meal._id || meal;
 
 
     self.$q.when(shoppingList, function (SL) {
     var itemsToBeRemoved, removedItems;
-      itemsToBeRemoved = _.filter(SL, {reservedFor: meal._id});
+      itemsToBeRemoved = _.filter(SL, {reservedFor: mealId});
       removedItems = self.bulkRemove(itemsToBeRemoved);
       deferred.resolve({removedItems: removedItems, meal: meal});
     });
@@ -349,8 +349,6 @@
     if (!item) {
       self.toastr.error('Error depolulating: No item present');
       throw new Error('Error in Shopping.depopulation');
-    } else if (item.$promise || item.$resolved) {
-      throw new Error('Promise sent to Shopping.depopulation');
     }
 
     item = angular.copy(item); //cloned so as not to depop the actual object
@@ -366,9 +364,6 @@
       item.reservedFor = item.reservedFor._id;
     }
 
-    //For safety remove any promise cruft
-    // delete(item.$promise);
-    // delete(item.$resolved);
 
     return item;
 

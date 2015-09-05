@@ -45,8 +45,9 @@
     console.log('in getShoppingList \nreq', req._params);
   	//console.log('in getShoppingList \nreq.params', req.params, '\nreq.body: ', req.body);
     ShoppingListItem.find(
-      {"owner": req._params.userid},
-      function(err, shoppingList){
+      {"owner": req._params.userid})
+      .populate('reservedFor')
+      .exec(function(err, shoppingList){
         console.log('getShoppingList results', err, shoppingList);
         if(err){
           handleError(res, err);

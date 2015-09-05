@@ -1,4 +1,4 @@
-(function(){
+(function () {
   'use strict';
 
   var config = require('./config/environment');
@@ -6,8 +6,8 @@
   module.exports = function (app) {
 
     function paramFix(req, res, next) {
-        req._params = req.params;
-        next();
+      req._params = req.params;
+      next();
     }
 
     // API
@@ -19,7 +19,6 @@
     app.use('/api/users/:userid/cupboard', paramFix, require('./api/cupboard'));
     app.use('/api/users/:userid/purchases', paramFix, require('./api/transaction'));
 
-
     // Auth
     app.use('/auth', require('./auth'));
 
@@ -27,22 +26,21 @@
       .get(function (req, res) {
         res.status(404).end();
       });
-      
-          
-      //load testing token url
-      app.route('/loaderio-133d97e6bd54d83cb2c846d835a829b4/').get(function(req, res){
-        console.log('in token route');
-        res.sendFile(__dirname + '/loader.io.txt');
-      });
+
+    //load testing token url
+    app.route('/loaderio-133d97e6bd54d83cb2c846d835a829b4/').get(function (req, res) {
+      console.log('in token route');
+      res.sendFile(__dirname + '/loader.io.txt');
+    });
 
     app.route('/*')
       .get(function (req, res) {
         res.sendFile(
-          app.get('appPath') + '/index.html',
-          { root: config.root }
+          app.get('appPath') + '/index.html', {
+            root: config.root
+          }
         );
       });
-
 
   };
 }());

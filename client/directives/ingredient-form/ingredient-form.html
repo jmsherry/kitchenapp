@@ -46,7 +46,7 @@
   </div>
 
   <div class="form-group" ng-class="{ 'has-error' : ingredientForm.quantity.$invalid && !ingredientForm.quantity.$pristine }">
-    <label for="ingredient_quantity">Quantity (in servings or grams)</label>
+    <label for="ingredient_quantity">Quantity (in servings)</label>
     <input type="text" name="quantity" id="ingredient_quantity" placeholder="What quantity does it come in?" ng-model="vm.newIngredient.quantity" ng-required="true"  maxlength="10" ng-trim="true">
     <ul ng-if="ingredientForm.quantity.$invalid && !ingredientForm.quantity.$pristine" ng-messages="ingredientForm.quantity.$error" class="help-block list-unstyled">
       <li ng-message="required">A quantity is required.</li>

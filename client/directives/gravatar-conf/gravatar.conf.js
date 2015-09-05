@@ -13,6 +13,8 @@
 
       // Force protocol
       gravatarServiceProvider.protocol = 'https';
+
+
     }
   ]);
 }());
