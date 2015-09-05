@@ -367,8 +367,8 @@
     }
 
     //For safety remove any promise cruft
-    delete(item.$promise);
-    delete(item.$resolved);
+    // delete(item.$promise);
+    // delete(item.$resolved);
 
     return item;
 

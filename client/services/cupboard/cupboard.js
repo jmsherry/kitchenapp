@@ -459,9 +459,10 @@
     if (!item) {
       self.toastr.error('Error depolulating: No item sent');
       throw new Error('Error in Cupboard.depopulation');
-    } else if (item.$promise || item.$resolved) {
-      throw new Error('Promise sent to Cupboard.depopulation');
     }
+    // else if (item.$promise || item.$resolved) {
+    //   throw new Error('Promise sent to Cupboard.depopulation');
+    // }
 
     item = angular.copy(item); //cloned so as not to depop the actual object
 
@@ -477,8 +478,8 @@
     }
 
     //For safety remove any promise cruft
-    delete(item.$promise);
-    delete(item.$resolved);
+    // delete(item.$promise);
+    // delete(item.$resolved);
 
     return item;
 

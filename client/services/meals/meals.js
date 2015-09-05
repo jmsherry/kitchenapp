@@ -193,6 +193,8 @@
         deferred = $q.defer(),
         meal;
 
+        $rootScope.isLoading = true;
+
       //create a template meal object
       meal = self.createMealObject(id);
       $q.when(meal, function (ml) {
@@ -204,7 +206,7 @@
           finalMeal = self.add(finalMeal);
 
           $q.when(finalMeal, function (m) {
-
+          //  $rootScope.isLoading = false;
             deferred.resolve(m);
           });
 
@@ -290,9 +292,11 @@
       if (!originalMealObj) {
         toastr.error('Error depolulating: No item sent');
         throw new Error('Error in Meal.depopulation');
-      } else if (item.$promise || item.$resolved) {
-        throw new Error('Promise sent to Meal.depopulation');
       }
+
+      // else if (item.$promise || item.$resolved) {
+      //   throw new Error('Promise sent to Meal.depopulation');
+      // }
 
       meal = angular.copy(originalMealObj),
         missing = meal.ingredients.missing,
