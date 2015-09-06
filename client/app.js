@@ -47,7 +47,7 @@
       // });
 
       angular.extend(toastrConfig, {
-        timeOut: 1500,
+        timeOut: 15000,
         positionClass: positionClass
       });
 
