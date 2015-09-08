@@ -119,6 +119,7 @@
           $q.when(recipe, _.bind(function (originalRecipe) {
             $log.log('originalRecipe', originalRecipe);
 
+            //Populate them
             var popdIngs = Ingredients.populate(originalRecipe.ingredients);
             $q.when(popdIngs, _.bind(function (fullIngs) {
               var self = this,
@@ -128,25 +129,21 @@
               originalIngs = Cupboard.process(fullIngs);
               $q.when(originalIngs, _.bind(function (sMealIngs) {
                 var self = this,
-                  popdSMealIngs, mlen = sMealIngs.missing.length;
+                  popdSMealIngs,
+                  foundItems = sMealIngs.present; // popd cItems
                 $log.log('sMealIngs', sMealIngs);
 
-                popdSMealIngs = sMealIngs.missing.concat(sMealIngs.present);
-
                 //Populate those ingredients
-                popdSMealIngs = Ingredients.populate(popdSMealIngs);
-                $q.when(popdSMealIngs, _.bind(function (fullSMealIngs) {
+                popdSMealIngs = Ingredients.populate(sMealIngs.missing);
+                $q.when(popdSMealIngs, _.bind(function (SLIngs) {
                   var self = this,
-                    missing, present, tmpMeal, strategisedMeal;
-
-                  missing = fullSMealIngs.splice(0, mlen);
-                  present = fullSMealIngs;
+                    missing,  tmpMeal, strategisedMeal;
 
                   //make a temporary meal object to avoid circular reference
                   tmpMeal = angular.copy(savedMeal);
                   tmpMeal.ingredients = {
-                    missing: missing,
-                    present: present
+                    missing: SLIngs,
+                    present: foundItems // popd cItems
                   };
 
                   //strategise meal - i.e. turn ingredients into cupboard and shopping items
@@ -159,7 +156,7 @@
                     //update the meal on the server
                     savedMeal.ingredients = stratTmpMeal.ingredients;
                     savedMeal.hasBeenStrategised = true;
-                    if (savedMeal.ingredients.missing === 0 && savedMeal.ingredients.present === originalRecipe.ingredients.length) {
+                    if (savedMeal.ingredients.missing === 0 && savedMeal.ingredients.present.length === originalRecipe.ingredients.length) {
                       savedMeal.isComplete = true;
                     }
                     saving = self.update(savedMeal);
@@ -283,15 +280,15 @@
         deferred = $q.defer(),
         promises = [],
         i, plen = mealObj.ingredients.present.length,
-        cupboardItems, shoppingListItems, fullIngs;
+        cupboardItems, shoppingListItems, fullIngs, mealCopy = angular.copy(mealObj);
 
       //reserve cupboard items for present ings
-      cupboardItems = Cupboard.bulkReserve(mealObj.ingredients.present, mealObj, true);
+      cupboardItems = Cupboard.bulkReserve(mealObj.ingredients.present, mealCopy, true); //true is for the reservedFor overwrite
       $q.when(cupboardItems, function (cItems) {
         promises = promises.concat(cItems);
 
         //create Shopping list items for missing ings
-        shoppingListItems = Shopping.bulkAdd(mealObj.ingredients.missing, mealObj);
+        shoppingListItems = Shopping.bulkAdd(mealObj.ingredients.missing, mealCopy);
         $q.when(shoppingListItems, function (SLItems) {
           $log.log('returned SL items', SLItems);
           promises = promises.concat(SLItems);

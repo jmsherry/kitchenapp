@@ -87,16 +87,18 @@
 
   Cupboard.prototype.populate = function populate(items, meal) {
     var self = this,
-      i, len = items.length,
+      i, len,
       deferred = self.$q.defer(),
       promises = [],
       thisIng;
 
-    if (self._.isPlainObject(items)) {
+    if (typeof items === 'object' && !self._.isArray(items)) {
       items = [items];
     } else if (!self._.isArray(items)) {
-      throw new Error('Wrong type of argument passed to Shopping.populate');
+      throw new Error('Wrong type of argument passed to Cupboard.populate');
     }
+
+    len = items.length;
 
     for (i = 0; i < len; i += 1) {
       thisIng = items[i].ingredient;
@@ -129,22 +131,29 @@
     return self.getCupboard();
   };
 
-  Cupboard.prototype.getItemById = function getItemById(id){
-    var self = this, items, deferred = self.$q.defer();
+  Cupboard.prototype.getItemById = function getItemById(id) {
+    var self = this,
+      items, deferred = self.$q.defer();
 
     items = self.getCupboard();
-    self.$q.when(items, function(inventoryList){
-      var item = self._.find(inventoryList, {_id: id});
+    self.$q.when(items, function (inventoryList) {
+      var item = self._.find(inventoryList, {
+        _id: id
+      });
       deferred.resolve(item);
     });
 
     return deferred.promise;
   };
 
-  Cupboard.prototype.getItemsById = function getItemsById(idsArray){
-    var self = this, items, deferred = self.$q.defer(), promises = [], i, len = idsArray.length, itemPromise;
+  Cupboard.prototype.getItemsById = function getItemsById(idsArray) {
+    var self = this,
+      items, deferred = self.$q.defer(),
+      promises = [],
+      i, len = idsArray.length,
+      itemPromise;
 
-    for(i=0; i < len; i+=1){
+    for (i = 0; i < len; i += 1) {
       itemPromise = self.getItemById(idsArray[i]);
       promises.push(itemPromise);
     }
@@ -246,9 +255,18 @@
     //depopulate
     depop = self.depopulate(item);
 
-    function CBSuccess(item, resp) {
-      self.$log.log(arguments);
-      self.updateLocal(item);
+    function CBSuccess(item, response) {
+      self.$log.log('in Cupboard Add CBSuccess: ', arguments);
+      self.$q.when(response, function (data) {
+        var updatedLocally;
+
+        data.ingredient = item.ingredient; //fast populate
+        updatedLocally = self.updateLocal(data);
+        self.$log.log('returned promise from localUpdate', updatedLocally);
+        self.$q.when(updatedLocally, function (updatedItem) {
+          deferred.resolve(updatedItem);
+        });
+      });
     }
 
     function CBError(item, err) {
@@ -350,10 +368,7 @@
       deferred.reject(err);
     }
 
-    self.server
-      .update({
-        item: item
-      }, self._.bind(CBSuccess, self, item), self._.bind(CBError, self, item));
+    item.$update(self._.bind(CBSuccess, self, item), self._.bind(CBError, self, item));
 
     return deferred.promise;
   };
@@ -389,7 +404,7 @@
       };
 
     //return an empty object if the array is empty
-    if(!ings){
+    if (!ings) {
       self.toastr.error('Error in processing meal. Please contact the maintainer.')
       throw new Error('No ingredients supplied to Cupboard.process')
     } else if (ings.length === 0) {
@@ -398,14 +413,15 @@
     }
 
     self.$q.when(cupboard, function (data) {
-      self._.forEach(ings, function (thisIng) {
+
+      self._.forEach(ings, function (thisIng) { //our required ingredient
         var item, len = data.length,
-          i, thisItem, thisItemIng;
+          i, thisItem, thisItemIngId;
 
         for (i = 0; i < len; i += 1) {
           thisItem = data[i]; //cupboard item
-          thisItemIng = thisItem.ingredient || thisItem; //our required ingredient
-          if (thisItemIng._id === thisIng._id) {
+          thisItemIngId = thisItem.ingredient._id;
+          if (thisItemIngId === thisIng._id) {
             item = thisItem;
             break;
           }
@@ -414,7 +430,7 @@
         if (item) {
           presentIngredientItems.push(item);
         } else {
-          missingIngredients.push(thisIng._id || thisIng);
+          missingIngredients.push(thisIng._id);
         }
 
       });
@@ -427,13 +443,18 @@
 
   Cupboard.prototype.addLocal = function addLocal(item) {
     var self = this,
-      cupboard, deferred = self.$q.defer();
+      cupboard, popdItem, deferred = self.$q.defer();
 
     cupboard = self.getCupboard();
     self.$q.when(cupboard, function (cupb) {
-      cupb.push(item);
-      self.toastr.success(item.ingredient.name + ' has been added to your cupboard');
-      deferred.resolve(item);
+
+      popdItem = self.populate(item);
+      self.$q.when(popdItem, function (fullItem) {
+        cupb.push(fullItem);
+        self.toastr.success(item.ingredient.name + ' has been added to your cupboard');
+        deferred.resolve(item);
+      });
+
     });
 
     return deferred.promise;
@@ -442,31 +463,41 @@
 
   Cupboard.prototype.updateLocal = function updateLocal(item) {
     var self = this,
-      cupboard, oldItem;
+      cupboard, oldItem, popdItem;
 
     cupboard = self.getCupboard();
     self.$q.when(cupboard, function (data) {
-      oldItem = self._.find(data, {
-        _id: item._id
-      });
-      oldItem = item;
 
-      self.toastr.success(item.ingredient.name + ' has been updated in your cupboard');
+      popdItem = self.populate(item);
+      self.$q.when(popdItem, function (fullItem) {
+
+        oldItem = self._.find(data, {
+          _id: fullItem._id
+        });
+        oldItem = fullItem;
+
+        self.toastr.success(item.ingredient.name + ' has been updated in your cupboard');
+
+      });
     });
   };
 
   Cupboard.prototype.reserveLocal = function reserveLocal(item, meal) {
     var self = this,
-      cupboard, oldItem, deferred = self.$q.defer();
+      cupboard, oldItem, popdItem, deferred = self.$q.defer();
 
     cupboard = self.getCupboard();
     self.$q.when(cupboard, function (data) {
-      oldItem = self._.find(data, {
-        _id: item._id
+
+      popdItem = self.populate(item, meal);
+      self.$q.when(popdItem, function (fullItem) {
+        oldItem = self._.find(data, {
+          _id: fullItem._id
+        });
+        oldItem = fullItem;
+        deferred.resolve(oldItem);
+        self.toastr.success(item.ingredient.name + ' has been reserved for ' + meal.name + '.');
       });
-      oldItem = item;
-      deferred.resolve(oldItem);
-      self.toastr.success(item.ingredient.name + ' has been reserved for ' + meal.name + '.');
     });
 
     return deferred.promise
