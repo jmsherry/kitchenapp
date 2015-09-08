@@ -249,7 +249,7 @@
   };
 
   Cupboard.prototype.update = function update(item) {
-    var self = this,
+    var self = this, deferred = self.$q.defer(),
       depop;
 
     //depopulate
@@ -275,6 +275,8 @@
     }
 
     depop.$update(self._.bind(CBSuccess, self, item), self._.bind(CBError, self, item));
+
+    return deferred.promise;
 
   };
 
@@ -329,7 +331,7 @@
 
     self.$q.when(cupboard, function (data) {
       self._.forEach(data, function (item) {
-        if (item.reservedFor === mealId) {
+        if (item.reservedFor._id || item.reservedFor === mealId) {
           item.reservedFor = null;
           self.update(item);
         }
