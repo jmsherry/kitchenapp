@@ -16,7 +16,14 @@
             _user = res.data;
           })
           .catch(function (err) {
-            console.log(err);
+            if(err.status === 401){
+              $state.go('login', {
+                messages: [{
+                service: 'Auth',
+                msg: "Your session has expired. Please log in to continue..."
+                }]
+              });
+            }
           });
       }
 
@@ -127,7 +134,7 @@
 
       this.checkAuthorised = function checkAuthorised(){
         if(!_user.hasOwnProperty('email')){
-          $location.path('/');
+          $state.go('home');
         }
       };
 
