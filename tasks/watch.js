@@ -69,9 +69,10 @@ module.exports = function () {
   watch(coreFiles, { events: ['add', 'unlink'] }, function () {
     if (Date.now() - lastInjection < 100) { return; }
     lastInjection = Date.now();
-    gulp.src('client/index.html')
-      .pipe(inject(gulp.src(toInject), { relative: true }))
-      .pipe(gulp.dest('client'));
+    // gulp.src('client/index.html')
+    //   .pipe(inject(gulp.src(toInject), { relative: true }))
+    //   .pipe(gulp.dest('client'));
+    gulp.run('inject');
   });
 
   watch(coreFiles, bsync.reload);
