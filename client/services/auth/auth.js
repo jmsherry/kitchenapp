@@ -97,12 +97,12 @@
        * @returns {object}
        */
       this.getUser = function () {
-        // var deferred = $q.defer();
-        // $q.when(_user, function(usr){
-        //   deferred.resolve(usr);
-        // });
-        // return deferred.promise;
-        return _user;
+        var deferred = $q.defer();
+        $q.when(_user, function(usr){
+          deferred.resolve(usr);
+        });
+        return deferred.promise;
+        //return _user;
       };
 
 

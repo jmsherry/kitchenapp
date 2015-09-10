@@ -4,9 +4,9 @@
   angular.module('kitchenapp.controllers')
     .controller('CupboardCtrl', CupboardCtrl);
 
-  CupboardCtrl.$inject = ['Cupboard', 'Auth', '$q', '$filter', 'Meals', '$modal', '$log', '_', '$'];
+  CupboardCtrl.$inject = ['Cupboard', 'Shopping', 'Auth', '$q', '$filter', 'Meals', '$modal', '$log', '_', '$'];
 
-    function CupboardCtrl(Cupboard, Auth, $q, $filter, Meals, $modal, $log, _, $) {
+    function CupboardCtrl(Cupboard, Shopping, Auth, $q, $filter, Meals, $modal, $log, _, $) {
 
     	 Auth.checkAuthorised();
 
@@ -60,15 +60,16 @@
         }
 
         vm.predicate = predicate;
-        //$(event.srcElement).blur();
       }
 
+      // Unreserving
       function unreserve(item){
         $log.log("unreserve", arguments);
-        item.reservedFor = null;
-        Cupboard.update(item);
+        Meals.unreserveItem(item);
       }
 
+
+      // Reserving
       function showReserveModal(item){
         $log.log("manuallyReserve", arguments);
 
@@ -91,8 +92,12 @@
       }
 
       function reserve(item, meal){
+        var $reserved;
         $log.log('reserving', arguments, this);
-        Cupboard.reserve(item, meal._id);
+        $reserved = Cupboard.reserve(item, meal);
+        $q.when($reserved, function(reservedItem){
+          Meals.obtain(meal);
+        });
       }
 
       angular.extend(vm, {

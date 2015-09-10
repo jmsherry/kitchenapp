@@ -18,6 +18,9 @@ exports.config = { // jshint ignore:line
   jasmineNodeOpts: {
     showColors: true,
     defaultTimeoutInterval: 30000
+  },
+  onPrepare: function() {
+    browser.manage().window().setSize(1600, 1000);
   }
 
 };

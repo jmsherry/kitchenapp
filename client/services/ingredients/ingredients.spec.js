@@ -6,6 +6,7 @@
       beforeEach(module('ngMock'));
       beforeEach(module('ui.router'));
       beforeEach(module('kitchenapp', 'templates'));
+      //beforeEach(module('kitchenapp'));
       beforeEach(module('toastr'));
 
 

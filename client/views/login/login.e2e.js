@@ -1,7 +1,7 @@
 (function(){
 
     'use strict';
-    var require = require || function(){};
+    //var require = require || function(){};
     var LoginPage = require('./login.page.js');
     LoginPage = new LoginPage();
 
@@ -10,6 +10,7 @@
     	var emailInput, passwordInput, submitButton;
 
         beforeEach(function() {
+          browser.driver.manage().window().setSize(1280, 1024);
             browser.get('/login');
         });
 

@@ -509,17 +509,32 @@
     }
 
     function obtainItem(meal, item) {
-      var missing = meal.ingredients.missing;
+      var self = this, missing, deferred = $q.defer(), $updatedMeal;
+
+      missing = meal.ingredients.missing;
       missing.splice(missing.indexOf(item.ingredient), 1);
       meal.ingredients.present.push(item);
-      return meal;
+
+      $updatedMeal = self.update(meal);
+      $q.when($updatedMeal, function(updatedMeal){
+        deferred.resolve(updatedMeal);
+      });
+
+      return deferred.promise;
     }
 
     function loseItem(meal, item) {
-      var present = meal.ingredients.missing;
+      var self = this, present, deferred = $q.defer(), $updatedMeal;
+      present = meal.ingredients.present;
       present.splice(present.indexOf(item), 1);
       meal.ingredients.missing.push(item.ingredient);
-      return meal;
+
+      $updatedMeal = self.update(meal);
+      $q.when($updatedMeal, function(updatedMeal){
+        deferred.resolve(updatedMeal);
+      });
+
+      return deferred.promise;
     }
 
     function itemBought(item) {
@@ -544,6 +559,46 @@
       });
     }
 
+    function unreserveItem(item){
+      var self = this, thisMeal = item.reservedFor, $updatedMeal, deferred = $q.defer();
+
+      //think about population
+
+      //update meal
+      $updatedMeal = self.loseItem(thisMeal, item);
+      $q.when($updatedMeal, function(updatedMeal){
+        var $updatedCItem;
+          // tell cupboard
+          $updatedCItem = Cupboard.unreserve(item);
+          $q.when($updatedCItem, function(updatedCItem){
+            deferred.resolve(updatedCItem);
+          });
+      });
+
+      return deferred.promise;
+
+    }
+
+    function reserveItem(item){
+      var self = this, thisMeal = item.reservedFor, $updatedMeal, deferred = $q.defer();
+
+      //think about population
+
+      //update meal
+      $updatedMeal = self.obtainItem(thisMeal, item);
+      $q.when($updatedMeal, function(updatedMeal){
+        var $updatedCItem;
+          // tell cupboard
+          $updatedCItem = Cupboard.reserve(item);
+          $q.when($updatedCItem, function(updatedCItem){
+            deferred.resolve(updatedCItem);
+          });
+      });
+
+      return deferred.promise;
+
+    }
+
     init();
 
     return {
@@ -563,7 +618,9 @@
       ingsToItems: ingsToItems,
       itemBought: itemBought,
       populate: populate,
-      depopulate: depopulate
+      depopulate: depopulate,
+      unreserveItem: unreserveItem,
+      reserveItem: reserveItem
     };
 
   }

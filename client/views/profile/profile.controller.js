@@ -12,9 +12,10 @@
 
   	var vm = this, user = Auth.getUser();
 vm.user = user;
-    // $q.when(user, function(usr){
-    //   vm.user = usr;
-    // });
+    $q.when(user, function(usr){
+      console.log(usr);
+      vm.user = usr;
+    });
 
   	angular.extend(vm, {
   	  name: 'ProfileCtrl'

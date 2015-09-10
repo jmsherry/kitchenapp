@@ -22,5 +22,6 @@ gulp.task('templates',                require('./tasks/templates'));
 gulp.task('updateKarmaConf',          require('./tasks/updateKarmaConf'));
 gulp.task('e2e:update',               require('./tasks/test').e2eUpdate);
 gulp.task('e2e',        ['serve'],    require('./tasks/test').e2eTests);
-gulp.task('test',       ['updateKarmaConf'],       require('./tasks/test').test);
+//gulp.task('test',        ['updateKarmaConf'],   require('./tasks/test').test);
+gulp.task('test',                     require('./tasks/test').test);
 gulp.task('sassdoc',                  require('./tasks/doc').sassdoc);

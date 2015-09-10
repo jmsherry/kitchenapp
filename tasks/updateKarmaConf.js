@@ -9,9 +9,10 @@
  var angularFilesort    = require('gulp-angular-filesort');
  var naturalSort = require('gulp-natural-sort');
  var headScripts = require('./config/headScripts');
+ var testFiles    = require('./config/testFiles');
  var inject      = require('gulp-inject');
  var _           = require('lodash');
- var jsToInject    = require('./config/filesToInject').js; //user files
+ var jsToInject  = require('./config/filesToInject').js; //user files
  var toExclude   = require('./config/bowerFilesToExclude');
 
 module.exports = function(){
@@ -20,7 +21,7 @@ module.exports = function(){
   bowerFls = bowerFiles();
   bowerBodyScripts = bowerFls.filter(function(str){
     var match = /\.(js)$/ig.test(str);
-    console.log(match, str);
+    //console.log(match, str);
     return match;
   });
 
@@ -31,9 +32,12 @@ module.exports = function(){
   }
 
   //console.log('filtered', bowerBodyScripts, bowerBodyScripts.length);
-  console.log(jsToInject);
+  //console.log(jsToInject); .concat(testFiles.deps)
 
-  scripts = headScripts.concat(bowerBodyScripts).concat(jsToInject);
+  scripts = headScripts.concat(testFiles.deps).concat(bowerBodyScripts).concat(testFiles.scripts);
+  //console.log(testFiles.scripts);
+  //console.log(scripts);
+
 
   gulp.src('./karma.conf.js')
   .pipe(inject(gulp.src(scripts, {read: false}), {
@@ -41,7 +45,7 @@ module.exports = function(){
     endtag: ']',
     ignorePath: toExclude,
     transform: function (filepath, file, i, length) {
-      return '  "./' + filepath.replace(/^(\/client\/)/,"") + '"' + (i + 1 < length ? ',' : '');
+      return "'./" + filepath.replace(/^(\/client\/)/,'') + "'" + (i + 1 < length ? "," : "");
     }
   }))
   .pipe(gulp.dest('./'));
