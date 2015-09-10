@@ -5,7 +5,7 @@
   angular.module('kitchenapp.directives',[]);
   angular.module('kitchenapp.services',[]);
   angular.module('kitchenapp.filters',[]);
-  //angular.module('kitchenapp.templates',[]);
+  angular.module('kitchenapp.templates',[]);
 
   angular.module('kitchenapp', [
     //Native services
@@ -15,6 +15,7 @@
     'ngAnimate',
     'ngTouch',
     'ngMessages',
+    'ngAria',
 
     //3rd party
     'btford.socket-io',
@@ -32,8 +33,8 @@
     'kitchenapp.controllers',
     'kitchenapp.directives',
     'kitchenapp.services',
-    'kitchenapp.filters'//,
-    //'kitchenapp.templates'
+    'kitchenapp.filters',
+    'kitchenapp.templates'
 
   ]).config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpProvider', 'calendarConfigProvider', 'toastrConfig', 'uiSelectConfig', function Configurator($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, calendarConfigProvider, toastrConfig, uiSelectConfig) {
       var positionClass;
