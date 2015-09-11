@@ -578,3 +578,12 @@ text.nv-axislabel {
     display: inline-block;
     padding-right: 50px;
   }
+
+  .cal-week-box {
+     .cal-day-past {
+        padding-bottom: 19px;
+      }
+      .cal-row-head [class*="cal-cell"]:first-child {
+        padding-bottom: 19px;
+      }
+    }

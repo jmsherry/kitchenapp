@@ -16,7 +16,6 @@
     'ngTouch',
     'ngMessages',
     'ngAria',
-    'ngLocale',
 
     //3rd party
     'btford.socket-io',

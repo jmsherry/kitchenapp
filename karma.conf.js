@@ -41,6 +41,7 @@ module.exports = function (config) {
       './bower_components/angular-gravatar/build/angular-gravatar.js',
       './bower_components/angular-messages/angular-messages.js',
       './bower_components/angular-resource/angular-resource.js',
+      './bower_components/angular-aria/angular-aria.js',
       './bower_components/angular-sanitize/angular-sanitize.js',
       './bower_components/angular-socket-io/socket.js',
       './bower_components/angular-toastr/dist/angular-toastr.tpls.js',
