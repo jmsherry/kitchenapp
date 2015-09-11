@@ -11,7 +11,7 @@
     "angular-animate": "~1.4.3",
     "angular-aria": "~1.4.5",
     "angular-bootstrap": "~0.12.1",
-    "angular-bootstrap-calendar": "git@github.com:jmsherry/angular-bootstrap-calendar.git#25b85348e355e75e129d2348a1ba46d6f0160618",
+    "angular-bootstrap-calendar": "git@github.com:jmsherry/angular-bootstrap-calendar.git#5fe463d4ecbc57113d1c145428a65efd37c65a48",
     "angular-cookies": "~1.4.3",
     "angular-gravatar": "~0.3.1",
     "angular-i18n": "~1.4.5",
@@ -36,7 +36,7 @@
   "resolutions": {
     "jquery": "~2.x",
     "angular": "~1.4.3",
-    "angular-bootstrap-calendar": "25b85348e355e75e129d2348a1ba46d6f0160618"
+    "angular-bootstrap-calendar": "5fe463d4ecbc57113d1c145428a65efd37c65a48"
   },
   "overrides": {
     "bootstrap": {
