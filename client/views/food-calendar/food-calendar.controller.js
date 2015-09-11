@@ -117,10 +117,10 @@ cssClass: 'balls' //A CSS class (or more, just separate with spaces) that will b
       }
 
       function timespanClick(calendarDate){
-        if($(event.target).hasClass('cal-day-past')){ return false;}
-      	$log.log('day clicked', event);
-      	$log.log(arguments);
-      	vm.showModal(calendarDate);
+        // if($(event.target).hasClass('cal-day-past')){ return false;}
+      	// $log.log('day clicked', event);
+      	// $log.log(arguments);
+      	// vm.showModal(calendarDate);
         // event.preventDefault();
         // event.stopPropagation();
         // return false;
@@ -138,7 +138,16 @@ cssClass: 'balls' //A CSS class (or more, just separate with spaces) that will b
 
       function weekdayClick(day){
         $log.log(day);
-        alert('yes!');
+        //alert('yes!');
+      }
+
+      function addClicked(day){
+        if($(event.target).hasClass('cal-day-past')){ return false;}
+        $log.log('add clicked', event);
+        vm.showModal(day);
+        event.preventDefault();
+        event.stopPropagation();
+        // return false;
       }
 
       angular.extend(vm, {
@@ -150,7 +159,8 @@ cssClass: 'balls' //A CSS class (or more, just separate with spaces) that will b
         timespanClick: timespanClick,
         setCalendarToToday: setCalendarToToday,
         drillDownClick: drillDownClick,
-        weekdayClick: weekdayClick
+        weekdayClick: weekdayClick,
+        addClicked: addClicked
       });
 
     });
