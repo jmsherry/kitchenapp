@@ -36,12 +36,12 @@
                     left: 65
                 },
                 clipEdge: true,
-                staggerLabels: true,
+                staggerLabels: false,
                 transitionDuration: 500,
                 stacked: true,
                 xAxis: {
                     axisLabel: 'Day',
-                    axisLabelDistance: 50,
+                    axisLabelDistance: 0,
                     showMaxMin: false,
                     tickFormat: function(d){
                         return moment(d).format('dddd Do');
