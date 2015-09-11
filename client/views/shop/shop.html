@@ -37,7 +37,7 @@
 				</div>
   			<div class="col-md-2 actions">
   				<button type="button" class="btn btn-primary" ng-click="vm.buy(item)">Buy</button>
-					<button type="button" class="btn btn-danger" ng-click="vm.remove(item)">Remove</button>
+					<button type="button" class="btn btn-danger" ng-if="!item.reservedFor" ng-click="vm.remove(item)">Remove</button>
   			</div>
   		</li>
   	</ul>
