@@ -1,12 +1,12 @@
-/* global toastr:false, moment:false */
+/* global toastr:false, moment:true, d3:true, nv:true, _:true */
 (function() {
     'use strict';
 
-    var moment = window.moment;
-    var d3 = window.d3;
-    var nv = window.nv;
-    var $ = window.$;
-    var _ = window._;
+    // var moment = window.moment;
+    // var d3 = window.d3;
+    // var nv = window.nv;
+    // var $ = window.$;
+    // var _ = window._;
 
 
     if(!moment){

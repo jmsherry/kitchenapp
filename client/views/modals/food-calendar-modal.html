@@ -2,9 +2,9 @@
 	<button type="button" class="close" aria-label="Close" ng-click="$close(null)"><span aria-hidden="true">&times;</span></button>
 
 			<h1>Place a meal</h1>
-
+<p>{{vm.completeMeals.length}}</p>
 		<ul class="list-unstyled modal-meals-list">
-			<li ng-repeat="meal in vm.completeMeals">
+			<li ng-repeat="meal in completeMeals">
 				<button class="btn btn-block btn-info" ng-click="placeMeal(meal, selectedDate)">{{meal.name}}</button>
 			</li>
 		</ul>

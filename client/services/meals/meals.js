@@ -315,7 +315,7 @@
       var meal, missing, present, mlen, plen, i;
 
       if (!originalMealObj) {
-        toastr.error('We\'re sorry there\s been an error. Please contact the maintainer');
+        toastr.error('We\'re sorry there\'s been an error. Please contact the maintainer');
         throw new Error('Error in Meal.depopulation');
       }
 
@@ -323,10 +323,10 @@
       //   throw new Error('Promise sent to Meal.depopulation');
       // }
 
-      meal = angular.copy(originalMealObj),
-        missing = meal.ingredients.missing,
-        present = meal.ingredients.present,
-        mlen = missing.length,
+      meal = angular.copy(originalMealObj);
+        missing = meal.ingredients.missing;
+        present = meal.ingredients.present;
+        mlen = missing.length;
         plen = present.length;
 
       for (i = 0; i < plen; i += 1) {
