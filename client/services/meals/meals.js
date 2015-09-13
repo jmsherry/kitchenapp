@@ -4,9 +4,9 @@
   angular.module('kitchenapp.services')
     .factory('Meals', Meals);
 
-  Meals.$inject = ['$rootScope', '$cookieStore', '$q', '$log', '$resource', 'toastr', 'Auth', 'Recipes', 'Cupboard', 'Shopping', 'Ingredients', '_'];
+  Meals.$inject = ['$rootScope', '$cookieStore', '$q', '$log', '$resource', 'toastr', 'Auth', 'Recipes', 'Cupboard', 'Shopping', 'Ingredients', '_', 'Utils'];
 
-  function Meals($rootScope, $cookieStore, $q, $log, $resource, toastr, Auth, Recipes, Cupboard, Shopping, Ingredients, _) {
+  function Meals($rootScope, $cookieStore, $q, $log, $resource, toastr, Auth, Recipes, Cupboard, Shopping, Ingredients, _, Utils) {
 
     var $deferred = $q.defer(),
       _meals = $deferred.promise,
@@ -23,7 +23,7 @@
         var completeMeals, pendingMeals, promises = [],
           self = this,
           shoppingListItems, cupboardItems, meal, i, len = mealsList.length,
-          j, sLen, cLen, lengths = [];
+          j, lengths = [];
 
         for (i = 0; i < len; i += 1) {
           meal = mealsList[i];
@@ -137,7 +137,7 @@
                 popdSMealIngs = Ingredients.populate(sMealIngs.missing);
                 $q.when(popdSMealIngs, _.bind(function (SLIngs) {
                   var self = this,
-                    missing,  tmpMeal, strategisedMeal;
+                    missing, tmpMeal, strategisedMeal;
 
                   //make a temporary meal object to avoid circular reference
                   tmpMeal = angular.copy(savedMeal);
@@ -159,7 +159,7 @@
                     if (savedMeal.ingredients.missing === 0 && savedMeal.ingredients.present.length === originalRecipe.ingredients.length) {
                       savedMeal.isComplete = true;
                     }
-                    saving = self.update(savedMeal);
+                    saving = self.update(savedMeal, true);
                     $q.when(saving, _.bind(function (updatedMeal) {
 
                       deferred.resolve(updatedMeal);
@@ -324,10 +324,10 @@
       // }
 
       meal = angular.copy(originalMealObj);
-        missing = meal.ingredients.missing;
-        present = meal.ingredients.present;
-        mlen = missing.length;
-        plen = present.length;
+      missing = meal.ingredients.missing;
+      present = meal.ingredients.present;
+      mlen = missing.length;
+      plen = present.length;
 
       for (i = 0; i < plen; i += 1) {
         present[i] = present[i]._id;
@@ -381,19 +381,33 @@
       return deferred.promise;
     }
 
-    function update(meal) {
+    /**
+     * @params meal {} meal to be updated
+     * @params firstPass boolean Used in the complex process of adding a meal.
+     *
+     **/
+
+    function update(meal, firstPass) {
       var self = this,
         deferred = $q.defer(),
         flatMeal;
 
+      firstPass = firstPass || false;
+
       //depopulate prior to saving
       flatMeal = self.depopulate(meal);
 
-      function successCB(meal, response) {
+      function successCB(meal, firstPass, response) {
         $log.log('update successCB: ', response);
         var updatedLocally;
         response.ingredients = meal.ingredients;
-        updatedLocally = self.updateLocal(response);
+
+        if(firstPass){
+          updatedLocally = self.addLocal(response);
+        } else {
+          updatedLocally = self.updateLocal(response);
+        }
+
         $q.when(updatedLocally, function (updatedMeal) {
           deferred.resolve(updatedMeal);
         });
@@ -405,42 +419,44 @@
       }
 
       flatMeal
-        .$update(_.bind(successCB, self, meal), _.bind(errCB, self, meal));
+        .$update(_.bind(successCB, self, meal, firstPass), _.bind(errCB, self, meal, firstPass));
 
       return deferred.promise;
     }
 
     function updateLocal(meal) {
       var self = this,
-        meals = self.get(),
+        $meals = self.get(),
         deferred = $q.defer();
 
-      $q.when(meals, function (mealData) {
+      $q.when($meals, function (meals) {
 
-        var oldMeal = _.find(mealData.pending, {
+        var oldMeal = _.find(meals.pending, {
           _id: meal._id
         });
 
         if (!oldMeal) {
-          oldMeal = _.find(mealData.complete, {
+          oldMeal = _.find(meals.complete, {
             _id: meal._id
           });
         }
 
-        if (!oldMeal && mealData.pending.length > 0 && mealData.complete.length > 0) {
+        if (!oldMeal) {
           toastr.error('Error updating meal. Please contact the maintainer');
           throw new Error('Cannot match meal to update in local data');
         }
 
-        oldMeal = meal;
+        //oldMeal = meal;
         if (oldMeal.isComplete) {
-          mealData.complete.push(oldMeal);
+          meals.splice(Utils.collIndexOf(meals.complete, meal._id), 1);
+          meals.complete.push(meal);
         } else {
-          mealData.pending.push(oldMeal);
+          meals.splice(Utils.collIndexOf(meals.pending, meal._id), 1);
+          meals.pending.push(meal);
         }
 
-        deferred.resolve(oldMeal);
-        toastr.success(oldMeal.name + ' sucessfully updated!');
+        deferred.resolve(meal);
+        toastr.success(meal.name + ' sucessfully updated!');
       });
 
       return deferred.promise;
@@ -471,22 +487,20 @@
     function removeLocal(meal) {
       var self = this,
         deferred = $q.defer(),
-        meals;
+        $meals;
 
-      meals = self.get();
-      $q.when(meals, function (data) {
-        var items, mealItem;
+      $meals = self.get();
+      $q.when($meals, function (meals) {
+        var removed;
 
         if (meal.isComplete) {
-          items = data.complete;
+          removed = meals.complete.splice(Utils.collIndexOf(meals.complete, meal._id), 1);
         } else {
-          items = data.pending;
+          removed = meals.pending.splice(Utils.collIndexOf(meals.pending, meal._id), 1);
         }
 
-        mealItem = items.splice(items.indexOf(meal), 1);
-        mealItem = mealItem[0];
-        toastr.success(mealItem.name + ' has been removed from your meals list.');
-        deferred.resolve(mealItem);
+        toastr.success(removed.name + ' has been removed from your meals list.');
+        deferred.resolve(removed);
 
       });
 
@@ -509,14 +523,16 @@
     }
 
     function obtainItem(meal, item) {
-      var self = this, missing, deferred = $q.defer(), $updatedMeal;
+      var self = this,
+        missing, deferred = $q.defer(),
+        $updatedMeal;
 
       missing = meal.ingredients.missing;
-      missing.splice(missing.indexOf(item.ingredient), 1);
+      missing.splice(Utils.collIndexOf(missing, item.ingredient), 1);
       meal.ingredients.present.push(item);
 
       $updatedMeal = self.update(meal);
-      $q.when($updatedMeal, function(updatedMeal){
+      $q.when($updatedMeal, function (updatedMeal) {
         deferred.resolve(updatedMeal);
       });
 
@@ -524,14 +540,17 @@
     }
 
     function loseItem(meal, item) {
-      var self = this, present, deferred = $q.defer(), $updatedMeal;
+      var self = this,
+        present, deferred = $q.defer(),
+        $updatedMeal;
       present = meal.ingredients.present;
-      present.splice(present.indexOf(item), 1);
+      present.splice(Utils.collIndexOf(present, item), 1);
       meal.ingredients.missing.push(item.ingredient);
 
       $updatedMeal = self.update(meal);
-      $q.when($updatedMeal, function(updatedMeal){
+      $q.when($updatedMeal, function (updatedMeal) {
         deferred.resolve(updatedMeal);
+        Shopping.add(item.ingredient, item.reservedFor);
       });
 
       return deferred.promise;
@@ -539,9 +558,10 @@
 
     function itemBought(item) {
       var self = this,
-        meals = self.get();
-      $q.when(meals, function (data) {
-        var meal = _.find(data.pending, {
+        $meals = self.get();
+
+      $q.when($meals, function (meals) {
+        var meal = _.find(meals.pending, {
             _id: item.reservedFor
           }),
           updated; //item is unpopulated at this stage
@@ -552,47 +572,52 @@
         }
 
         updated = self.update(meal);
-        $q.when(updated, function (savedMeal) {
-          data.pending.splice(data.pending.indexOf(savedMeal), 1);
-          data.complete.push(savedMeal);
+        $q.when(updated, function (updatedMeal) {
+          meals.pending.splice(Utils.collIndexOf(meals, updatedMeal), 1);
+          meals.complete.push(updatedMeal);
         });
+
       });
     }
 
-    function unreserveItem(item){
-      var self = this, thisMeal = item.reservedFor, $updatedMeal, deferred = $q.defer();
+    function unreserveItem(item) {
+      var self = this,
+        thisMeal = item.reservedFor,
+        $updatedMeal, deferred = $q.defer();
 
       //think about population
 
       //update meal
       $updatedMeal = self.loseItem(thisMeal, item);
-      $q.when($updatedMeal, function(updatedMeal){
+      $q.when($updatedMeal, function (updatedMeal) {
         var $updatedCItem;
-          // tell cupboard
-          $updatedCItem = Cupboard.unreserve(item);
-          $q.when($updatedCItem, function(updatedCItem){
-            deferred.resolve(updatedCItem);
-          });
+        // tell cupboard
+        $updatedCItem = Cupboard.unreserve(item);
+        $q.when($updatedCItem, function (updatedCItem) {
+          deferred.resolve(updatedCItem);
+        });
       });
 
       return deferred.promise;
 
     }
 
-    function reserveItem(item){
-      var self = this, thisMeal = item.reservedFor, $updatedMeal, deferred = $q.defer();
+    function reserveItem(item) {
+      var self = this,
+        thisMeal = item.reservedFor,
+        $updatedMeal, deferred = $q.defer();
 
       //think about population
 
       //update meal
       $updatedMeal = self.obtainItem(thisMeal, item);
-      $q.when($updatedMeal, function(updatedMeal){
+      $q.when($updatedMeal, function (updatedMeal) {
         var $updatedCItem;
-          // tell cupboard
-          $updatedCItem = Cupboard.reserve(item);
-          $q.when($updatedCItem, function(updatedCItem){
-            deferred.resolve(updatedCItem);
-          });
+        // tell cupboard
+        $updatedCItem = Cupboard.reserve(item);
+        $q.when($updatedCItem, function (updatedCItem) {
+          deferred.resolve(updatedCItem);
+        });
       });
 
       return deferred.promise;

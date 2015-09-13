@@ -10,7 +10,7 @@
 
 <form novalidate  name="loginForm" ng-submit="vm.login()">
   <h1>Log In</h1>
-
+  
   <div class="form-group" ng-class="{ 'has-error' : loginForm.email.$invalid && !loginForm.email.$pristine }">
     <label for="email">Email address</label>
     <input type="text" name="email" id="email" placeholder="Enter an email address" ng-model="vm.user.email" ng-required="true" ng-minlength="2" ng-maxlength="30" class="form-control" autofocus="true">

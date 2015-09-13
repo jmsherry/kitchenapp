@@ -4,11 +4,11 @@
   var mongoose = require('mongoose');
   var Schema = mongoose.Schema;
   var ObjectId = mongoose.Types.ObjectId;
-  var User = require('./../user/user.model');
+  //var User = require('./../user/user.model');
   var Ingredient = require('./../ingredient/ingredient.model');
   var CupboardItem = require('./cupboardItem.model');
   var Transaction = require('./../transaction/transaction.model');
-  var _ = require('lodash');
+  //var _ = require('lodash');
 
   function handleError (res, err) {
     console.log(err);
@@ -44,10 +44,12 @@
       return res.status(201).json(item);
     });
 
+    //Consider where to place this and what to do with errors
     if(req.body.bought){
       Ingredient.findOne({
         _id: req.body.ingId
       }, function(err, ing){
+
         var transaction = new Transaction({
           owner: req._params.userid,
           dateAdded: new Date(),
@@ -61,6 +63,7 @@
             //throw new Error('transaction wasn\'t saved');
           }
         });
+        
       });
     }
 

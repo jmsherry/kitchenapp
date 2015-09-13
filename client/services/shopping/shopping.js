@@ -4,9 +4,9 @@
   angular.module('kitchenapp.services')
     .service('Shopping', Shopping);
 
-  Shopping.$inject = ['$q', '$resource', 'Auth', 'Ingredients', 'toastr', 'Cupboard', '$log', '$injector', '$', '_', 'moment'];
+  Shopping.$inject = ['$q', '$resource', 'Auth', 'Ingredients', 'toastr', 'Cupboard', '$log', '$injector', '$', '_', 'moment', 'Utils'];
 
-  function Shopping($q, $resource, Auth, Ingredients, toastr, Cupboard, $log, $injector, $, _, moment) {
+  function Shopping($q, $resource, Auth, Ingredients, toastr, Cupboard, $log, $injector, $, _, moment, Utils) {
 
     this.deferred = $q.defer();
     var _shopping = this.deferred.promise;
@@ -26,6 +26,7 @@
     this.toastr = toastr;
     this.$resource = $resource;
     this.Ingredients = Ingredients;
+    this.Utils = Utils;
     this.$q = $q;
     this.$log = $log;
     this.Cupboard = Cupboard;
@@ -303,11 +304,11 @@
 
   Shopping.prototype.addLocal = function addLocal(item) {
     var self = this,
-      shopping, deferred = self.$q.defer();
+      $shopping, deferred = self.$q.defer();
 
-    shopping = self.getShopping();
-    self.$q.when(shopping, function (shoppingList) {
-      shoppingList.push(item);
+    $shopping = self.getShopping();
+    self.$q.when($shopping, function (shopping) {
+      shopping.push(item);
       self.toastr.success(item.ingredient.name + ' has been added to your shopping');
       deferred.resolve(item);
     });
@@ -318,14 +319,12 @@
 
   Shopping.prototype.updateLocal = function updateLocal(item) {
     var self = this,
-      shopping, oldItem;
+      $shopping, oldItem;
 
-    shopping = self.getShopping();
-    self.$q.when(shopping, function (data) {
-      oldItem = self._.find(data, {
-        _id: item._id
-      });
-      oldItem = item;
+    $shopping = self.getShopping();
+    self.$q.when($shopping, function (shopping) {
+      shopping.splice(self.Utils.collIndexOf(shopping, item._id), 1);
+      shopping.push(item);
 
       self.toastr.success(item.ingredient.name + ' has been updated in your shopping');
     });
@@ -333,11 +332,11 @@
 
   Shopping.prototype.removeLocal = function removeLocal(item) {
     var self = this,
-      shopping, deferred = self.$q.defer();
+      $shopping, deferred = self.$q.defer();
 
-    shopping = self.getShopping();
-    self.$q.when(shopping, function (items) {
-      var removedItem = items.splice(items.indexOf(item), 1);
+    $shopping = self.getShopping();
+    self.$q.when($shopping, function (shopping) {
+      var removedItem = shopping.splice(self.Utils.collIndexOf(shopping, item._id), 1);
       deferred.resolve(removedItem);
       self.toastr.success(item.ingredient.name + ' has been removed from your shopping');
     });

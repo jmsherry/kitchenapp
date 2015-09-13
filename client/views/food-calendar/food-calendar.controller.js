@@ -77,7 +77,7 @@
       }];
       vm.completeMeals = completeMeals;
 
-      function showModal(date) {
+      function showModal(day) {
         //var self = this;
         $log.log('showModal', arguments);
         $modal.open({
@@ -85,11 +85,11 @@
           controller: function modalController($modalInstance, $scope) {
             //var vm = this;
             $log.log('modal controller running', arguments, placedMeals);
-            $scope.selectedDate = date;
+            $scope.selectedDate = day;
             $scope.completeMeals = completeMeals;
             $scope.placeMeal = function (meal, date) {
               console.log('Placing', arguments);
-              meal.starts_at = date;
+              meal.starts_at = day.date.toString();
               Meals.update(meal);
             };
             //$log.log('modal scope', vm);

@@ -13,7 +13,7 @@
 
 Kitchenapp is a MEAN (Mongodb [with Mongoose ODM], Express js, Angular and Node) stack demo created using the bangular yeoman template.
 
-Use `gulp` to run in development and `gulp preview` to run the optimised project.
+Use `gulp` to run in development and `gulp preview` to run the optimised project. (NB: You will need mongodb running locally if you are running this project locally. [Install it](http://docs.mongodb.org/master/installation/), then open a shell window and type `mongod` into the command line. Open a second tab to run the project as above...)
 
 `gulp test` will allow you to run the tests (which are currently locked to a limited set for demo purposes) and you can specify whether to test the client or server-side code by adding the flag `--server` or `--client`. `gulp e2e` will perform protractor tests. As you can see from the badges the project uses CI service at Codeship (Travis is hooked up for practice) Coverage (istanbul) is used through gulp and reported via Code Climate. e2e as a service is to be handled by Saucelabs.
 

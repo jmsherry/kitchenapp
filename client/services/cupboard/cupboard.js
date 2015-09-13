@@ -4,9 +4,9 @@
   angular.module('kitchenapp.services')
     .service('Cupboard', Cupboard);
 
-  Cupboard.$inject = ['$q', '$resource', '$log', 'Auth', 'Ingredients', 'toastr', '$', '_', 'moment'];
+  Cupboard.$inject = ['$q', '$resource', '$log', 'Auth', 'Ingredients', 'toastr', '$', '_', 'moment', 'Utils'];
 
-  function Cupboard($q, $resource, $log, Auth, Ingredients, toastr, $, _, moment) {
+  function Cupboard($q, $resource, $log, Auth, Ingredients, toastr, $, _, moment, Utils) {
 
     this.deferred = $q.defer();
     var _cupboard = this.deferred.promise;
@@ -26,6 +26,7 @@
     this.toastr = toastr;
     this.$resource = $resource;
     this.Ingredients = Ingredients;
+    this.Utils = Utils;
     this.$q = $q;
     this.$log = $log;
     this._ = _;
@@ -55,7 +56,10 @@
         self.$log.log('cupboard init SL returned: ', data);
         var populated = self.populate(data);
         self.$q.when(populated, function (fullData) {
-          self.deferred.resolve(fullData);
+          var $localCp = self.deferred.resolve(fullData);
+          self.$q.when($localCp, function(localCp){
+            self.$log.log('HERERE!!!!!', localCp);
+          });
         });
       });
     }
@@ -357,21 +361,30 @@
 
   Cupboard.prototype.reserve = function reserve(item, meal, overwrite) {
     var self = this,
-      deferred = self.$q.defer();
+      deferred = self.$q.defer(), itemCopy = angular.copy(item);
+
+      if(!item){
+        throw new Error('Item not provided for cupboard.reserve');
+      }
+      if(!meal){
+        throw new Error('Meal not provided for cupboard.reserve');
+      }
 
     // Prevent accidental overwrite
-    if (typeof item.reservedFor === 'string' && !overwrite) {
+    if (!self._.isNull(itemCopy.reservedFor) && !overwrite) {
       throw new Error('Item already reserved');
     }
 
-    if (meal._id) {
-      item.reservedFor = meal;
-    }
+    //if (meal._id) {
+      itemCopy.reservedFor = meal._id || meal;
+    //}
 
-    function CBSuccess(item, resp) {
+
+
+    function CBSuccess(itemCopy, meal, resp) {
       self.$q.when(resp, function () {
         self.$log.log('reserved cupboard item', resp);
-        var reservedLocally = self.reserveLocal(item, meal);
+        var reservedLocally = self.reserveLocal(itemCopy, meal);
         self.$q.when(reservedLocally, function (locallyReservedItem) {
           deferred.resolve(locallyReservedItem);
         });
@@ -384,7 +397,7 @@
       deferred.reject(err);
     }
 
-    item.$update(self._.bind(CBSuccess, self, item), self._.bind(CBError, self, item));
+    item.$update(self._.bind(CBSuccess, self, itemCopy, meal), self._.bind(CBError, self, itemCopy, meal));
 
     return deferred.promise;
   };
@@ -509,13 +522,13 @@
     cupboard = self.getCupboard();
     self.$q.when(cupboard, function (cupb) {
 
-      popdItem = self.populate(item);
-      self.$q.when(popdItem, function (fullItem) {
-        fullItem = fullItem[0];
-        cupb.push(fullItem);
-        self.toastr.success(fullItem.ingredient.name + ' has been added to your cupboard');
-        deferred.resolve(fullItem);
-      });
+      //popdItem = self.populate(item);
+      //self.$q.when(popdItem, function (fullItem) {
+        //fullItem = fullItem[0];
+        cupb.push(item);
+        self.toastr.success(item.ingredient.name + ' has been added to your cupboard');
+        deferred.resolve(item);
+    //  });
 
     });
 
@@ -526,24 +539,23 @@
   Cupboard.prototype.updateLocal = function updateLocal(item) {
     var self = this,
       deferred = self.$q.defer(),
-      cupboard, oldItem, popdItem;
+      $cupboard, oldItem, popdItem;
 
-    cupboard = self.getCupboard();
-    self.$q.when(cupboard, function (data) {
+    $cupboard = self.getCupboard();
+    self.$q.when($cupboard, function (cupboard) {
 
-      popdItem = self.populate(item);
-      self.$q.when(popdItem, function (fullItem) {
-        fullItem = fullItem[0];
+      //popdItem = self.populate(item);
+    //  self.$q.when(popdItem, function (fullItem) {
+        //fullItem = fullItem[0];
 
         //Find and replace in local memory
-        oldItem = self._.find(data, {
-          _id: fullItem._id
-        });
-        oldItem = fullItem;
-        deferred.resolve(oldItem)
-        self.toastr.success(oldItem.ingredient.name + ' has been updated in your cupboard');
+        cupboard.splice(self.Utils.collIndexOf(cupboard, item._id), 1);
+        cupboard.push(item);
 
-      });
+        deferred.resolve(item);
+        self.toastr.success(item.ingredient.name + ' has been updated in your cupboard');
+
+      //});
     });
 
     return deferred.promise;
@@ -551,17 +563,18 @@
 
   Cupboard.prototype.reserveLocal = function reserveLocal(item, meal) {
     var self = this,
-      cupboard, oldItem, popdItem, deferred = self.$q.defer();
+      $cupboard, oldItem, popdItem, deferred = self.$q.defer();
 
-    cupboard = self.getCupboard();
-    self.$q.when(cupboard, function (data) {
+    $cupboard = self.getCupboard();
+    self.$q.when($cupboard, function (cupboard) {
 
-      oldItem = self._.find(data, {
-        _id: item._id
-      });
-      oldItem.reservedFor = meal;
-      deferred.resolve(oldItem);
-      self.toastr.success(oldItem.ingredient.name + ' has been reserved for ' + meal.name + '.');
+      cupboard.splice(self.Utils.collIndexOf(cupboard, item._id), 1);
+      item.reservedFor = meal;
+      cupboard.push(item);
+
+      self.$log.log('BBBBBBBBB', cupboard, oldItem, item);
+      deferred.resolve(item);
+      self.toastr.success(item.ingredient.name + ' has been reserved for ' + meal.name + '.');
 
     });
 
@@ -570,17 +583,16 @@
 
   Cupboard.prototype.unreserveLocal = function unreserveLocal(item) {
     var self = this,
-      cupboard, oldItem, popdItem, deferred = self.$q.defer();
+      $cupboard, oldItem, popdItem, deferred = self.$q.defer();
 
-    cupboard = self.getCupboard();
-    self.$q.when(cupboard, function (data) {
+    $cupboard = self.getCupboard();
+    self.$q.when($cupboard, function (cupboard) {
 
-      oldItem = self._.find(data, {
-        _id: item._id
-      });
-      oldItem.reservedFor = null;
-      deferred.resolve(oldItem);
-      self.toastr.success(oldItem.ingredient.name + ' has been unreserved.');
+      var unres = cupboard[self.Utils.collIndexOf(cupboard, item._id)];
+      unres.reservedFor = null;
+
+      deferred.resolve(unres);
+      self.toastr.success(unres.ingredient.name + ' has been unreserved.');
 
     });
 
@@ -589,11 +601,11 @@
 
   Cupboard.prototype.removeLocal = function removeLocal(item) {
     var self = this,
-      cupboard, deferred = self.$q.defer();
+      $cupboard, deferred = self.$q.defer();
 
-    cupboard = self.getCupboard();
-    self.$q.when(cupboard, function (items) {
-      var removedItem = items.splice(items.indexOf(item), 1);
+    $cupboard = self.getCupboard();
+    self.$q.when($cupboard, function (cupboard) {
+      var removedItem = cupboard.splice(self.Utils.collIndexOf(cupboard, item._id), 1);
       deferred.resolve(removedItem);
       self.toastr.success(item.ingredient.name + ' has been removed from your cupboard');
     });
