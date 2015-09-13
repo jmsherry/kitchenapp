@@ -1,4 +1,4 @@
-(function(){
+(function () {
 
   'use strict';
   var mongoose = require('mongoose');
@@ -10,7 +10,7 @@
   var Transaction = require('./../transaction/transaction.model');
   //var _ = require('lodash');
 
-  function handleError (res, err) {
+  function handleError(res, err) {
     console.log(err);
     return res.sendStatus(500).send(err);
   }
@@ -23,7 +23,7 @@
    */
   exports.addToCupboard = function addToCupboard(req, res) {
 
-    console.log('in addToCupboard \nreq.params',  req.params, '\nreq._params', req._params,  '\nreq.body: ', req.body);
+    console.log('in addToCupboard \nreq.params', req.params, '\nreq._params', req._params, '\nreq.body: ', req.body);
 
     var item = new CupboardItem({
       owner: req._params.userid,
@@ -35,9 +35,9 @@
 
     console.log('new constructed item: ', item);
 
-    item.save(function(err, item){
+    item.save(function (err, item) {
       console.log('in addToCupboard results', err, item);
-      if(err){
+      if (err) {
         handleError(res, err);
       }
       console.log('sent item: ', item);
@@ -45,10 +45,10 @@
     });
 
     //Consider where to place this and what to do with errors
-    if(req.body.bought){
+    if (req.body.bought) {
       Ingredient.findOne({
         _id: req.body.ingId
-      }, function(err, ing){
+      }, function (err, ing) {
 
         var transaction = new Transaction({
           owner: req._params.userid,
@@ -56,17 +56,16 @@
           amount: ing.price
         });
 
-        transaction.save(function(err, item){
+        transaction.save(function (err, item) {
           console.log('saving transaction', err, item);
-          if(err){
+          if (err) {
             //handleError(res, err);
             //throw new Error('transaction wasn\'t saved');
           }
         });
-        
+
       });
     }
-
 
   };
 
@@ -77,16 +76,18 @@
    * @param res
    */
   exports.getCupboard = function getCupboard(req, res) {
-    console.log('in getCupboard \nreq.params', req.params, '\nreq._params', req._params,  '\nreq.body: ', req.body);
-    CupboardItem.find(
-      {'owner': req._params.userid},
-    function(err, items){
-      console.log('in getCupboard results', err, items);
-      if(err){
-        handleError(res, err);
-      }
-      return res.status(200).json(items);
-    });
+    console.log('in getCupboard \nreq.params', req.params, '\nreq._params', req._params, '\nreq.body: ', req.body);
+    CupboardItem.find({
+        'owner': req._params.userid
+      })
+      .populate('reservedFor')
+      .exec(function (err, items) {
+        console.log('in getCupboard results', err, items);
+        if (err) {
+          handleError(res, err);
+        }
+        return res.status(200).json(items);
+      });
   };
 
   /**
@@ -97,19 +98,58 @@
    */
   exports.updateCupboard = function updateCupboard(req, res) {
 
-    console.log('in updateCupboard \nreq.params', req.params, '\nreq._params', req._params,  '\nreq.body: ', req.body);
+    console.log('in updateCupboard \nreq.params', req.params, '\nreq._params', req._params, '\nreq.body: ', req.body);
 
-    CupboardItem.findByIdAndUpdate(
-      req._params.itemid,
-      req.body.item,
-      {new: true},
-      function(err, item){
-        console.log('in updateCupboard results', err, item);
+    // CupboardItem.findByIdAndUpdate(
+    //   req.params.itemid,
+    //   req.body.item,
+    //   {new: true},
+    //   function(err, item){
+    //     console.log('in updateCupboard results', err, item);
+    //
+    //     if(err){
+    //       handleError(res, err);
+    //     }
+    //     return res.status(200).json(item);
+    //   }
+    // );
 
-        if(err){
+    CupboardItem.findById(
+      req.params.itemid,
+      function (err, item) {
+        if (err) {
           handleError(res, err);
         }
-        return res.status(200).json(item);
+        console.log('in updateCupboard results', item);
+
+        if (!item) {
+          handleError(res, new Error('No matching doc to update'));
+        }
+
+        console.log(item, item.update);
+
+        CupboardItem.update({
+          owner: req.body.owner,
+          //}, {
+          ingredient: req.body.ingredient,
+          //}, {
+          dateAdded: req.body.dateAdded,
+          //}, {
+          reservedFor: req.body.reservedFor,
+          //}, {
+          bought: req.body.bought
+        }, function (err, updated) {
+          if (err) {
+            handleError(res, err);
+          }
+          if (null) {
+            handleError(res, new Error('Update returned null'));
+          } else {
+            console.log('updated', updated);
+            return res.status(200).json(updated);
+          }
+        });
+
       }
     );
 
@@ -124,19 +164,16 @@
   exports.removeFromCupboard = function removeFromCupboard(req, res) {
     console.log('in removeFromCupboard \nreq.params', req.params, '\nreq._params', req._params, '\nreq.body: ', req.body);
     CupboardItem.findByIdAndRemove(
-      req.params.itemid,
-      {},
-      function(err, item){
+      req.params.itemid, {},
+      function (err, item) {
         console.log('in removeFromCupboard results', err, item);
-        if(err){
+        if (err) {
           handleError(res, err);
         }
         return res.status(200).json(item);
       }
     );
   };
-
-
 
   /**
    * Return an item from the users cuboard.
@@ -146,13 +183,13 @@
    */
   exports.getCupboardItem = function getCupboardItem(req, res) {
     console.log('getCupboardItem req.params', req.params);
-    CupboardItem.findById(req.params.itemid, function(err, item){
+    CupboardItem.findById(req.params.itemid, function (err, item) {
       console.log('in getCupboardItem results', err, item);
-      if(err){
+      if (err) {
         handleError(res, err);
       }
 
-      if(!item){
+      if (!item) {
         return res.status(404).json(null);
       }
       return res.status(200).json(item);

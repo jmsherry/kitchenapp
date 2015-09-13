@@ -9,7 +9,7 @@
     owner: {type: ObjectId, ref: 'User'},
     ingredient: {type: ObjectId, ref: 'Ingredient'},
     dateAdded: { type: Date, default: Date.now },
-    reservedFor: {type: ObjectId, ref: 'Meal'},
+    reservedFor: {type: ObjectId, ref: 'MealItem'},
     bought: Boolean
   });
 

@@ -57,7 +57,7 @@
         var populated = self.populate(data);
         self.$q.when(populated, function (fullData) {
           var $localCp = self.deferred.resolve(fullData);
-          self.$q.when($localCp, function(localCp){
+          self.$q.when($localCp, function (localCp) {
             self.$log.log('HERERE!!!!!', localCp);
           });
         });
@@ -361,25 +361,24 @@
 
   Cupboard.prototype.reserve = function reserve(item, meal, overwrite) {
     var self = this,
-      deferred = self.$q.defer(), itemCopy = angular.copy(item);
+      deferred = self.$q.defer(),
+      itemCopy = angular.copy(item);
 
-      if(!item){
-        throw new Error('Item not provided for cupboard.reserve');
-      }
-      if(!meal){
-        throw new Error('Meal not provided for cupboard.reserve');
-      }
+    if (!item) {
+      throw new Error('Item not provided for cupboard.reserve');
+    }
+    if (!meal) {
+      throw new Error('Meal not provided for cupboard.reserve');
+    }
 
     // Prevent accidental overwrite
     if (!self._.isNull(itemCopy.reservedFor) && !overwrite) {
       throw new Error('Item already reserved');
     }
 
-    //if (meal._id) {
-      itemCopy.reservedFor = meal._id || meal;
-    //}
-
-
+    //itemCopy.reservedFor = meal;
+    item.reservedFor = meal._id || meal;
+    item.ingredient = item.ingredient._id || item.ingredient;
 
     function CBSuccess(itemCopy, meal, resp) {
       self.$q.when(resp, function () {
@@ -524,11 +523,11 @@
 
       //popdItem = self.populate(item);
       //self.$q.when(popdItem, function (fullItem) {
-        //fullItem = fullItem[0];
-        cupb.push(item);
-        self.toastr.success(item.ingredient.name + ' has been added to your cupboard');
-        deferred.resolve(item);
-    //  });
+      //fullItem = fullItem[0];
+      cupb.push(item);
+      self.toastr.success(item.ingredient.name + ' has been added to your cupboard');
+      deferred.resolve(item);
+      //  });
 
     });
 
@@ -545,15 +544,15 @@
     self.$q.when($cupboard, function (cupboard) {
 
       //popdItem = self.populate(item);
-    //  self.$q.when(popdItem, function (fullItem) {
-        //fullItem = fullItem[0];
+      //  self.$q.when(popdItem, function (fullItem) {
+      //fullItem = fullItem[0];
 
-        //Find and replace in local memory
-        cupboard.splice(self.Utils.collIndexOf(cupboard, item._id), 1);
-        cupboard.push(item);
+      //Find and replace in local memory
+      cupboard.splice(self.Utils.collIndexOf(cupboard, item._id), 1);
+      cupboard.push(item);
 
-        deferred.resolve(item);
-        self.toastr.success(item.ingredient.name + ' has been updated in your cupboard');
+      deferred.resolve(item);
+      self.toastr.success(item.ingredient.name + ' has been updated in your cupboard');
 
       //});
     });

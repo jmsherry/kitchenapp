@@ -36,7 +36,7 @@
                 $q.when(addedToCupboard, function (cupboardItem) {
 
                   // Now tell meals service that you've bought it so meals can be updated
-                  if (populatedItem.reservedFor) {
+                  if (cupboardItem.reservedFor) {
                       Meals.itemBought(cupboardItem);
                   }
 

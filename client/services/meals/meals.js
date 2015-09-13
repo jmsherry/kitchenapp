@@ -448,10 +448,10 @@
 
         //oldMeal = meal;
         if (oldMeal.isComplete) {
-          meals.splice(Utils.collIndexOf(meals.complete, meal._id), 1);
+          meals.complete.splice(Utils.collIndexOf(meals.complete, meal._id), 1);
           meals.complete.push(meal);
         } else {
-          meals.splice(Utils.collIndexOf(meals.pending, meal._id), 1);
+          meals.pending.splice(Utils.collIndexOf(meals.pending, meal._id), 1);
           meals.pending.push(meal);
         }
 
@@ -565,16 +565,20 @@
             _id: item.reservedFor
           }),
           updated; //item is unpopulated at this stage
+
         meal = self.obtainItem(meal, item);
+        $q.when(meal, function(correctedMeal){
 
-        if (meal.ingredients.missing.length === 0) {
-          meal.isComplete = true;
-        }
+          if (correctedMeal.ingredients.missing.length === 0) {
+            correctedMeal.isComplete = true;
+          }
 
-        updated = self.update(meal);
-        $q.when(updated, function (updatedMeal) {
-          meals.pending.splice(Utils.collIndexOf(meals, updatedMeal), 1);
-          meals.complete.push(updatedMeal);
+          updated = self.update(correctedMeal);
+          $q.when(updated, function (updatedMeal) {
+            meals.pending.splice(Utils.collIndexOf(meals, updatedMeal), 1);
+            meals.complete.push(updatedMeal);
+          });
+
         });
 
       });
