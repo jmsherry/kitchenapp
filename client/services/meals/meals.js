@@ -499,6 +499,8 @@
           removed = meals.pending.splice(Utils.collIndexOf(meals.pending, meal._id), 1);
         }
 
+        removed = removed[0];
+
         toastr.success(removed.name + ' has been removed from your meals list.');
         deferred.resolve(removed);
 

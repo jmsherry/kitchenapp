@@ -337,8 +337,8 @@
       mealId = meal._id;
 
     self.$q.when($cupboard, function (cupboard) {
-      var affectedItems = self._.find(cupboard, {
-        reservedFor: meal._id
+      var affectedItems = self._.deepFilter(cupboard, {
+        'reservedFor._id': [meal._id]
       });
       self._.forEach(affectedItems, function (item) {
         var $updatedItem;
