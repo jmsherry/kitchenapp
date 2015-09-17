@@ -87,8 +87,8 @@ angular.module('kitchenapp.services')
           $q.when(ings, function(fullIngs){
             var populated = [];
             $.each(idsArray, function(i, item){
-              if(typeof item !== 'string'){
-                var ing = _.find(fullIngs, {_id: item._id});
+              if(typeof item === 'string'){
+                var ing = _.find(fullIngs, {_id: item});
                 populated.push(ing);
               } else {
                 populated.push(item);

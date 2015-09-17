@@ -11,7 +11,8 @@
         Auth.checkAuthorised();
 
         var vm = this,
-            items = Shopping.get();
+            items = Shopping.get(),
+            $meals = Meals.get();
 
         $q.when(items, function (SL) {
           if(!SL){
@@ -20,6 +21,16 @@
             toastr.error('Error retrieving shopping list!')
           } else {
             vm.items = SL;
+          }
+        });
+
+        $q.when($meals, function (meals) {
+          if(!meals){
+            vm.meals = [];
+            $log.warn('Meals not correct', meals);
+            toastr.error('Error retrieving meals list!')
+          } else {
+            vm.meals = meals;
           }
         });
 
@@ -48,10 +59,41 @@
             Shopping.remove(item);
         }
 
+        function sortBy(predicate) {
+          $log.log('in sortBy: ', vm.items, predicate);
+          switch (predicate) {
+          case 'name':
+            $log.log('pre-sort name: ', vm.items);
+            vm.items = _.sortByOrder(vm.items, ['ingredient.name'], ['asc']);
+            $log.log('sorted: ', vm.items);
+            break;
+          case 'dateAdded':
+            $log.log('pre-sort dateAdded: ', vm.items);
+            vm.items = _.sortByOrder(vm.items, ['dateAdded'], ['asc']);
+            $log.log('sorted: ', vm.items);
+            break;
+          case 'reservation':
+            $log.log('pre-sort reservation: ', vm.items);
+            vm.items = _.sortByOrder(vm.items, ['reservedFor._id'], ['asc']);
+            $log.log('sorted: ', vm.items);
+            break;
+          default:
+            $log.log('pre-sort default name: ', vm.items);
+            $filter('orderBy')(vm.items, 'dateAdded', false);
+            $log.log('sorted: ', vm.items);
+            break;
+          }
+
+          vm.predicate = predicate;
+        }
+
         angular.extend(vm, {
             name: 'ShopCtrl',
             buy: buy,
-            remove: remove
+            remove: remove,
+            predicate: '',
+            reverse: false,
+            sortBy: sortBy
         });
 
     }

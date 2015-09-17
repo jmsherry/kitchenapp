@@ -26,7 +26,7 @@
             })
             .catch(function (err) {
               //vm.error = err;
-              toastr.error(err.msg);
+              toastr.error('Error logging in ', err.msg);
             });
         }
 

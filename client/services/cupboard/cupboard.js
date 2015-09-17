@@ -65,7 +65,7 @@
     }
 
     function errorCB(err) {
-      self.toastr.error(err.message);
+      self.toastr.error('Error initialising cupboard service', err);
       self.deferred.reject(err);
     }
 
@@ -290,9 +290,6 @@
       deferred = self.$q.defer(),
       depop;
 
-    //depopulate
-    //depop = self.depopulate(item);
-
     function CBSuccess(item, response) {
       self.$log.log('removed cupboard item, removing locally', item);
       var removed = self.removeLocal(item);
@@ -494,7 +491,7 @@
         for (i = 0; i < len; i += 1) {
           thisItem = data[i]; //cupboard item
           thisItemIngId = thisItem.ingredient._id;
-          if (thisItemIngId === thisIng._id) {
+          if (thisItemIngId === thisIng._id && !thisItem.reservedFor) {
             item = thisItem;
             break;
           }

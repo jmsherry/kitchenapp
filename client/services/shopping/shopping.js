@@ -66,7 +66,7 @@
     }
 
     function errorCB(err) {
-      self.toastr.error(err.message);
+      self.toastr.error('Error initialising shopping service: ', err);
       self.deferred.reject(err);
     }
 
