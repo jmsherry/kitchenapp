@@ -155,6 +155,12 @@
 
                     //update the meal on the server
                     savedMeal.ingredients = stratTmpMeal.ingredients;
+                    savedMeal.ingredients.present.forEach(function(ing){
+                      ing.reservedFor.hasBeenStrategised = true;
+                    });
+                    savedMeal.ingredients.missing.forEach(function(ing){
+                      ing.reservedFor.hasBeenStrategised = true;
+                    });
                     savedMeal.hasBeenStrategised = true;
                     if (savedMeal.ingredients.missing === 0 && savedMeal.ingredients.present.length === originalRecipe.ingredients.length) {
                       savedMeal.isComplete = true;
@@ -224,7 +230,7 @@
         var i, len, thisIng;
 
         //clone the recipe
-        mealObj = _.clone(rec);
+        mealObj = _.clone(rec, true);
 
         //depopulate ingredients
         len = mealObj.ingredients.length;
@@ -402,7 +408,7 @@
         var updatedLocally;
         response.ingredients = meal.ingredients;
 
-        if(firstPass){
+        if (firstPass) {
           updatedLocally = self.addLocal(response);
         } else {
           updatedLocally = self.updateLocal(response);
@@ -526,16 +532,29 @@
 
     function obtainItem(meal, item) {
       var self = this,
-        missing, deferred = $q.defer(),
-        $updatedMeal;
+        missing, present, deferred = $q.defer(),
+        $updatedMeal, $CItem;
 
+      present = meal.ingredients.present;
       missing = meal.ingredients.missing;
       missing.splice(Utils.collIndexOf(missing, item.ingredient), 1);
-      meal.ingredients.present.push(item);
 
-      $updatedMeal = self.update(meal);
-      $q.when($updatedMeal, function (updatedMeal) {
-        deferred.resolve(updatedMeal);
+      $CItem = Cupboard.add(item.ingredient);
+
+      $q.when($CItem, function (CItem) {
+
+
+        present.push(CItem);
+
+        if (missing.length === 0 && present.length > 0) {
+          correctedMeal.isComplete = true;
+        }
+
+        $updatedMeal = self.update(meal);
+        $q.when($updatedMeal, function (updatedMeal) {
+          deferred.resolve(updatedMeal);
+        });
+
       });
 
       return deferred.promise;
@@ -544,15 +563,28 @@
     function loseItem(meal, item) {
       var self = this,
         present, deferred = $q.defer(),
-        $updatedMeal;
+        $updatedMeal, $SLItem;
+
+        if(meal.completed){
+          meal.completed = false;
+        }
+
+      //Remove cupboard item
       present = meal.ingredients.present;
       present.splice(Utils.collIndexOf(present, item), 1);
-      meal.ingredients.missing.push(item.ingredient);
 
-      $updatedMeal = self.update(meal);
-      $q.when($updatedMeal, function (updatedMeal) {
-        deferred.resolve(updatedMeal);
-        Shopping.add(item.ingredient, item.reservedFor);
+      //Create SL item and add to missing
+      $SLItem = Shopping.add(item.ingredient, item.reservedFor);
+
+      $q.when($SLItem, function (SLItem) {
+        meal.ingredients.missing.push(SLItem);
+
+        $updatedMeal = self.update(meal);
+        $q.when($updatedMeal, function (updatedMeal) {
+          deferred.resolve(updatedMeal);
+          Shopping.add(item.ingredient, item.reservedFor);
+        });
+
       });
 
       return deferred.promise;
@@ -565,17 +597,12 @@
       $q.when($meals, function (meals) {
         var meal = _.find(meals.pending, {
             _id: item.reservedFor
-          }),
-          updated; //item is unpopulated at this stage
+          }); //item is unpopulated at this stage
 
         meal = self.obtainItem(meal, item);
-        $q.when(meal, function(correctedMeal){
+        $q.when(meal, function (correctedMeal) {
 
-          if (correctedMeal.ingredients.missing.length === 0) {
-            correctedMeal.isComplete = true;
-          }
-
-          updated = self.update(correctedMeal);
+          var updated = self.update(correctedMeal);
           $q.when(updated, function (updatedMeal) {
             meals.pending.splice(Utils.collIndexOf(meals, updatedMeal), 1);
             meals.complete.push(updatedMeal);

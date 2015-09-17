@@ -99,7 +99,7 @@
       $log.log('reserving', arguments, this);
       $reserved = Cupboard.reserve(item, meal);
       $q.when($reserved, function (reservedItem) {
-        Meals.obtain(meal);
+        Meals.obtainItem(meal);
       });
     }
 

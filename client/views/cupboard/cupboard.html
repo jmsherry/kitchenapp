@@ -49,6 +49,7 @@
 						<button type="button" class="btn btn-primary" ng-click="vm.showReserveModal(item)"  ng-if="!item.reservedFor && vm.meals.pending.length > 0">Add to a meal</button>
 					</div>
 					<p>Added: {{ item.dateAdded  | date : 'd MMMM y' : GMT}}</p>
+					<p>{{ item.reservedFor | json }}
 				</div>
 				<div class="col-md-2 actions" ng-if="vm.editing">
 					<button type="button" class="btn btn-danger" ng-click="vm.remove(item)">Remove</button>

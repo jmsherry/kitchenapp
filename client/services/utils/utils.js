@@ -9,17 +9,17 @@
   function Utils($log, _, $) {
 
     function collIndexOf(collection, item){
-      var i, len = collection.length, idx, id;
+      var i, len = collection.length, idx = undefined, id;
 
       id = item._id || item;
 
       for(i=0; i<len; i+=1){
-        if(collection[i] === id){
+        if(collection[i]._id === id){
           idx = i;
           break;
         }
       }
-      if(idx === -1){
+      if(!idx && idx !== 0){
         throw new Error('Item not in collection');
       }
       return idx;

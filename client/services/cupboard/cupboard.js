@@ -291,7 +291,7 @@
       depop;
 
     //depopulate
-    depop = self.depopulate(item);
+    //depop = self.depopulate(item);
 
     function CBSuccess(item, response) {
       self.$log.log('removed cupboard item, removing locally', item);
@@ -306,7 +306,7 @@
       deferred.reject(err)
     }
 
-    depop.$delete(self._.bind(CBSuccess, self, item), self._.bind(CBError, self, item));
+    item.$delete(self._.bind(CBSuccess, self, item), self._.bind(CBError, self, item));
 
     return deferred.promise;
 
@@ -341,10 +341,10 @@
         'reservedFor._id': [meal._id]
       });
       self._.forEach(affectedItems, function (item) {
-        var $updatedItem;
-        item.reservedFor = null;
-        $updatedItem = self.update(item);
-        promises.push($updatedItem);
+        var $unreservedItem;
+        //item.reservedFor = null;
+        $unreservedItem = self.unreserve(item);
+        promises.push($unreservedItem);
       });
 
       self.$q.all(promises).then(function (items) {
@@ -421,14 +421,14 @@
 
   Cupboard.prototype.unreserve = function unreserve(item, meal, overwrite) {
     var self = this,
-      deferred = self.$q.defer();
+      deferred = self.$q.defer(), itemCopy = angular.copy(item);
 
-    item.reservedFor = null;
+    itemCopy.reservedFor = null;
 
-    function CBSuccess(item, resp) {
-      self.$q.when(resp, function () {
-        self.$log.log('unreserved cupboard item', resp);
-        var unreservedLocally = self.unreserveLocal(item, meal);
+    function CBSuccess(itm, resp) {
+      self.$q.when(resp, function (rsp) {
+        //self.$log.log('unreserved cupboard item', rsp);
+        var unreservedLocally = self.unreserveLocal(itm, meal);
         self.$q.when(unreservedLocally, function (locallyUnreservedItem) {
           deferred.resolve(locallyUnreservedItem);
         });
@@ -441,7 +441,7 @@
       deferred.reject(err);
     }
 
-    item.$update(self._.bind(CBSuccess, self, item), self._.bind(CBError, self, item));
+    itemCopy.$update(self._.bind(CBSuccess, self, item), self._.bind(CBError, self, item));
 
     return deferred.promise;
   };
@@ -620,7 +620,7 @@
       throw new Error('Error in Cupboard.depopulation');
     }
 
-    item = angular.copy(item); //cloned so as not to depop the actual object
+    item = _.cloneDeep(item); //cloned so as not to depop the actual object
 
     // depopulate owner, ingredient, reservedFor fields
     if (item.owner && typeof item.owner === 'object' && item.owner._id) {

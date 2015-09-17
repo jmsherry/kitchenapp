@@ -11,7 +11,7 @@
   var _ = require('lodash');
 
   function handleError(res, err) {
-    console.log(err);
+    console.log('Error', err);
     return res.sendStatus(500).send(err);
   }
 
@@ -30,7 +30,6 @@
       hasBeenStrategised: false,
       isComplete: false
     });
-
 
     meal = new MealItem(meal);
 
@@ -76,19 +75,45 @@
 
     console.log('in updateMeal \nreq.params', req.params, '\nreq._params', req._params, '\nreq.body: ', req.body);
 
-
-    MealItem.findByIdAndUpdate(
+    MealItem.findById(
       req.params.mealid,
-      req.body, {
-        new: true
-      },
       function (err, meal) {
         console.log('in updateMeal results', err, meal);
 
         if (err) {
           handleError(res, err);
+        } else if (!meal) {
+          handleError(res, new Error('No meal found to update'));
         }
-        return res.status(200).json(meal);
+
+        meal.owner = req.body.owner;
+        meal.name = req.body.name;
+        meal.description = req.body.description;
+        meal.imageURL = req.body.imageURL;
+        meal.ingredients = req.body.ingredients;
+        meal.isComplete = req.body.isComplete;
+        meal.hasBeenStrategised = req.body.hasBeenStrategised;
+        meal.recipe = req.body.recipe;
+        meal.starts_at = req.body.starts_at;
+
+        meal.save(function (err, ml) {
+          if (err) {
+            handleError(res, err);
+          }
+          return res.status(200).json(ml);
+        });
+
+        // {
+        //   owner: req.body.owner,
+        //   name: req.body.name,
+        //   description: req.body.description,
+        //   imageURL: req.body.imageURL,
+        //   ingredients: req.body.ingredients,
+        //   isComplete: req.body.isComplete,
+        //   hasBeenStrategised: req.body.hasBeenStrategised,
+        //   recipe: req.body.recipe,
+        //   starts_at: req.body.starts_at
+        // },
       }
     );
 

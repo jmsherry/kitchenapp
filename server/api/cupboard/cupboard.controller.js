@@ -128,27 +128,31 @@
 
         console.log(item, item.update);
 
-        CupboardItem.update({
-          owner: req.body.owner,
-          //}, {
-          ingredient: req.body.ingredient,
-          //}, {
-          dateAdded: req.body.dateAdded,
-          //}, {
-          reservedFor: req.body.reservedFor,
-          //}, {
-          bought: req.body.bought
-        }, function (err, updated) {
+        function successCB(err, updated) {
           if (err) {
             handleError(res, err);
           }
-          if (null) {
+          if (!updated) {
             handleError(res, new Error('Update returned null'));
           } else {
-            console.log('updated', updated);
+            console.log('updated sucessfully', updated);
             return res.status(200).json(updated);
           }
-        });
+        }
+
+        item.save(req.body, successCB);
+
+        // {
+        //   owner: req.body.owner,
+        //   //}, {
+        //   ingredient: req.body.ingredient,
+        //   //}, {
+        //   dateAdded: req.body.dateAdded,
+        //   //}, {
+        //   reservedFor: req.body.reservedFor,
+        //   //}, {
+        //   bought: req.body.bought
+        // }
 
       }
     );
