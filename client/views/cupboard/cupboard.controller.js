@@ -29,7 +29,7 @@
       var $removed = Cupboard.remove(item);
       $q.when($removed, function (removed) {
         if (item.reservedFor) {
-          Shopping.add(item.ingredient, item.reservedFor);
+          Meals.unreserveItem(item.ingredient, item.reservedFor);
         }
       });
     }

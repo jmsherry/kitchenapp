@@ -40,7 +40,7 @@
   	<ul class="list-unstyled cupboardList">
   		<li ng-repeat="item in vm.items track by $index" ng-class="item.reservedFor ? 'reserved bg-success' : ''">
 				<div ng-class="vm.editing ? 'col-md-10 description' : 'col-md-12 description'">
-					<img ng-if="item.ingredient.imageURL" src="{{item.ingredient.imageURL}}" width="50px" height="50px">
+					<img ng-if="item.ingredient.imageURL" ng-src="{{item.ingredient.imageURL}}" width="50px" height="50px">
 					<img ng-if="!item.ingredient.imageURL" src="/assets/images/item-img-placeholder.png" width="50px" height="50px">
 					<h2>{{ item.ingredient.name }}</h2>
 					<div>

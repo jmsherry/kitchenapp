@@ -359,7 +359,7 @@
   Cupboard.prototype.reserve = function reserve(item, meal, overwrite) {
     var self = this,
       deferred = self.$q.defer(),
-      itemCopy = angular.copy(item);
+      itemCopy;
 
     if (!item) {
       throw new Error('Item not provided for cupboard.reserve');
@@ -369,13 +369,15 @@
     }
 
     // Prevent accidental overwrite
-    if (!self._.isNull(itemCopy.reservedFor) && !overwrite) {
+    if (!self._.isNull(item.reservedFor) && !overwrite) {
       throw new Error('Item already reserved');
     }
 
     //itemCopy.reservedFor = meal;
     item.reservedFor = meal._id || meal;
     item.ingredient = item.ingredient._id || item.ingredient;
+
+    itemCopy = angular.copy(item);
 
     function CBSuccess(itemCopy, meal, resp) {
       self.$q.when(resp, function () {

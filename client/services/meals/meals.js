@@ -36,7 +36,7 @@
           cupboardItems = Cupboard.getItemsById(cupboardItems);
           promises = promises.concat(cupboardItems);
 
-          lengths.push([shoppingListItems.length, cupboardItems.length]);
+          lengths.push({'sl': shoppingListItems.length, 'ci': cupboardItems.length});
 
         }
 
@@ -44,11 +44,11 @@
           var pointer = 0,
             sLen, cLen;
           for (i = 0; i < len; i += 1) {
-            sLen = lengths[i][0];
-            cLen = lengths[i][1];
+            sLen = lengths[i]['sl'];
+            cLen = lengths[i]['ci'];
             mealsList[i].ingredients.missing = fulfilled.splice(pointer, sLen);
             mealsList[i].ingredients.present = fulfilled.splice(pointer + sLen, cLen);
-            pointer += sLen + cLen;
+            //pointer += sLen + cLen;
           }
 
           $log.log(mealsList);

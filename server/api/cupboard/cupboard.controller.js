@@ -4,7 +4,7 @@
   var mongoose = require('mongoose');
   var Schema = mongoose.Schema;
   var ObjectId = mongoose.Types.ObjectId;
-  //var User = require('./../user/user.model');
+  var User = require('./../user/user.model');
   var Ingredient = require('./../ingredient/ingredient.model');
   var CupboardItem = require('./cupboardItem.model');
   var Transaction = require('./../transaction/transaction.model');
@@ -46,25 +46,32 @@
 
     //Consider where to place this and what to do with errors
     if (req.body.bought) {
+
       Ingredient.findOne({
         _id: req.body.ingId
       }, function (err, ing) {
 
-        var transaction = new Transaction({
-          owner: req._params.userid,
-          dateAdded: new Date(),
-          amount: ing.price
-        });
+        User.findById(
+          req._params.userid,
+          function (err, user) {
 
-        transaction.save(function (err, item) {
-          console.log('saving transaction', err, item);
-          if (err) {
-            //handleError(res, err);
-            //throw new Error('transaction wasn\'t saved');
-          }
-        });
+            var transaction = new Transaction({
+              owner: req._params.userid,
+              dateAdded: new Date(),
+              amount: ing.price,
+              currentBudget: user.budget
+            });
 
+            transaction.save(function (err, item) {
+              console.log('saving transaction', err, item);
+              if (err) {
+                //handleError(res, err);
+                //throw new Error('transaction wasn\'t saved');
+              }
+            });
+          });
       });
+
     }
 
   };
@@ -114,47 +121,24 @@
     //   }
     // );
 
-    CupboardItem.findById(
-      req.params.itemid,
-      function (err, item) {
+    CupboardItem.findOneAndUpdate({
+        _id: req.params.itemid
+      },
+      req.body, {
+        new: true
+      },
+      function successCB(err, updated) {
         if (err) {
           handleError(res, err);
         }
-        console.log('in updateCupboard results', item);
-
-        if (!item) {
-          handleError(res, new Error('No matching doc to update'));
+        if (!updated) {
+          handleError(res, new Error('Update returned null'));
+        } else {
+          console.log('updated successfully', updated);
+          return res.status(200).json(updated);
         }
-
-        console.log(item, item.update);
-
-        function successCB(err, updated) {
-          if (err) {
-            handleError(res, err);
-          }
-          if (!updated) {
-            handleError(res, new Error('Update returned null'));
-          } else {
-            console.log('updated sucessfully', updated);
-            return res.status(200).json(updated);
-          }
-        }
-
-        item.save(req.body, successCB);
-
-        // {
-        //   owner: req.body.owner,
-        //   //}, {
-        //   ingredient: req.body.ingredient,
-        //   //}, {
-        //   dateAdded: req.body.dateAdded,
-        //   //}, {
-        //   reservedFor: req.body.reservedFor,
-        //   //}, {
-        //   bought: req.body.bought
-        // }
-
       }
+
     );
 
   };
