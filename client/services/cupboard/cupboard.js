@@ -202,7 +202,8 @@
     // Add wrapper if ingredient passed, rather than shopping item
     if (!item.ingredient && item.name) {
       item = {
-        ingredient: item
+        ingredient: item,
+        reservedFor: null
       };
     }
 
