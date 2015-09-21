@@ -622,7 +622,7 @@
 
       $q.when($meals, function (meals) {
         var meal = _.find(meals.pending, {
-          _id: item.reservedFor
+          _id: item.reservedFor._id
         }); //item is unpopulated at this stage
 
         meal = self.obtainItem(meal, item);
@@ -630,22 +630,7 @@
 
           var updated = self.update(correctedMeal), completeIdx;
           $q.when(updated, function (updatedMeal) {
-            // var isInComplete = true;
-            // if (updatedMeal.isComplete) {
-            //   meals.pending.splice(Utils.collIndexOf(meals.pending, updatedMeal), 1);
-            //   meals.complete.push(updatedMeal);
-            // } else {
-            //   try {
-            //     completeIdx = Utils.collIndexOf(meals.complete, updatedMeal);
-            //   } catch(e){
-            //     isInComplete = false;
-            //   }
-            //
-            //   if (isInComplete) {
-            //     meals.complete.splice(completeIdx, 1);
-            //     meals.pending.push(updatedMeal);
-            //   }
-            // }
+
             deferred.resolve(updatedMeal);
 
           });

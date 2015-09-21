@@ -224,6 +224,7 @@
         var addedLocally;
 
         data.ingredient = item.ingredient; //fast populate
+        data.reservedFor = item.reservedFor;
         addedLocally = self.addLocal(data);
         self.$log.log('returned promise from localAdd', addedLocally);
         self.$q.when(addedLocally, function (storedItem) {
