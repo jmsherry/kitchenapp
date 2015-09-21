@@ -14,7 +14,7 @@
       id = item._id || item;
 
       for(i=0; i<len; i+=1){
-        if(collection[i]._id || collection[i] === id){
+        if(collection[i]._id === id || collection[i] === id){
           idx = i;
           break;
         }
