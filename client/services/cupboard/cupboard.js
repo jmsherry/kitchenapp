@@ -300,7 +300,7 @@
   Cupboard.prototype.remove = function remove(item) {
     var self = this,
       deferred = self.$q.defer(),
-      depop;
+      itemCopy = angular.copy(item);
 
     function CBSuccess(item, response) {
       self.$log.log('removed cupboard item, removing locally', item);
@@ -310,12 +310,13 @@
       });
     }
 
+
     function CBError(item, err) {
       self.toastr.error('could not remove ' + item.name + ' from cupboard');
       deferred.reject(err)
     }
 
-    item.$delete(self._.bind(CBSuccess, self, item), self._.bind(CBError, self, item));
+    itemCopy.$delete(self._.bind(CBSuccess, self, item), self._.bind(CBError, self, item));
 
     return deferred.promise;
 
@@ -617,7 +618,7 @@
 
     $cupboard = self.getCupboard();
     self.$q.when($cupboard, function (cupboard) {
-      var removedItem = cupboard.splice(self.Utils.collIndexOf(cupboard, item._id), 1);
+      var removedItem = cupboard.splice(self.Utils.collIndexOf(cupboard, item), 1);
       deferred.resolve(removedItem);
       self.toastr.success(item.ingredient.name + ' has been removed from your cupboard');
     });
