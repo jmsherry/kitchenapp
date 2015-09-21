@@ -15,7 +15,7 @@
 				<p>Sort by: </p>
 				<div class="btn-group  btn-group-lg" role="group" aria-label="sorting choices">
 					<button type="button" class="btn btn-primary" ng-click="vm.sortBy('name')">Name</button>
-					<button type="button" class="btn btn-primary" ng-click="vm.sortBy('reservation')">Reservation</button>
+					<button type="button" class="btn btn-primary" ng-if="vm.meals.length > 1" autofocus=""ng-click="vm.sortBy('reservation')">Reservation</button>
 				</div>
 			</div>
 		</div>

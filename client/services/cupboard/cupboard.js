@@ -4,9 +4,9 @@
   angular.module('kitchenapp.services')
     .service('Cupboard', Cupboard);
 
-  Cupboard.$inject = ['$q', '$resource', '$log', 'Auth', 'Ingredients', 'toastr', '$', '_', 'moment', 'Utils'];
+  Cupboard.$inject = ['$q', '$resource', '$state', '$log', 'Auth', 'Ingredients', 'toastr', '$', '_', 'moment', 'Utils'];
 
-  function Cupboard($q, $resource, $log, Auth, Ingredients, toastr, $, _, moment, Utils) {
+  function Cupboard($q, $resource, $state, $log, Auth, Ingredients, toastr, $, _, moment, Utils) {
 
     this.deferred = $q.defer();
     var _cupboard = this.deferred.promise;
@@ -28,6 +28,7 @@
     this.Ingredients = Ingredients;
     this.Utils = Utils;
     this.$q = $q;
+    this.$state = $state;
     this.$log = $log;
     this._ = _;
     this.$ = $;
@@ -65,7 +66,17 @@
     }
 
     function errorCB(err) {
-      self.toastr.error('Error initialising cupboard service', err);
+      if(err.status === 401){
+        self.$state.go('login', {
+          messages: [{
+          service: 'Auth',
+          msg: "Your session has expired. Please log in to continue..."
+          }]
+        });
+      } else {
+        self.toastr.error('Error initialising cupboard service', err);
+      }
+
       self.deferred.reject(err);
     }
 
@@ -373,11 +384,13 @@
       throw new Error('Item already reserved');
     }
 
+    itemCopy = angular.copy(item);
     //itemCopy.reservedFor = meal;
+
     item.reservedFor = meal._id || meal;
     item.ingredient = item.ingredient._id || item.ingredient;
 
-    itemCopy = angular.copy(item);
+
 
     function CBSuccess(itemCopy, meal, resp) {
       self.$q.when(resp, function () {
@@ -407,7 +420,7 @@
 
     self._.forEach(items, function (item) {
       var reservedItem;
-      reservedItem = self.reserve(item, meal);
+      reservedItem = self.reserve(item, meal, overwrite);
       promises.push(reservedItem)
     });
 

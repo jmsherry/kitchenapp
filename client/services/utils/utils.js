@@ -14,7 +14,7 @@
       id = item._id || item;
 
       for(i=0; i<len; i+=1){
-        if(collection[i]._id === id){
+        if(collection[i]._id || collection[i] === id){
           idx = i;
           break;
         }
@@ -31,6 +31,29 @@
 
     function updateInCollection(collection, item){
 
+    }
+
+    function depopulate(o) {
+    var results = [];
+
+    function properties(obj) {
+      var props, i;
+      if (!obj) {
+        throw new Error('No object provided to depopulate')
+      }
+      // if (typeof obj !== 'object' && typeof obj !== 'function') {
+      //   return properties(obj.constructor.prototype);
+      // }
+      props = Object.getOwnPropertyNames(obj);
+      i = props.length;
+      while (i--) {
+        if (!~results.indexOf(props[i])) {
+          results.push(props[i]);
+        }
+      }
+      return properties(Object.getPrototypeOf(obj));
+    }
+    return properties(o);
     }
 
     return {

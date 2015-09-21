@@ -4,13 +4,15 @@
   angular.module('kitchenapp.services')
     .factory('Meals', Meals);
 
-  Meals.$inject = ['$rootScope', '$cookieStore', '$q', '$log', '$resource', 'toastr', 'Auth', 'Recipes', 'Cupboard', 'Shopping', 'Ingredients', '_', 'Utils'];
+  Meals.$inject = ['$rootScope', '$cookieStore', '$state', '$q', '$log', '$resource', 'toastr', 'Auth', 'Recipes', 'Cupboard', 'Shopping', 'Ingredients', '_', 'Utils', '$window'];
 
-  function Meals($rootScope, $cookieStore, $q, $log, $resource, toastr, Auth, Recipes, Cupboard, Shopping, Ingredients, _, Utils) {
+  function Meals($rootScope, $cookieStore, $state, $q, $log, $resource, toastr, Auth, Recipes, Cupboard, Shopping, Ingredients, _, Utils, $window) {
 
     var $deferred = $q.defer(),
       _meals = $deferred.promise,
       server;
+
+
 
     function init() {
       $log.log('meals init');
@@ -36,7 +38,10 @@
           cupboardItems = Cupboard.getItemsById(cupboardItems);
           promises = promises.concat(cupboardItems);
 
-          lengths.push({'sl': shoppingListItems.length, 'ci': cupboardItems.length});
+          lengths.push({
+            'sl': shoppingListItems.length,
+            'ci': cupboardItems.length
+          });
 
         }
 
@@ -72,8 +77,17 @@
 
       function errCB(err) {
         $log.log('in errCB', arguments);
+        // if (err.status === 401) {
+        //   $state.go('login', {
+        //     messages: [{
+        //       service: 'Auth',
+        //       msg: "Your session has expired. Please log in to continue..."
+        //     }]
+        //   });
+        // } else {
+          toastr.error('Failed to load meals!', 'Server Error ' + err.status + ' ' + err.data.message);
+        //}
         $deferred.reject(err);
-        toastr.error('Failed to load meals!', 'Server Error ' + err.status + ' ' + err.data.message);
       }
 
       $q.when(owner, function (ownerData) {
@@ -155,10 +169,10 @@
 
                     //update the meal on the server
                     savedMeal.ingredients = stratTmpMeal.ingredients;
-                    savedMeal.ingredients.present.forEach(function(ing){
+                    savedMeal.ingredients.present.forEach(function (ing) {
                       ing.reservedFor.hasBeenStrategised = true;
                     });
-                    savedMeal.ingredients.missing.forEach(function(ing){
+                    savedMeal.ingredients.missing.forEach(function (ing) {
                       ing.reservedFor.hasBeenStrategised = true;
                     });
                     savedMeal.hasBeenStrategised = true;
@@ -289,7 +303,7 @@
         cupboardItems, shoppingListItems, fullIngs, mealCopy = angular.copy(mealObj);
 
       //reserve cupboard items for present ings
-      cupboardItems = Cupboard.bulkReserve(mealObj.ingredients.present, mealCopy, true); //true is for the reservedFor overwrite
+      cupboardItems = Cupboard.bulkReserve(mealObj.ingredients.present, mealCopy);
       $q.when(cupboardItems, function (cItems) {
         promises = promises.concat(cItems);
 
@@ -452,13 +466,22 @@
           throw new Error('Cannot match meal to update in local data');
         }
 
-        //oldMeal = meal;
+
+        var isInComplete = true;
         if (oldMeal.isComplete) {
-          meals.complete.splice(Utils.collIndexOf(meals.complete, meal._id), 1);
+          meals.pending.splice(Utils.collIndexOf(meals.pending, oldMeal), 1);
           meals.complete.push(meal);
         } else {
-          meals.pending.splice(Utils.collIndexOf(meals.pending, meal._id), 1);
-          meals.pending.push(meal);
+          try {
+            completeIdx = Utils.collIndexOf(meals.complete, oldMeal);
+          } catch(e){
+            isInComplete = false;
+          }
+
+          if (isInComplete) {
+            meals.complete.splice(completeIdx, 1);
+            meals.pending.push(meal);
+          }
         }
 
         deferred.resolve(meal);
@@ -539,23 +562,25 @@
       missing = meal.ingredients.missing;
       missing.splice(Utils.collIndexOf(missing, item.ingredient), 1);
 
-      $CItem = Cupboard.add(item.ingredient);
 
-      $q.when($CItem, function (CItem) {
+      // $CItem = Cupboard.add(item.ingredient);
+      //
+      // $q.when($CItem, function (CItem) {
 
-
-        present.push(CItem);
+        present.push(item);
 
         if (missing.length === 0 && present.length > 0) {
-          correctedMeal.isComplete = true;
+          meal.isComplete = true;
         }
 
-        $updatedMeal = self.update(meal);
-        $q.when($updatedMeal, function (updatedMeal) {
-          deferred.resolve(updatedMeal);
-        });
+        // $updatedMeal = self.update(meal);
+        // $q.when($updatedMeal, function (updatedMeal) {
+        //  deferred.resolve(updatedMeal);
+        //});
 
-      });
+        deferred.resolve(meal);
+
+      //});
 
       return deferred.promise;
     }
@@ -565,9 +590,9 @@
         present, deferred = $q.defer(),
         $updatedMeal, $SLItem;
 
-        if(meal.completed){
-          meal.completed = false;
-        }
+      if (meal.completed) {
+        meal.completed = false;
+      }
 
       //Remove cupboard item
       present = meal.ingredients.present;
@@ -582,7 +607,7 @@
         $updatedMeal = self.update(meal);
         $q.when($updatedMeal, function (updatedMeal) {
           deferred.resolve(updatedMeal);
-          Shopping.add(item.ingredient, item.reservedFor);
+          //Shopping.add(item.ingredient, item.reservedFor);
         });
 
       });
@@ -592,25 +617,44 @@
 
     function itemBought(item) {
       var self = this,
+        deferred = $q.defer(),
         $meals = self.get();
 
       $q.when($meals, function (meals) {
         var meal = _.find(meals.pending, {
-            _id: item.reservedFor
-          }); //item is unpopulated at this stage
+          _id: item.reservedFor
+        }); //item is unpopulated at this stage
 
         meal = self.obtainItem(meal, item);
         $q.when(meal, function (correctedMeal) {
 
-          var updated = self.update(correctedMeal);
+          var updated = self.update(correctedMeal), completeIdx;
           $q.when(updated, function (updatedMeal) {
-            meals.pending.splice(Utils.collIndexOf(meals, updatedMeal), 1);
-            meals.complete.push(updatedMeal);
+            // var isInComplete = true;
+            // if (updatedMeal.isComplete) {
+            //   meals.pending.splice(Utils.collIndexOf(meals.pending, updatedMeal), 1);
+            //   meals.complete.push(updatedMeal);
+            // } else {
+            //   try {
+            //     completeIdx = Utils.collIndexOf(meals.complete, updatedMeal);
+            //   } catch(e){
+            //     isInComplete = false;
+            //   }
+            //
+            //   if (isInComplete) {
+            //     meals.complete.splice(completeIdx, 1);
+            //     meals.pending.push(updatedMeal);
+            //   }
+            // }
+            deferred.resolve(updatedMeal);
+
           });
 
         });
 
       });
+
+      return deferred.promise;
     }
 
     function unreserveItem(item) {

@@ -8,7 +8,8 @@
   var TransactionSchema = new Schema({
     owner: {type: ObjectId, ref: 'User'},
     dateAdded: { type: Date, default: Date.now },
-    amount: Number
+    amount: Number,
+    currentBudget: Number
   });
 
   /**

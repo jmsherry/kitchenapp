@@ -386,8 +386,6 @@
     self.$log.log('buying', item);
     removed = self.remove(item);
 
-    // added = self.Cupboard.add(item, true); //true indicates that it was bought not acquired.
-    //
     self.$q.when(removed, function (data) {
       deferred.resolve(data[0]);
     });

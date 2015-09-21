@@ -25,6 +25,7 @@
     "angular-ui-grid": "~3.0.0-rc.20",
     "angular-ui-router": "~0.2.13",
     "angular-ui-select": "~0.12.1",
+    "autofill-event": "~1.0.0",
     "bootstrap": "~3.3.4",
     "fastdom": "~0.8.6",
     "interact": "~1.2.4",

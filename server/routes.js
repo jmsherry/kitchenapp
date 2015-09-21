@@ -10,6 +10,10 @@
       next();
     }
 
+    function handleExpired(req, res) {
+      res.send(401);
+    }
+
     // API
     app.use('/api/users', require('./api/user'));
     app.use('/api/ingredients', require('./api/ingredient'));
@@ -18,6 +22,11 @@
     app.use('/api/users/:userid/shopping', paramFix, require('./api/shopping'));
     app.use('/api/users/:userid/cupboard', paramFix, require('./api/cupboard'));
     app.use('/api/users/:userid/purchases', paramFix, require('./api/transaction'));
+
+    app.use('/api/users/meals', handleExpired);
+    app.use('/api/users/shopping', handleExpired);
+    app.use('/api/users/cupboard', handleExpired);
+    app.use('/api/users/purchases', handleExpired);
 
     // Auth
     app.use('/auth', require('./auth'));
