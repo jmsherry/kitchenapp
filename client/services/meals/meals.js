@@ -408,7 +408,7 @@
     function update(meal, firstPass) {
       var self = this,
         deferred = $q.defer(),
-        flatMeal;
+        flatMeal = angular.copy(meal);
 
       firstPass = firstPass || false;
 
@@ -448,7 +448,7 @@
         deferred = $q.defer();
 
       $q.when($meals, function (meals) {
-
+        var targetArray = 'pending';
         //check most likely location (pending meals)
         var oldMeal = _.find(meals.pending, {
           _id: meal._id
@@ -459,6 +459,7 @@
           oldMeal = _.find(meals.complete, {
             _id: meal._id
           });
+          targetArray = 'complete';
         }
 
         //if it's not in either, throw an error...
@@ -468,12 +469,13 @@
         }
 
         //remove the old meal
-        if (oldMeal.isComplete) {
-          meals.complete.splice(Utils.collIndexOf(meals.complete, oldMeal), 1);
-          //meals.complete.push(meal);
-        } else {
-          meals.pending.splice(Utils.collIndexOf(meals.pending, oldMeal), 1);
-        }
+        // if (oldMeal.isComplete) {
+        //   meals.complete.splice(Utils.collIndexOf(meals.complete, oldMeal), 1);
+        // } else {
+        //   meals.pending.splice(Utils.collIndexOf(meals.pending, oldMeal), 1);
+        // }
+
+        meals[targetArray].splice(Utils.collIndexOf(meals[targetArray], oldMeal), 1);
 
         if (meal.isComplete) {
           meals.complete.push(meal);
@@ -584,7 +586,7 @@
         $updatedMeal, $SLItem;
 
       if (meal.isComplete) {
-        meal.completed = false;
+        meal.isComplete = false;
       }
 
       //Remove cupboard item
@@ -682,7 +684,7 @@
           $q.when($SL, function (SL) {
             var mealItems, SLItem;
             mealItems = _.where(SL, {reservedFor: {_id: meal._id}});
-            SLItem = _.where(mealItems, {ingredient: {_id: updatedCItem.ingredient._id}})[0];
+            SLItem = _.find(mealItems, 'ingredient._id', updatedCItem.ingredient._id);
 
             if(SLItem){
               Shopping.remove(SLItem);
