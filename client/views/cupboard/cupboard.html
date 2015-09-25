@@ -1,7 +1,7 @@
 <div class="row">
-	<div class="col-xs-12">
-		<h1>My Cupboard</h1>
-	</div>
+  <div class="col-xs-12">
+    <h1>My Cupboard</h1>
+  </div>
 </div>
 <div class="row" ng-if="gridOptions.data.length === 0" ng-show="vm.loading">
   <div class="col-xs-12">
@@ -9,53 +9,64 @@
   </div>
 </div>
 <div class="row" ng-show="!vm.loading">
-	<div class="col-xs-12">
-		<p ng-if="!vm.items.length > 0">Your cupboard is empty!! Go to <a ui-sref="ingredients">ingredients</a> to register ingredients or <a ui-sref="shop">shop</a> to buy more.</p>
-	</div>
+  <div class="col-xs-12">
+    <p ng-if="!vm.items.length > 0">Your cupboard is empty!! Go to <a ui-sref="ingredients">ingredients</a> to register ingredients or <a ui-sref="shop">shop</a> to buy more.</p>
+  </div>
 </div>
 <div class="row" ng-show="!vm.loading">
-	<div class="col-xs-12 info-messages">
-		<p ng-if="!vm.meals.complete.length > 0 && !vm.meals.pending.length > 0 && vm.items.length > 0" class="bg-warning">There are no meals currently in the system. Go <a ui-sref="meals" title="Go to meals page">here</a> to create some<span  ng-if="vm.items.length > 0"> and put your ingredients to good use</span>!!</p>
-	</div>
+  <div class="col-xs-12 info-messages">
+    <p ng-if="!vm.meals.complete.length > 0 && !vm.meals.pending.length > 0 && vm.items.length > 0" class="bg-warning">There are no meals currently in the system. Go <a ui-sref="meals" title="Go to meals page">here</a> to create some
+      <span ng-if="vm.items.length > 0"> and put your ingredients to good use</span>!!</p>
+  </div>
 </div>
 
 <div class="row">
-	<div ng-class="vm.items.length > 1 ? 'col-md-6' : 'col-md-12'">
-		<button type="button" class="btn btn-warning" ng-if="!vm.editing  && vm.items.length > 0" ng-click="vm.toggleEdit()">Remove spolied or lost items</button>
-		<button type="button" class="btn btn-info" ng-if="vm.editing  && vm.items.length > 0" ng-click="vm.toggleEdit()">Finish editing</button>
-	</div>
-	<div ng-if="vm.items.length > 1" class="col-md-6">
-		<div class="pull-right sorts">
-			<p>Sort by: </p>
-			<div class="btn-group  btn-group-lg" role="group" aria-label="sorting choices">
-				<button type="button" class="btn btn-primary" ng-click="vm.sortBy('name')">Name</button>
-				<button type="button" class="btn btn-primary" ng-click="vm.sortBy('dateAdded')">Date</button>
-				<button type="button" class="btn btn-primary" ng-click="vm.sortBy('reservation')" ng-if="vm.meals.complete.length > 0 || vm.meals.pending.length > 0">Reservation</button>
-			</div>
-		</div>
-	</div>
+  <div ng-class="vm.items.length > 1 ? 'col-md-6' : 'col-md-12'">
+    <button type="button" class="btn btn-warning" ng-if="!vm.editing  && vm.items.length > 0" ng-click="vm.toggleEdit()">Remove spolied or lost items</button>
+    <button type="button" class="btn btn-info" ng-if="vm.editing  && vm.items.length > 0" ng-click="vm.toggleEdit()">Finish editing</button>
+  </div>
+  <div ng-if="vm.items.length > 1" class="col-md-6">
+    <div class="pull-right sorts">
+      <p>Sort by: </p>
+      <div class="btn-group  btn-group-lg" role="group" aria-label="sorting choices">
+        <button type="button" class="btn btn-primary" ng-click="vm.sortBy('name')">Name</button>
+        <button type="button" class="btn btn-primary" ng-click="vm.sortBy('dateAdded')">Date</button>
+        <button type="button" class="btn btn-primary" ng-click="vm.sortBy('reservation')" ng-if="vm.meals.complete.length > 1 || vm.meals.pending.length > 1">Reservation</button>
+      </div>
+    </div>
+  </div>
 </div>
 <div class="row">
-	<div class="col-md-12">
-  	<ul class="list-unstyled cupboardList">
-  		<li ng-repeat="item in vm.items track by $index" ng-class="item.reservedFor ? 'reserved bg-success' : ''">
-				<div ng-class="vm.editing ? 'col-md-10 description' : 'col-md-12 description'">
-					<img ng-if="item.ingredient.imageURL" ng-src="{{item.ingredient.imageURL}}" width="50px" height="50px">
-					<img ng-if="!item.ingredient.imageURL" src="/assets/images/item-img-placeholder.png" width="50px" height="50px">
-					<h2>{{ item.ingredient.name }}</h2>
-					<div>
-						<p ng-if="item.reservedFor">Reserved for meal: {{ item.reservedFor.name }}<span ng-if="item.reservedFor.starts_at"> on {{ item.reservedFor.date | date : 'd MMMM y' : GMT }}</span>.</p>
-						<button type="button" class="btn btn-danger" ng-click="vm.unreserve(item)"  ng-if="item.reservedFor">Unreserve</button>
-						<button type="button" class="btn btn-primary" ng-click="vm.showReserveModal(item)"  ng-if="!item.reservedFor && vm.meals.pending.length > 0">Add to a meal</button>
-					</div>
-					<p>Added: {{ item.dateAdded  | date : 'd MMMM y' : GMT}}</p>
-					<p ng-if="item.reservedFor">{{ item.reservedFor.name }} ({{ item.reservedFor._id }})</p>
-					<p ng-if="!item.reservedFor">unreserved</p>
-				</div>
-				<div class="col-md-2 actions" ng-if="vm.editing">
-					<button type="button" class="btn btn-danger" ng-click="vm.remove(item)">Remove</button>
-				</div>
-			</li>
-  	</ul>
-	</div>
+  <div class="col-md-12">
+    <ul class="list-unstyled cupboardList">
+      <li ng-repeat="item in vm.items track by $index" ng-class="item.reservedFor ? 'reserved' : ''">
+        <div class="col-md-10 description">
+
+            <img class="product-thumbnail" ng-if="item.ingredient.imageURL" ng-src="{{item.ingredient.imageURL}}" width="50px" height="50px">
+            <img class="product-thumbnail" ng-if="!item.ingredient.imageURL" src="/assets/images/item-img-placeholder.png" width="50px" height="50px">
+
+          <div class="details-container">
+            <h2>{{ item.ingredient.name }}</h2>
+
+            <p ng-if="item.reservedFor">Reserved for meal: <span ng-class="item.reservedFor.isComplete ? 'meal-name completed' : 'meal-name'">{{ item.reservedFor.name }}</span><span ng-if="item.reservedFor.starts_at"> on {{ item.reservedFor.date | date : 'd MMMM y' : GMT }}</span>.</p>
+
+            <p>Added: <span class="added-info">{{ item.dateAdded | date : 'd MMMM y' : GMT}}</span></p>
+            <p ng-if="item.reserveFor">{{ item.reservedFor.name }} ({{ item.reservedFor._id }})</p>
+            <p ng-if="item.reserveFor">unreserved</p>
+          </div>
+        </div>
+        <div class="col-md-2 actions">
+					<ul class="list-unstyled">
+						<li>
+							<button ng-if="vm.editing" type="button" class="btn btn-danger btn-block" ng-click="vm.remove(item)">Remove</button>
+						</li>
+						<li>
+							<button type="button" class="btn btn-warning btn-block" ng-click="vm.unreserve(item)" ng-if="item.reservedFor">Unreserve</button>
+							<button type="button" class="btn btn-primary btn-block" ng-click="vm.showReserveModal(item)" ng-if="!item.reservedFor && vm.meals.pending.length > 0">Add to a meal</button>
+						</li>
+					</ul>
+        </div>
+      </li>
+    </ul>
+  </div>
 </div>

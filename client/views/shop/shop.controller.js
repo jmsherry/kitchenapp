@@ -48,7 +48,7 @@
 
                   // Now tell meals service that you've bought it so meals can be updated
                   if (cupboardItem.reservedFor) {
-                      Meals.itemBought(cupboardItem);
+                      Meals.itemBought(boughtItem, cupboardItem);
                   }
 
                 });

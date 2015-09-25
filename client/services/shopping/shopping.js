@@ -398,7 +398,7 @@
 
     items = self.getShopping();
     self.$q.when(items, function(shoppingList){
-      var item = self._.find(shoppingList, {_id: id});
+      var item = self._.find(shoppingList, {'_id': id});
       deferred.resolve(item);
     });
 

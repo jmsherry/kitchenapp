@@ -434,7 +434,7 @@
     return deferred.promise;
   };
 
-  Cupboard.prototype.unreserve = function unreserve(item, meal, overwrite) {
+  Cupboard.prototype.unreserve = function unreserve(item, meal) {
     var self = this,
       deferred = self.$q.defer(), itemCopy = angular.copy(item);
 
@@ -450,13 +450,13 @@
       });
     }
 
-    function CBError(item, err) {
+    function CBError(itm, err) {
       self.$log.log(arguments, err);
-      self.toastr.error('Could not unreserve ' + item.name + ' from cupboard');
+      self.toastr.error('Could not unreserve ' + itm.name + ' from cupboard');
       deferred.reject(err);
     }
 
-    itemCopy.$update(self._.bind(CBSuccess, self, item), self._.bind(CBError, self, item));
+    itemCopy.$update(self._.bind(CBSuccess, self, item, meal), self._.bind(CBError, self, item, meal));
 
     return deferred.promise;
   };
@@ -595,14 +595,15 @@
     return deferred.promise
   };
 
-  Cupboard.prototype.unreserveLocal = function unreserveLocal(item) {
+  Cupboard.prototype.unreserveLocal = function unreserveLocal(item, meal) {
     var self = this,
       $cupboard, oldItem, popdItem, deferred = self.$q.defer();
 
     $cupboard = self.getCupboard();
     self.$q.when($cupboard, function (cupboard) {
 
-      var unres = cupboard[self.Utils.collIndexOf(cupboard, item._id)];
+      var unres;
+      unres = cupboard[self.Utils.collIndexOf(cupboard, item)];
       unres.reservedFor = null;
 
       deferred.resolve(unres);

@@ -43,17 +43,20 @@
       switch (predicate) {
       case 'name':
         $log.log('pre-sort name: ', vm.items);
-        vm.items = _.sortByOrder(vm.items, ['ingredient.name'], ['asc']);
+        vm.dir = !vm.dir;
+        vm.items = _.sortByOrder(vm.items, ['ingredient.name'], [vm.dir]);
         $log.log('sorted: ', vm.items);
         break;
       case 'dateAdded':
         $log.log('pre-sort dateAdded: ', vm.items);
-        vm.items = _.sortByOrder(vm.items, ['dateAdded'], ['asc']);
+        vm.dir = !vm.dir;
+        vm.items = _.sortByOrder(vm.items, ['dateAdded'], [vm.dir]);
         $log.log('sorted: ', vm.items);
         break;
       case 'reservation':
         $log.log('pre-sort reservation: ', vm.items);
-        vm.items = _.sortByOrder(vm.items, ['reservedFor.date'], ['asc']);
+        vm.dir = !vm.dir;
+        vm.items = _.sortByOrder(vm.items, ['reservedFor.date'], [vm.dir]);
         $log.log('sorted: ', vm.items);
         break;
       default:
@@ -95,12 +98,14 @@
     }
 
     function reserve(item, meal) {
-      var $reserved;
+      //var $reserved;
       $log.log('reserving', arguments, this);
-      $reserved = Cupboard.reserve(item, meal);
-      $q.when($reserved, function (reservedItem) {
-        Meals.obtainItem(meal);
-      });
+      // $reserved = Cupboard.reserve(item, meal);
+      // $q.when($reserved, function (reservedItem) {
+      //   Meals.obtainItem(meal, reservedItem);
+      // });
+      //item.reservedFor = meal;
+      Meals.reserveItem(item, meal);
     }
 
     angular.extend(vm, {
@@ -110,6 +115,7 @@
       toggleEdit: toggleEdit,
       sortBy: sortBy,
       predicate: '',
+      dir: 'asc',
       reverse: false,
       unreserve: unreserve,
       showReserveModal: showReserveModal,

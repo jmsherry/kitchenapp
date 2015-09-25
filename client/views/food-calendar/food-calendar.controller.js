@@ -23,8 +23,8 @@
       $log.log("completeMeals: ", completeMeals);
       $log.log("placedMeals: ", placedMeals);
 
-      //vm.canAdd = completeMeals.length ? true : false;
-      vm.canAdd = false;
+      vm.canAdd = completeMeals.length > 0 ? true : false;
+
 
       //These variables MUST be set as a minimum for the calendar to work
       vm.calendarView = 'week';

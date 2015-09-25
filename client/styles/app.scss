@@ -19,6 +19,11 @@ body {
   font-weight: 100;
 }
 
+img.hero {
+  // margin-left: -15px;
+  // margin-right: -15px;
+  width:100%;
+}
 
 @media (max-width: 992px) {
   img.hero {
@@ -183,7 +188,7 @@ to prevent collapsing during animation*/
   /* overflow: hidden; */
   padding-bottom: 15px;
 
-  & .meal {
+  .meal {
     margin-bottom: 10px;
     overflow: hidden;
     border: 1px solid #ccc;
@@ -193,7 +198,7 @@ to prevent collapsing during animation*/
     -webkit-box-shadow: inset 0 0 10px #ccc;
     box-shadow: inset 0 0 10px #ccc;
     position: relative;
-    background-color: #fafafa;
+    //background-color: #fafafa;
 
     button {
       margin-top: 10px;
@@ -299,28 +304,52 @@ to prevent collapsing during animation*/
     -moz-box-shadow:    inset 0 0 10px #ccc;
     -webkit-box-shadow: inset 0 0 10px #ccc;
     box-shadow:         inset 0 0 10px #ccc;
+
+    &.reserved {
+      border:1px solid #090;
+      -moz-box-shadow:    inset 0 0 1px #090;
+      -webkit-box-shadow: inset 0 0 1px #090;
+      box-shadow:         inset 0 0 1px #090;
+      h2 {
+        color: #060;
+      }
+    }
     & .actions {
       text-align: right;
+      button {
+        margin-bottom: 15px;
+      }
     }
     & .description {
       font-size: 1.2em;
       h2 {
         margin:0;
       }
-      .image-container {
-        padding-right:15px;
+      .product-thumbnail {
         display: inline-block;
         vertical-align: top;
       }
-
-      img {
-        /*border: 1px solid #ccc; */
-        display: block;
+      .meal-name {
+        color: #2e6da4;
+      /* font-style: oblique; */
+      font-weight: bold;
+        &.completed {
+          color:#009900;
+        }
+      }
+      .added-info {
+        color: #060;
       }
       .details-container {
         display: inline-block;
         vertical-align: top;
       }
+    }
+    li {
+      margin:0;
+      padding: 0;
+      border:0;
+      box-shadow: none;
     }
   }
 }
@@ -419,6 +448,9 @@ select {
   .close {
     padding: 0 15px;
     font-size: 2em;
+    position: absolute;
+    top: 5px;
+    right: 0;
   }
   li {
     margin-bottom: 5px;
