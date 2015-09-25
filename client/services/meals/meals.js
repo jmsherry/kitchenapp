@@ -560,23 +560,21 @@
       present = meal.ingredients.present;
       missing = meal.ingredients.missing;
 
-      // if (SLItem) {
-      //   //find where ing is the same
-      //   rereserveSLItem = _.deepFind(missing, {
-      //     'ingredient._id': CItem._id
-      //   });
-      //   missing.splice(Utils.collIndexOf(missing, rereserveSLItem), 1);
-      // } else {
+      if (SLItem) {
         missing.splice(Utils.collIndexOf(missing, SLItem), 1);
-      //}
+      }
+
       present.push(CItem);
 
       if (missing.length === 0 && present.length > 0) {
         meal.isComplete = true;
       }
 
-      deferred.resolve(meal);
-
+      //Update the meal
+      $updatedMeal = self.update(meal);
+      $q.when($updatedMeal, function (updatedMeal) {
+        deferred.resolve(updatedMeal);
+      });
       return deferred.promise;
     }
 
@@ -682,22 +680,35 @@
 
           var $SL = Shopping.get();
           $q.when($SL, function (SL) {
-            var mealItems, SLItem;
-            mealItems = _.where(SL, {reservedFor: {_id: meal._id}});
+            var mealItems, SLItem, $removedSLItem = null;
+
+            //try to find SL equivalent and remove
+            mealItems = _.where(SL, {
+              reservedFor: {
+                _id: meal._id
+              }
+            });
             SLItem = _.find(mealItems, 'ingredient._id', updatedCItem.ingredient._id);
 
-            if(SLItem){
-              Shopping.remove(SLItem);
+            if (SLItem) {
+              $removedSLItem = Shopping.remove(SLItem);
+            } else {
+              $removedSLItem = null;
             }
 
-            //update meal
-            var $updatedMeal = self.obtainItem(latestMeal, SLItem, updatedCItem);
-            $q.when($updatedMeal, function (updatedMeal) {
-              deferred.resolve({
-                item: updatedCItem,
-                meal: updatedMeal
+            $q.when($removedSLItem, function (rSLItem) {
+              $log.log(rSLItem);
+              //update meal
+              var $updatedMeal = self.obtainItem(latestMeal, SLItem, updatedCItem);
+              $q.when($updatedMeal, function (updatedMeal) {
+                deferred.resolve({
+                  item: updatedCItem,
+                  meal: updatedMeal
+                });
               });
+
             });
+
           });
         });
 
