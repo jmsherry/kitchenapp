@@ -427,7 +427,15 @@
         }
 
         $q.when(updatedLocally, function (updatedMeal) {
-          deferred.resolve(updatedMeal);
+          if (updatedMeal.isComplete) {
+            var $upboardRecordsUpdated = self.updateCupboardRecords(updatedMeal);
+            $q.when($upboardRecordsUpdated, function (data) {
+              deferred.resolve(updatedMeal);
+            });
+          } else {
+            deferred.resolve(updatedMeal);
+          }
+
         });
       }
 
@@ -489,6 +497,28 @@
 
       return deferred.promise;
 
+    }
+
+    function updateCupboardRecords(meal) {
+      var deferred = $q.defer(),
+        $cupboard = Cupboard.get();
+      $q.when($cupboard, function (cupboard) {
+        var updatedCItems;
+        updatedCItems = _.where(cupboard, {
+          reservedFor: {
+            _id: meal._id
+          }
+        });
+        _.forEach(updatedCItems, function (item) {
+          item.reservedFor = meal;
+        });
+        // $items = Cupboard.bulkUpdate(items);
+        // $q.when($updatedCItems, function(updatedCItems){
+        //   deferred.resolve(updatedCItems);
+        // });
+        deferred.resolve(updatedCItems);
+      });
+      return deferred.promise;
     }
 
     function remove(meal) {
@@ -730,6 +760,7 @@
       getMealById: getMealById,
       update: update,
       updateLocal: updateLocal,
+      updateCupboardRecords: updateCupboardRecords,
       remove: remove,
       removeLocal: removeLocal,
       obtainItem: obtainItem,

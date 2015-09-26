@@ -25,6 +25,12 @@ img.hero {
   width:100%;
 }
 
+@media (max-width: 910px) {
+  .full-title {
+    display: none;
+  }
+}
+
 @media (max-width: 992px) {
   img.hero {
     margin-left: -15px;

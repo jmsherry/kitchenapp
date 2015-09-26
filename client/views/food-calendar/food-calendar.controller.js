@@ -15,8 +15,8 @@
     meals = Meals.get();
     $q.when(meals, function (data) {
       var mls = data.complete;
-      completeMeals = _.filter(mls, 'starts_at', null);
-      placedMeals = _.reject(mls, 'starts_at', null);
+      completeMeals = _.filter(mls, 'startsAt', null);
+      placedMeals = _.reject(mls, 'startsAt', null);
       vm.events = placedMeals.map(function(element, index, array){
 
         var eventWrapper = Object.create(element);
@@ -112,7 +112,7 @@
             $scope.placeMeal = function (meal, date) {
               var $mealPlaced;
               $log.log('Placing', arguments);
-              meal.starts_at = day.date.toString();
+              meal.startsAt = day.date.toString();
               $mealPlaced = Meals.update(meal);
               $q.when($mealPlaced, function(pMl){
                 placedMeals.push(vm.wrap(meal));

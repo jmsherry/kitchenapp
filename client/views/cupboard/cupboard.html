@@ -40,7 +40,7 @@
   <div class="col-md-12">
     <ul class="list-unstyled cupboardList">
       <li ng-repeat="item in vm.items track by $index" ng-class="item.reservedFor ? 'reserved' : ''">
-        <div class="col-md-10 description">
+        <div class="col-sm-10 description">
 
             <img class="product-thumbnail" ng-if="item.ingredient.imageURL" ng-src="{{item.ingredient.imageURL}}" width="50px" height="50px">
             <img class="product-thumbnail" ng-if="!item.ingredient.imageURL" src="/assets/images/item-img-placeholder.png" width="50px" height="50px">
@@ -48,14 +48,14 @@
           <div class="details-container">
             <h2>{{ item.ingredient.name }}</h2>
 
-            <p ng-if="item.reservedFor">Reserved for meal: <span ng-class="item.reservedFor.isComplete ? 'meal-name completed' : 'meal-name'">{{ item.reservedFor.name }}</span><span ng-if="item.reservedFor.starts_at"> on {{ item.reservedFor.date | date : 'd MMMM y' : GMT }}</span>.</p>
+            <p ng-if="item.reservedFor">Reserved for meal: <span ng-class="item.reservedFor.isComplete ? 'meal-name completed' : 'meal-name'">{{ item.reservedFor.name }}</span><span ng-if="item.reservedFor.startsAt"> on <span class="text-info">{{ item.reservedFor.startsAt | date : 'd MMMM y' : GMT }}</span></span>.</p>
 
             <p>Added: <span class="added-info">{{ item.dateAdded | date : 'd MMMM y' : GMT}}</span></p>
             <p ng-if="item.reserveFor">{{ item.reservedFor.name }} ({{ item.reservedFor._id }})</p>
             <p ng-if="item.reserveFor">unreserved</p>
           </div>
         </div>
-        <div class="col-md-2 actions">
+        <div class="col-sm-2 actions">
 					<ul class="list-unstyled">
 						<li>
 							<button ng-if="vm.editing" type="button" class="btn btn-danger btn-block" ng-click="vm.remove(item)">Remove</button>

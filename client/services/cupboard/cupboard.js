@@ -66,11 +66,11 @@
     }
 
     function errorCB(err) {
-      if(err.status === 401){
+      if (err.status === 401) {
         self.$state.go('login', {
           messages: [{
-          service: 'Auth',
-          msg: "Your session has expired. Please log in to continue..."
+            service: 'Auth',
+            msg: "Your session has expired. Please log in to continue..."
           }]
         });
       } else {
@@ -298,6 +298,25 @@
 
   };
 
+  Cupboard.prototype.bulkUpdate = function bulkUpdate(CItems) {
+
+    self.$log.log('updating', CItems);
+    var self = this,
+      deferred = self.$q.defer(),
+      items = [];
+
+    self.$.each(CItems, function (i, CItem) {
+      items.push(self.update(CItems));
+    });
+
+    self.$q.all(items).then(function (itemsArr) {
+      deferred.resolve(itemsArr);
+    });
+
+    return deferred.promise;
+
+  };
+
   Cupboard.prototype.remove = function remove(item) {
     var self = this,
       deferred = self.$q.defer(),
@@ -310,7 +329,6 @@
         deferred.resolve(removedItem);
       });
     }
-
 
     function CBError(item, err) {
       self.toastr.error('could not remove ' + item.name + ' from cupboard');
@@ -393,8 +411,6 @@
     item.reservedFor = meal._id || meal;
     item.ingredient = item.ingredient._id || item.ingredient;
 
-
-
     function CBSuccess(itemCopy, meal, resp) {
       self.$q.when(resp, function () {
         self.$log.log('reserved cupboard item', resp);
@@ -436,7 +452,8 @@
 
   Cupboard.prototype.unreserve = function unreserve(item, meal) {
     var self = this,
-      deferred = self.$q.defer(), itemCopy = angular.copy(item);
+      deferred = self.$q.defer(),
+      itemCopy = angular.copy(item);
 
     itemCopy.reservedFor = null;
 
