@@ -110,9 +110,13 @@
             $scope.selectedDate = day;
             $scope.completeMeals = completeMeals;
             $scope.placeMeal = function (meal, date) {
+              var $mealPlaced;
               $log.log('Placing', arguments);
               meal.starts_at = day.date.toString();
-              Meals.update(meal);
+              $mealPlaced = Meals.update(meal);
+              $q.when($mealPlaced, function(pMl){
+                placedMeals.push(vm.wrap(meal));
+              });
             };
             //$log.log('modal scope', vm);
           },
@@ -181,8 +185,8 @@
       function eventTimesChanged(updatedEvent){
         $log.log('eventTimesChanged', arguments);
         var meal = Object.getPrototypeOf(updatedEvent);
-        meal.startsAt = updatedEvent.startsAt;
-        //meal.endsAt = updatedEvent.endsAt;
+        $log.log(typeof meal.startsAt);
+        meal.startsAt = new Date(updatedEvent.startsAt);//moment(updatedEvent.startsAt).toDate();
         Meals.update(meal);
       }
 
