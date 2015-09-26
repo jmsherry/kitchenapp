@@ -2,8 +2,8 @@
 	<div class="col-xs-12">
 		<h1>Meal Planner</h1>
 		<p class="ng-cloak">You have
-			<span ng-class="vm.completeMeals.length > 0 ?  'completeCount text-success' : 'completeCount text-info'">
-					{{vm.completeMeals.length}} complete meal<span ng-if="vm.completeMeals.length !== 1">s</span></span>.
+			<span ng-class="vm.completeMeals.length > 0 ?  'completeCount text-warning' : 'completeCount text-info'">
+					{{vm.completeMeals.length}} unplaced meal<span ng-if="vm.completeMeals.length !== 1">s</span></span>.
 			<span ng-if="vm.completeMeals.length > 0">Click on a date to place a meal.</span>
 			<span ng-if="vm.completeMeals.length === 0">Go to <a href="#" ui-sref="meals">Build Meals</a> to create more...</span>
 
@@ -61,6 +61,7 @@
 		    view="vm.calendarView"
 		    current-day="vm.calendarDay"
 		    events="vm.events"
+				meals="vm.completeMeals"
 		    view-title="vm.calendarTitle"
 		    on-event-click="vm.eventClicked(calendarEvent)"
 		    on-event-times-changed="vm.eventTimesChanged(calendarEvent); calendarEvent.startsAt = calendarNewEventStart; calendarEvent.endsAt = calendarNewEventEnd"

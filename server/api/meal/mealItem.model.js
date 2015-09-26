@@ -26,7 +26,7 @@
     isComplete: {type:Boolean, required: true},
     hasBeenStrategised:  {type:Boolean, required: false},
     recipe: {type: ObjectId, ref: 'Recipe', required: true},
-    starts_at: {type: Date, default: null}
+    startsAt: {type: Date, default: null}
   });
 
   /**

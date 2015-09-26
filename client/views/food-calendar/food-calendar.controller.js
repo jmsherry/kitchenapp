@@ -4,9 +4,9 @@
   angular.module('kitchenapp.controllers')
     .controller('FoodCalendarCtrl', FoodCalendarCtrl);
 
-  FoodCalendarCtrl.$inject = ['$modal', 'Meals', 'Auth', '$log', '$q', '$', '_'];
+  FoodCalendarCtrl.$inject = ['$modal', 'Meals', 'Auth', '$log', '$q', '$', '_', 'moment', 'Utils'];
 
-  function FoodCalendarCtrl($modal, Meals, Auth, $log, $q, $, _) {
+  function FoodCalendarCtrl($modal, Meals, Auth, $log, $q, $, _, moment, Utils) {
 
     Auth.checkAuthorised();
 
@@ -17,6 +17,25 @@
       var mls = data.complete;
       completeMeals = _.filter(mls, 'starts_at', null);
       placedMeals = _.reject(mls, 'starts_at', null);
+      vm.events = placedMeals.map(function(element, index, array){
+
+        var eventWrapper = Object.create(element);
+        eventWrapper = angular.extend(eventWrapper, {
+          title: element.name, // The title of the event
+          type: 'info', // The type of the event (determines its color). Can be important, warning, info, inverse, success or special
+          startsAt: moment(element.startsAt).toDate(), // A javascript date object for when the event starts
+          endsAt: moment(element.startsAt).add(1, 'h').toDate(), // Optional - a javascript date object for when the event ends
+          editable: false, // If edit-event-html is set and this field is explicitly set to false then dont make it editable.
+          deletable: true, // If delete-event-html is set and this field is explicitly set to false then dont make it deleteable
+          draggable: true, //Allow an event to be dragged and dropped
+          resizable: true, //Allow an event to be resizable
+          incrementsBadgeTotal: true, //If set to false then will not count towards the badge total amount on the month and year view
+          //recursOn: 'week', // If set the event will recur on the given period. Valid values are year or month
+          cssClass: 'balls' //A CSS class (or more, just separate with spaces) that will be added to the event when it is displayed on each view. Useful for marking an event as selected / active etc
+        });
+
+        return eventWrapper;
+      });
 
       $log.log("meals data: ", data);
       $log.log("mls", mls);
@@ -27,9 +46,11 @@
 
 
       //These variables MUST be set as a minimum for the calendar to work
-      vm.calendarView = 'week';
+      vm.calendarView = 'month';
       vm.calendarDay = new Date();
       //vm.nowString = 'This month';
+
+      //vm.events = placedMeals || [];
 
       // $scope.$watch('vm.calendarView', function(currentView) {
       //    $log.log(arguments);
@@ -50,31 +71,32 @@
       // });
 
       //vm.events = placedMeals || [];
-      vm.events = [{
-        title: 'My event title', // The title of the event
-        type: 'info', // The type of the event (determines its color). Can be important, warning, info, inverse, success or special
-        startsAt: new Date(2015, 8, 28, 1), // A javascript date object for when the event starts
-        endsAt: new Date(2015, 8, 28, 2), // Optional - a javascript date object for when the event ends
-        editable: true, // If edit-event-html is set and this field is explicitly set to false then dont make it editable.
-        deletable: true, // If delete-event-html is set and this field is explicitly set to false then dont make it deleteable
-        draggable: true, //Allow an event to be dragged and dropped
-        resizable: true, //Allow an event to be resizable
-        incrementsBadgeTotal: true, //If set to false then will not count towards the badge total amount on the month and year view
-        //recursOn: 'week', // If set the event will recur on the given period. Valid values are year or month
-        cssClass: 'balls' //A CSS class (or more, just separate with spaces) that will be added to the event when it is displayed on each view. Useful for marking an event as selected / active etc
-      }, {
-        title: 'My other event title', // The title of the event
-        type: 'info', // The type of the event (determines its color). Can be important, warning, info, inverse, success or special
-        startsAt: new Date(2015, 8, 29, 1), // A javascript date object for when the event starts
-        endsAt: new Date(2015, 8, 29, 2), // Optional - a javascript date object for when the event ends
-        editable: true, // If edit-event-html is set and this field is explicitly set to false then dont make it editable.
-        deletable: true, // If delete-event-html is set and this field is explicitly set to false then dont make it deleteable
-        draggable: true, //Allow an event to be dragged and dropped
-        resizable: true, //Allow an event to be resizable
-        incrementsBadgeTotal: true, //If set to false then will not count towards the badge total amount on the month and year view
-        //recursOn: 'week', // If set the event will recur on the given period. Valid values are year or month
-        cssClass: 'balls' //A CSS class (or more, just separate with spaces) that will be added to the event when it is displayed on each view. Useful for marking an event as selected / active etc
-      }];
+      // vm.events = [{
+      //   title: 'My event title', // The title of the event
+      //   type: 'info', // The type of the event (determines its color). Can be important, warning, info, inverse, success or special
+      //   startsAt: new Date(2015, 8, 28, 1), // A javascript date object for when the event starts
+      //   endsAt: new Date(2015, 8, 28, 2), // Optional - a javascript date object for when the event ends
+      //   editable: true, // If edit-event-html is set and this field is explicitly set to false then dont make it editable.
+      //   deletable: true, // If delete-event-html is set and this field is explicitly set to false then dont make it deleteable
+      //   draggable: true, //Allow an event to be dragged and dropped
+      //   resizable: true, //Allow an event to be resizable
+      //   incrementsBadgeTotal: true, //If set to false then will not count towards the badge total amount on the month and year view
+      //   //recursOn: 'week', // If set the event will recur on the given period. Valid values are year or month
+      //   cssClass: 'balls' //A CSS class (or more, just separate with spaces) that will be added to the event when it is displayed on each view. Useful for marking an event as selected / active etc
+      // }, {
+      //   title: 'My other event title', // The title of the event
+      //   type: 'info', // The type of the event (determines its color). Can be important, warning, info, inverse, success or special
+      //   startsAt: new Date(2015, 8, 29, 1), // A javascript date object for when the event starts
+      //   endsAt: new Date(2015, 8, 29, 2), // Optional - a javascript date object for when the event ends
+      //   editable: false, // If edit-event-html is set and this field is explicitly set to false then dont make it editable.
+      //   deletable: true, // If delete-event-html is set and this field is explicitly set to false then dont make it deleteable
+      //   draggable: true, //Allow an event to be dragged and dropped
+      //   resizable: true, //Allow an event to be resizable
+      //   incrementsBadgeTotal: true, //If set to false then will not count towards the badge total amount on the month and year view
+      //   //recursOn: 'week', // If set the event will recur on the given period. Valid values are year or month
+      //   cssClass: 'balls' //A CSS class (or more, just separate with spaces) that will be added to the event when it is displayed on each view. Useful for marking an event as selected / active etc
+      // }];
+
       vm.completeMeals = completeMeals;
 
       function showModal(day) {
@@ -88,7 +110,7 @@
             $scope.selectedDate = day;
             $scope.completeMeals = completeMeals;
             $scope.placeMeal = function (meal, date) {
-              console.log('Placing', arguments);
+              $log.log('Placing', arguments);
               meal.starts_at = day.date.toString();
               Meals.update(meal);
             };
@@ -105,23 +127,30 @@
         event.stopPropagation();
       }
 
-      function eventEdited() {
-        vm.showModal('Edited', event);
+      // function eventEdited(calendarEvent) {
+      //   $log.log('edited', arguments);
+      //   var meal = Object.getPrototypeOf(calendarEvent);
+      //   Meals.update(meal);
+      // }
+
+      function eventDeleted(calendarEvent) {
+        $log.log('del', arguments);
+        var meal = Object.getPrototypeOf(calendarEvent);
+        meal.startsAt = null;
+        Meals.update(meal);
+        vm.events.splice(Utils.collIndexOf(vm.events, calendarEvent), 1);
+        vm.completeMeals.push(meal);
       }
 
-      function eventDeleted() {
-        vm.showModal('Deleted', event);
-      }
-
-      function timespanClick(calendarDate) {
-        // if($(event.target).hasClass('cal-day-past')){ return false;}
-        // $log.log('day clicked', event);
-        // $log.log(arguments);
-        // vm.showModal(calendarDate);
-        // event.preventDefault();
-        // event.stopPropagation();
-        // return false;
-      }
+      // function timespanClick(calendarDate) {
+      //   // if($(event.target).hasClass('cal-day-past')){ return false;}
+      //   // $log.log('day clicked', event);
+      //   // $log.log(arguments);
+      //   // vm.showModal(calendarDate);
+      //   // event.preventDefault();
+      //   // event.stopPropagation();
+      //   // return false;
+      // }
 
       function setCalendarToToday() {
         vm.calendarDay = new Date();
@@ -149,17 +178,26 @@
         // return false;
       }
 
+      function eventTimesChanged(updatedEvent){
+        $log.log('eventTimesChanged', arguments);
+        var meal = Object.getPrototypeOf(updatedEvent);
+        meal.startsAt = updatedEvent.startsAt;
+        //meal.endsAt = updatedEvent.endsAt;
+        Meals.update(meal);
+      }
+
       angular.extend(vm, {
         name: 'FoodCalendarCtrl',
         showModal: showModal,
         eventClicked: eventClicked,
-        eventEdited: eventEdited,
+      //  eventEdited: eventEdited,
         eventDeleted: eventDeleted,
-        timespanClick: timespanClick,
+      //  timespanClick: timespanClick,
         setCalendarToToday: setCalendarToToday,
         drillDownClick: drillDownClick,
         weekdayClick: weekdayClick,
-        addClicked: addClicked
+        addClicked: addClicked,
+        eventTimesChanged: eventTimesChanged
       });
 
     });
