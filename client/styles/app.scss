@@ -165,6 +165,25 @@ to prevent collapsing during animation*/
   background: #999;
 }
 
+.cal-view-buttons-holder {
+  text-align: center;
+}
+
+.cal-pagination-ctrls {
+  text-align: center;
+}
+
+@media (min-width: 992px) {
+  .cal-view-buttons {
+    float: right;
+  }
+  .cal-pagination-ctrls {
+    text-align: left;
+  }
+}
+
+
+
 .nav-tabs {
     h2 {
     display: inline-block;
