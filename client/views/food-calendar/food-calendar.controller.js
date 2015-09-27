@@ -14,12 +14,20 @@
 
     function wrap(element, index, array) {
 
-      var eventWrapper = Object.create(element);
+      var localStartDate, localEndDate, eventWrapper;
+
+      eventWrapper = Object.create(element);
+      // localStartDate = moment(element.startsAt).toDate();//.local().format("YYYY-MM-DD HH:mm");
+      // localEndDate = moment(element.startsAt).toDate();//.local().add(1, 'h').format("YYYY-MM-DD HH:mm");
+      $log.log('original', element.startsAt, typeof element.startsAt);
+      // $log.log('localStartDate', localStartDate, typeof localStartDate);
+      // $log.log('localEndDate', localEndDate, typeof localEndDate);
+
       eventWrapper = angular.extend(eventWrapper, {
         title: element.name, // The title of the event
         type: 'info', // The type of the event (determines its color). Can be important, warning, info, inverse, success or special
-        startsAt: moment(element.startsAt).toDate(), // A javascript date object for when the event starts
-        endsAt: moment(element.startsAt).add(1, 'h').toDate(), // Optional - a javascript date object for when the event ends
+        startsAt: new Date(element.startsAt), // A javascript date object for when the event starts
+        endsAt: localEndDate, // Optional - a javascript date object for when the event ends
         editable: false, // If edit-event-html is set and this field is explicitly set to false then dont make it editable.
         deletable: true, // If delete-event-html is set and this field is explicitly set to false then dont make it deleteable
         draggable: true, //Allow an event to be dragged and dropped
@@ -39,10 +47,11 @@
       placedMeals = _.reject(mls, 'startsAt', null);
       vm.events = placedMeals.map(wrap);
 
-      $log.log("meals data: ", data);
-      $log.log("mls", mls);
+      // $log.log("meals data: ", data);
+      // $log.log("mls", mls);
       $log.log("completeMeals: ", completeMeals);
       $log.log("placedMeals: ", placedMeals);
+      $log.log("vm.events: ", vm.events);
 
       vm.canAdd = completeMeals.length > 0 ? true : false;
 
@@ -67,18 +76,19 @@
             $scope.selectedDate = day;
             $scope.wrap = wrap;
             $scope.placeMeal = function (meal, date) {
-              var $mealPlaced;
+              var $mealPlaced, m = angular.copy(meal);
               $log.log('Placing', arguments);
-              meal.startsAt = day.date.toString();
-              $mealPlaced = Meals.update(meal);
+              $log.log('DAY', day.date.toDate());
+              m.startsAt = moment.utc(day.date); //cast to UTC Moment.
+              $mealPlaced = Meals.update(m);
               $q.when($mealPlaced, function (pML) {
                 $log.log(pML);
-                // var scheduledMeal = vm.wrap(meal);
-                // completeMeals.splice(Utils.collIndexOf(completeMeals, meal), 1);
-                // placedMeals.push(scheduledMeal);
+                var scheduledMeal = vm.wrap(meal);
+                completeMeals.splice(Utils.collIndexOf(completeMeals, meal), 1);
+                placedMeals.push(scheduledMeal);
               });
 
-              event.stopPropagation();
+              //event.stopPropagation();
             };
             //$log.log('modal scope', vm);
           },
@@ -146,10 +156,13 @@
 
       function eventTimesChanged(updatedEvent) {
         $log.log('eventTimesChanged', arguments);
-        var meal = Object.getPrototypeOf(updatedEvent);
+        var meal = Object.getPrototypeOf(updatedEvent), scheduledMeal;
         $log.log(typeof meal.startsAt);
-        meal.startsAt = new Date(updatedEvent.startsAt); //moment(updatedEvent.startsAt).toDate();
+        meal.startsAt = moment.utc(updatedEvent.startsAt, 'DD-MM-YYYY').toDate();
         Meals.update(meal);
+        scheduledMeal = vm.wrap(meal);
+        placedMeals.splice(Utils.collIndexOf(placedMeals, updatedEvent), 1);
+        placedMeals.push(scheduledMeal);
       }
 
       angular.extend(vm, {

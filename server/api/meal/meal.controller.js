@@ -99,7 +99,10 @@
         meal.isComplete = req.body.isComplete;
         meal.hasBeenStrategised = req.body.hasBeenStrategised;
         meal.recipe = req.body.recipe;
-        meal.startsAt = moment(req.body.startsAt).toDate();
+        meal.startsAt = moment.utc(req.body.startsAt);
+        if(!meal.startsAt){
+          meal.startsAt = null;
+        }
 
         console.log('original', meal.startAt, 'finished', moment(req.body.startsAt).toDate());
 
