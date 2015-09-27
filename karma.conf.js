@@ -56,6 +56,8 @@ module.exports = function (config) {
       './bower_components/lodash-deep/lodash-deep.js',
       './bower_components/bootstrap/dist/js/bootstrap.js',
       './bower_components/angular-bootstrap-calendar/dist/js/angular-bootstrap-calendar-tpls.js',
+      './bower_components/bootstrap-tour/build/js/bootstrap-tour.js',
+      './bower_components/bootstrap-tour/build/js/bootstrap-tour-standalone.js',
       'app.js',
       'constants.js',
       'views/**/*.js',
