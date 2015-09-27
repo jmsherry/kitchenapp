@@ -9,6 +9,11 @@
   var ShoppingItem = require('./../shopping/shoppingItem.model');
   var MealItem = require('./mealItem.model');
   var _ = require('lodash');
+  var moment = require('moment');
+  moment.createFromInputFallback = function(config) {
+    // your favorite unreliable string magic, or
+    config._d = new Date(config._i);
+  };
 
   function handleError(res, err) {
     console.log('Error', err);
@@ -94,7 +99,9 @@
         meal.isComplete = req.body.isComplete;
         meal.hasBeenStrategised = req.body.hasBeenStrategised;
         meal.recipe = req.body.recipe;
-        meal.starts_at = req.body.starts_at;
+        meal.startsAt = moment(req.body.startsAt).toDate();
+
+        console.log('original', meal.startAt, 'finished', moment(req.body.startsAt).toDate());
 
         meal.save(function (err, ml) {
           if (err) {
