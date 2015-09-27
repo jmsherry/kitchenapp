@@ -45,7 +45,10 @@
         positionClass = 'toast-bottom-right';
       }
 
-
+      moment.createFromInputFallback = function(config) {
+        // your favorite unreliable string magic, or
+        config._d = new Date(config._i);
+      };
 
       $urlRouterProvider.otherwise('/');
       $locationProvider.html5Mode(true);
