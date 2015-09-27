@@ -29,6 +29,10 @@
       console.warn('Lodash not loaded');
     }
 
+    if(!Tour){
+      console.warn('Bootstrap Tour not loaded');
+    }
+
     // Constants used by the entire app
     angular
         .module('kitchenapp')
@@ -36,7 +40,8 @@
         .constant('d3', d3)
         .constant('nv', nv)
         .constant('$', $)
-        .constant('_', _);
+        .constant('_', _)
+        .constant('Tour', Tour);
 
 
 })();
