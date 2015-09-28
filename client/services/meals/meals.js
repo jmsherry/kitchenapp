@@ -440,8 +440,14 @@
       }
 
       function errCB(meal, err) {
+        var errString;
         $log.log('update errCB: ', err);
-        toastr.error('Failed to update ' + meal.name + "!", 'Server Error ' + err.status + ' ' + err.data.message);
+        if(err){
+          errString = err.status + ' ' + err.data.message
+        } else {
+          errString = '';
+        }
+        toastr.error('Failed to update ' + meal.name + "!", 'Server Error ' + errString);
       }
 
       flatMeal

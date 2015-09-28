@@ -99,12 +99,16 @@
         meal.isComplete = req.body.isComplete;
         meal.hasBeenStrategised = req.body.hasBeenStrategised;
         meal.recipe = req.body.recipe;
-        meal.startsAt = moment.utc(req.body.startsAt);
-        if(!meal.startsAt){
+
+        if(!req.body.startsAt){
+          console.log('fixed');
           meal.startsAt = null;
+        } else {
+          console.log('processed');
+          meal.startsAt = moment.utc(req.body.startsAt);
         }
 
-        console.log('original', meal.startAt, 'finished', moment(req.body.startsAt).toDate());
+        console.log('original', req.body.startsAt, 'finished', meal.startsAt);
 
         meal.save(function (err, ml) {
           if (err) {

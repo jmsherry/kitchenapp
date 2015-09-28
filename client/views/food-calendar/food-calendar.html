@@ -55,9 +55,28 @@
     <span class="glyphicon glyphicon-arrow-right"></span>
   </p>
 
-  <mwl-calendar view="vm.calendarView" current-day="vm.calendarDay" events="vm.events" meals="vm.completeMeals" view-title="vm.calendarTitle" on-event-click="vm.eventClicked(calendarEvent)" on-event-times-changed="vm.eventTimesChanged(calendarEvent); calendarEvent.startsAt = calendarNewEventStart; calendarEvent.endsAt = calendarNewEventEnd"
-  edit-event-html="'<i class=\'glyphicon glyphicon-pencil\'></i>'" delete-event-html="'<i class=\'glyphicon glyphicon-remove\'></i>'" on-edit-event-click="vm.eventEdited(calendarEvent)" on-delete-event-click="vm.eventDeleted(calendarEvent)" on-drill-down-click="vm.drillDownClick(calendarEvent)"
-  on-timespan-click="vm.timespanClick(day)" on-weekday-click="vm.weekdayClick(calendarEvent)" on-add-click="vm.addClicked(day)" day-view-start="06:00" day-view-end="22:00" day-view-split="30" use-iso-week="true" week-title-label="" auto-open="true">
-  </mwl-calendar>
+  <mwl-calendar
+	view="vm.calendarView"
+	current-day="vm.calendarDay"
+	events="vm.events"
+	meals="vm.completeMeals"
+	canAdd="vm.canAdd"
+	view-title="vm.calendarTitle"
+	on-event-click="vm.eventClicked(calendarEvent)"
+	on-event-times-changed="vm.eventTimesChanged(calendarEvent, calendarNewEventStart); calendarEvent.startsAt = calendarNewEventStart; calendarEvent.endsAt = calendarNewEventEnd"
+  edit-event-html="'<i class=\'glyphicon glyphicon-pencil\'></i>'"
+	delete-event-html="'<i class=\'glyphicon glyphicon-remove\'></i>'"
+	on-edit-event-click="vm.eventEdited(calendarEvent)"
+	on-delete-event-click="vm.eventDeleted(calendarEvent)"
+	on-drill-down-click="vm.drillDownClick(calendarEvent)"
+  on-timespan-click="vm.timespanClick(day)"
+	on-weekday-click="vm.weekdayClick(calendarEvent)"
+	on-add-click="vm.addClicked(day)"
+	day-view-start="06:00"
+	day-view-end="22:00"
+	day-view-split="30"
+	use-iso-week="true"
+	week-title-label=""
+	auto-open="true"></mwl-calendar>
 
 </div>
