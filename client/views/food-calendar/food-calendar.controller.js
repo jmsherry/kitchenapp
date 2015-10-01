@@ -184,6 +184,7 @@
 
 
 
+
         //if date is in the past return and error toast.
         if (moment(newStartTime).isBefore(now, 'day')) {
           toastr.warning('That date is in the past and will be disregarded; Resetting calendar...');
