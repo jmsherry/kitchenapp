@@ -76,14 +76,14 @@
             $scope.selectedDate = day;
             $scope.wrap = wrap;
             $scope.placeMeal = function (meal, date) {
-              var $mealPlaced, m = angular.copy(meal);
+              var $updatedMeal, m = angular.copy(meal);
               $log.log('Placing', arguments);
               $log.log('DAY', day.date.toDate());
               m.startsAt = moment.utc(day.date); //cast to UTC Moment.
-              $mealPlaced = Meals.update(m);
-              $q.when($mealPlaced, function (pML) {
-                $log.log(pML);
-                var scheduledMeal = vm.wrap(meal);
+              $updatedMeal = Meals.update(m);
+              $q.when($updatedMeal, function (updatedMeal) {
+                $log.log(updatedMeal);
+                var scheduledMeal = vm.wrap(updatedMeal);
                 completeMeals.splice(Utils.collIndexOf(completeMeals, meal), 1);
                 placedMeals.push(scheduledMeal);
               });
@@ -119,6 +119,7 @@
         $updatedMeal = Meals.update(mealCopy);
         $q.when($updatedMeal, function (updatedMeal) {
           vm.events.splice(Utils.collIndexOf(vm.events, calendarEvent), 1);
+          vm.placedMeals.splice(Utils.collIndexOf(vm.placedMeal, meal), 1);
           vm.completeMeals.push(meal);
         });
         event.stopPropagation();
@@ -183,11 +184,9 @@
           scheduledMeal;
 
 
-
-
         //if date is in the past return and error toast.
         if (moment(newStartTime).isBefore(now, 'day')) {
-          toastr.warning('That date is in the past and will be disregarded; Resetting calendar...');
+          toastr.warning('That date is in the past and will be disregarded!');
           // $timeout(function(){
           //   //$window.location.reload();
           //   $state.go($state.current, {}, {reload: true});

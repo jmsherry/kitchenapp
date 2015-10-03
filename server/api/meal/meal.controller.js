@@ -106,6 +106,7 @@
         } else {
           console.log('processed');
           meal.startsAt = moment.utc(req.body.startsAt);
+          meal.endsAt = moment.utc(req.body.startsAt).add(1, 'h');
         }
 
         console.log('original', req.body.startsAt, 'finished', meal.startsAt);

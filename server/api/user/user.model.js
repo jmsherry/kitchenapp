@@ -10,7 +10,8 @@
     email: String,
     passwordHash: String,
     salt: String,
-    budget: Number
+    budget: Number,
+    inducted: Boolean
   });
 
   /**

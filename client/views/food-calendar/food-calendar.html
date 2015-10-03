@@ -63,7 +63,7 @@
 	canAdd="vm.canAdd"
 	view-title="vm.calendarTitle"
 	on-event-click="vm.eventClicked(calendarEvent)"
-	on-event-times-changed="vm.eventTimesChanged(calendarEvent, calendarNewEventStart); calendarEvent.startsAt = calendarNewEventStart; calendarEvent.endsAt = calendarNewEventEnd"
+	on-event-times-changed="vm.eventTimesChanged(calendarEvent, calendarNewEventStart)"
   edit-event-html="'<i class=\'glyphicon glyphicon-pencil\'></i>'"
 	delete-event-html="'<i class=\'glyphicon glyphicon-remove\'></i>'"
 	on-edit-event-click="vm.eventEdited(calendarEvent)"
