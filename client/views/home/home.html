@@ -19,7 +19,7 @@
       </ul>
       <p>...and you can even add your own recipes and ingredients!</p>
       <div class="intros">
-        <button class="btn btn-primary" ng-click="vm.introVideo()">Watch the intro video</button>
+        <button id="introVideoBtn" class="btn btn-primary" ng-click="vm.introVideo()">Watch the intro video</button>
         <button class="btn btn-primary" ng-click="vm.takeTour()" ng-if="Auth.isLogged()">Take Tour</button>
       </div>
       <strong ng-if="!Auth.isLogged()">To begin, please register or sign in above...</strong>

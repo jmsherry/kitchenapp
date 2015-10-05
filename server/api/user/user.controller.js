@@ -64,6 +64,7 @@
         console.log(user);
         user.budget = req.body.budget;
         user.email = req.body.email;
+        user.inducted = req.body.inducted;
         user.save(function (err, updatedUser) {
           if (err) {
             return handleError(res, err);

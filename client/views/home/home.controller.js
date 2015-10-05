@@ -4,11 +4,21 @@
   angular.module('kitchenapp.controllers')
     .controller('HomeCtrl', HomeCtrl);
 
-  HomeCtrl.$inject = ['$modal', '$log', 'Tour', 'TourSteps'];
+  HomeCtrl.$inject = ['$modal', '$log', 'Tour', 'TourSteps', 'Auth', '$q', '$', '$timeout'];
 
-  function HomeCtrl($modal, $log, Tour, TourSteps) {
+  function HomeCtrl($modal, $log, Tour, TourSteps, Auth, $q, $, $timeout) {
 
-    var vm = this;
+    var vm = this,
+      $user = Auth.getUser();
+
+    $q.when($user, function (user) {
+      vm.user = user;
+      if (!user.inducted) {
+        $timeout(function () {
+          $('#introVideoBtn').click();
+        });
+      }
+    });
 
     // Instance the tour
     var tour = new Tour({
@@ -46,10 +56,8 @@
 
     $log.log(tour);
 
-
-
     function takeTour() {
-$log.log(tour);
+      $log.log(tour);
       // Initialize the tour
       tour.init();
 
@@ -62,7 +70,12 @@ $log.log(tour);
       $modal.open({
         templateUrl: '/views/modals/intro-modal.html',
         controller: function ($modalInstance, $scope) {
-
+          $scope.inductUser = function inductUser() {
+            vm.user.inducted = true;
+            Auth.updateUser(vm.user);
+            $modalInstance.close();
+          };
+          $scope.user = vm.user;
         }
       });
     }
