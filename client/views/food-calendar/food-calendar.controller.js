@@ -12,21 +12,35 @@
 
     var meals, completeMeals, placedMeals, vm = this;
 
+    function isValidDate(d) {
+      if (Object.prototype.toString.call(d) !== "[object Date]")
+        return false;
+      return !isNaN(d.getTime());
+    }
+
     function wrap(element, index, array) {
 
       var localStartDate, localEndDate, eventWrapper;
 
       eventWrapper = Object.create(element);
-      // localStartDate = moment(element.startsAt).toDate();//.local().format("YYYY-MM-DD HH:mm");
-      // localEndDate = moment(element.startsAt).toDate();//.local().add(1, 'h').format("YYYY-MM-DD HH:mm");
+      localStartDate = moment(element.startsAt).local().toDate(); //.local().format("YYYY-MM-DD HH:mm");
+      localEndDate = moment(element.startsAt).local().add(1, 'h').toDate(); //.local().add(1, 'h').format("YYYY-MM-DD HH:mm");
       $log.log('original', element.startsAt, typeof element.startsAt);
-      // $log.log('localStartDate', localStartDate, typeof localStartDate);
-      // $log.log('localEndDate', localEndDate, typeof localEndDate);
+      $log.log('localStartDate', localStartDate, _.isDate(localStartDate));
+      $log.log('localEndDate', localEndDate, _.isDate(localEndDate));
+
+      if(!isValidDate(localStartDate)){
+        throw new Error('Invalid start date');
+      }
+
+      if(!isValidDate(localEndDate)){
+        throw new Error('Invalid end date');
+      }
 
       eventWrapper = angular.extend(eventWrapper, {
         title: element.name, // The title of the event
         type: 'info', // The type of the event (determines its color). Can be important, warning, info, inverse, success or special
-        startsAt: new Date(element.startsAt), // A javascript date object for when the event starts
+        startsAt: localStartDate, // A javascript date object for when the event starts
         endsAt: localEndDate, // Optional - a javascript date object for when the event ends
         editable: false, // If edit-event-html is set and this field is explicitly set to false then dont make it editable.
         deletable: true, // If delete-event-html is set and this field is explicitly set to false then dont make it deleteable
@@ -71,8 +85,8 @@
             //var vm = this;
             $log.log('modal controller running', arguments, placedMeals);
 
-            $scope.completeMeals = completeMeals;
-            $scope.placedMeals = placedMeals;
+            $scope.completeMeals = vm.completeMeals;
+            $scope.placedMeals = vm.placedMeals;
             $scope.selectedDate = day;
             $scope.wrap = wrap;
             $scope.placeMeal = function (meal, date) {
@@ -86,6 +100,9 @@
                 var scheduledMeal = vm.wrap(updatedMeal);
                 completeMeals.splice(Utils.collIndexOf(completeMeals, meal), 1);
                 placedMeals.push(scheduledMeal);
+                if (completeMeals.length === 0) {
+                  $modalInstance.close();
+                }
               });
 
               event.stopPropagation();
@@ -119,7 +136,7 @@
         $updatedMeal = Meals.update(mealCopy);
         $q.when($updatedMeal, function (updatedMeal) {
           vm.events.splice(Utils.collIndexOf(vm.events, calendarEvent), 1);
-          vm.placedMeals.splice(Utils.collIndexOf(vm.placedMeal, meal), 1);
+          vm.placedMeals.splice(Utils.collIndexOf(vm.placedMeals, meal), 1);
           vm.completeMeals.push(meal);
         });
         event.stopPropagation();
@@ -182,7 +199,6 @@
           now = moment(),
           $updatedMeal,
           scheduledMeal;
-
 
         //if date is in the past return and error toast.
         if (moment(newStartTime).isBefore(now, 'day')) {

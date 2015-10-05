@@ -4,9 +4,9 @@
   angular.module('kitchenapp.controllers')
     .controller('HomeCtrl', HomeCtrl);
 
-  HomeCtrl.$inject = ['$modal', '$log', 'Tour', 'TourSteps', 'Auth', '$q', '$', '$timeout'];
+  HomeCtrl.$inject = ['$modal', '$log', 'Tour', 'TourSteps', 'Auth', '$q', '$', '$timeout', '$window'];
 
-  function HomeCtrl($modal, $log, Tour, TourSteps, Auth, $q, $, $timeout) {
+  function HomeCtrl($modal, $log, Tour, TourSteps, Auth, $q, $, $timeout, $window) {
 
     var vm = this,
       $user = Auth.getUser();
@@ -26,7 +26,7 @@
       steps: TourSteps.getSteps(),
       container: "body",
       keyboard: true,
-      storage: window.localStorage,
+      storage: $window.localStorage,
       debug: true,
       backdrop: false,
       backdropContainer: 'body',
@@ -71,8 +71,10 @@
         templateUrl: '/views/modals/intro-modal.html',
         controller: function ($modalInstance, $scope) {
           $scope.inductUser = function inductUser() {
-            vm.user.inducted = true;
-            Auth.updateUser(vm.user);
+            if (!vm.user.inducted) {
+              vm.user.inducted = true;
+              Auth.updateUser(vm.user);
+            }
             $modalInstance.close();
           };
           $scope.user = vm.user;

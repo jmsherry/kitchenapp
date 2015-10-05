@@ -1,14 +1,18 @@
 <div class="modal-container">
-	<button type="button" class="close" aria-label="Close" ng-click="$close(null)"><span aria-hidden="true">&times;</span></button>
+  <button type="button" class="close" aria-label="Close" ng-click="$close(null)">
+    <span aria-hidden="true">&times;</span>
+  </button>
 
 
-      <div class="iframe-wrapper">
-        <h1>Introduction Video</h1>
-<iframe width="560" height="315" src="https://www.youtube.com/embed/8Y3TU6T0n34?autoplay=1" frameborder="0" allowfullscreen></iframe>
-<div class="actions">
-	<button type="button" class="btn btn-primary pull-right" aria-label="Close" ng-click="inductUser()">Done</button>
-</div>
-</div>
+  <div class="iframe-wrapper">
+    <h1>Introduction Video</h1>
+    <div class="video-container">
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/8Y3TU6T0n34?autoplay=1" frameborder="0" allowfullscreen></iframe>
+    </div>
+    <div class="actions">
+      <button type="button" class="btn btn-primary pull-right" aria-label="Close" ng-click="vm.inductUser(); $close(null)">Done</button>
+    </div>
+  </div>
 
 
 </div>
