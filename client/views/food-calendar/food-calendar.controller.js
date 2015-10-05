@@ -100,7 +100,7 @@
                 var scheduledMeal = vm.wrap(updatedMeal);
                 $log.log('scheduledMeal', scheduledMeal);
                 vm.completeMeals.splice(Utils.collIndexOf(vm.completeMeals, meal), 1);
-                vm.placedMeals.push(scheduledMeal);
+                vm.placedMeals.push(updatedMeal);
                 vm.events.push(scheduledMeal);
                 if (completeMeals.length === 0) {
                   $modalInstance.close();
