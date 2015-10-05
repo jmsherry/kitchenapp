@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('kitchenapp.directives')
-    .directive('navBar', function () {
+    .directive('kaNavBar', function () {
       return {
         restrict: 'E',
         replace: true,
