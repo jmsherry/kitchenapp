@@ -8,6 +8,7 @@
 
   router.get('/me', auth.isAuthenticated(), controller.getMe);
   router.post('/', controller.create);
+  router.put('/:userid', controller.update);
 
   module.exports = router;
 }());

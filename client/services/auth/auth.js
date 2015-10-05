@@ -4,9 +4,9 @@
   angular.module('kitchenapp.services')
     .service('Auth', Auth);
 
-    Auth.$inject = ['$rootScope', '$cookieStore', '$q', '$http', '$location', '$timeout', '$state'];
+    Auth.$inject = ['$rootScope', '$cookieStore', '$q', '$http', '$location', '$timeout', '$state', '$log'];
 
-    function Auth($rootScope, $cookieStore, $q, $http, $location, $timeout, $state) {
+    function Auth($rootScope, $cookieStore, $q, $http, $location, $timeout, $state, $log) {
 
       var _user = {};
 
@@ -113,11 +113,11 @@
        * @returns {promise}
        */
       this.updateUser = function updateUser(user) {
+        $log.log(arguments);
         var deferred = $q.defer();
-        $http.put('/api/users', user)
+        $http.put('/api/users/'+ user._id, user)
           .then(function (res) {
-            _user = res.data.user;
-            $cookieStore.put('token', res.data.token);
+            _user = res.data;
             deferred.resolve(_user);
           })
           .catch(function (err) {

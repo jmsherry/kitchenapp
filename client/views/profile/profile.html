@@ -1,16 +1,41 @@
 <div>
   <h1>Profile View</h1>
 
-	<div class="form-group">
-		<img gravatar-src-once="vm.user.email" gravatar-size="100" height="100" width="100" ng-cloak>
-		<p>To edit your avatar go to <a href="//www.gravatar.com" target="_self">gravatar.com</a></p>
-	</div>
+  <div class="form-group">
+    <img id="avatar" gravatar-src-once="vm.user.email" gravatar-size="100" height="100" width="100" ng-cloak>
+    <p>To edit your avatar go to <a href="//www.gravatar.com" target="_self">gravatar.com</a></p>
+  </div>
 
-	<dl class="personal-details">
-		<dt>Email</dt>
-		<dd>{{vm.user.email}}</dd>
-		<dt>Budget</dt>
-		<dd>{{vm.user.budget | currency }} per week</dd>
-	</dl>
-
+  <form novalidate name="updateForm" ng-submit="vm.updateProfile()">
+    <dl class="personal-details">
+      <dt>Email Address</dt>
+      <dd ng-if="!vm.editingEmail">{{vm.user.email}}
+        <button type="button" class="btn btn-primary" ng-click="vm.editEmail(true)" ng-if="!vm.editingEmail">Edit</button>
+      </dd>
+      <dd ng-if="vm.editingEmail">
+        <div class="form-group" ng-class="{ 'has-error' : signupForm.email.$invalid && !signupForm.email.$pristine }">
+          <input type="text" name="email" id="email" placeholder="Enter an email address" ng-model="vm.user.email" ng-required="true" ng-minlength="2" ng-maxlength="30" class="form-control">
+          <p ng-show="signupForm.email.$invalid && !signupForm.email.$pristine" class="help-block">A valid email is required.</p>
+        </div>
+        <div class="form-group">
+          <button type="button" class="btn btn-default" ng-click="vm.editEmail(false)" ng-if="vm.editingEmail">Cancel</button>
+        </div>
+      </dd>
+      <dt>Budget</dt>
+      <dd ng-if="!vm.editingBudget">{{vm.user.budget | currency }} per week
+        <button type="button" class="btn btn-primary" ng-click="vm.editBudget(true)" ng-if="!vm.editingBudget">Edit</button>
+      </dd>
+      <dd ng-if="vm.editingBudget">
+        <div class="form-group" ng-class="{ 'has-error' : signupForm.email.$invalid && !signupForm.email.$pristine }">
+          <input id="userBudget" type="text" ng-model="vm.user.budget" placeholder="&pound;?" class="form-control">
+        </div>
+        <div class="form-group">
+          <button type="button" class="btn btn-default" ng-click="vm.editBudget(false)" ng-if="vm.editingBudget">Cancel</button>
+        </div>
+      </dd>
+    </dl>
+    <div class="form-group">
+      <button ng-if="vm.editingBudget || vm.editingEmail" type="submit" class="btn btn-primary" ng-disabled="signupForm.$invalid">Submit</button>
+    </div>
+  </form>
 </div>
