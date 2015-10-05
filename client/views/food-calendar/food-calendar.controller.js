@@ -205,21 +205,22 @@
         //if date is in the past return and error toast.
         if (moment(newStartTime).isBefore(now, 'day')) {
           toastr.warning('That date is in the past and will be disregarded!');
-          // $timeout(function(){
-          //   //$window.location.reload();
-          //   $state.go($state.current, {}, {reload: true});
-          // }, 1500);
           return scheduledMeal;
         }
 
         meal.startsAt = moment(newStartTime);
 
-        //scheduledMeal.endsAt = moment(meal.startsAt).add(1, 'h').toDate();
         $log.log(meal, typeof meal.startsAt);
 
         $updatedMeal = Meals.update(meal);
         $q.when($updatedMeal, function (updatedMeal) {
-          $log.log('updatdMeal', updatedMeal);
+          $log.log('updatedMeal', updatedMeal);
+          var scheduledMeal = vm.wrap(updatedMeal);
+          $log.log('scheduledMeal', scheduledMeal);
+          vm.placedMeals.splice(Utils.collIndexOf(vm.placedMeals, meal), 1);
+          vm.events.splice(Utils.collIndexOf(vm.events, meal), 1);
+          vm.placedMeals.push(updatedMeal);
+          vm.events.push(scheduledMeal);
         });
       }
 
