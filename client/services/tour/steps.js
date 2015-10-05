@@ -630,7 +630,7 @@
     }
 
     function getSteps(customTour) {
-      var tourType;
+      var tourType, configuredTour = [];
       if ($window.innerWidth/$window.devicePixelRatio < 768) {
         tourType = 'mobile';
       } else {
@@ -640,8 +640,10 @@
       $log.info('tourType = ' + tourType);
 
       for (var tour in tours) {
-
+        configuredTour.push(tour[tourType]);
       }
+
+      configuredTour = _.flatten(configuredTour);
 
       return configuredTour;
 

@@ -71,11 +71,18 @@
         templateUrl: '/views/modals/intro-modal.html',
         controller: function ($modalInstance, $scope) {
           $scope.inductUser = function inductUser() {
+            var $inducted;
+            $log.log('inductUser');
             if (!vm.user.inducted) {
+              $log.log('inductUser');
               vm.user.inducted = true;
-              Auth.updateUser(vm.user);
+              $inducted = Auth.updateUser(vm.user);
+              $q.when($inducted, function(inducted){
+                modalInstance.close();
+              });
+            } else {
+              $modalInstance.close();
             }
-            $modalInstance.close();
           };
           $scope.user = vm.user;
         }
