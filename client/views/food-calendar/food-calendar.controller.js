@@ -96,10 +96,12 @@
               m.startsAt = moment.utc(day.date); //cast to UTC Moment.
               $updatedMeal = Meals.update(m);
               $q.when($updatedMeal, function (updatedMeal) {
-                $log.log(updatedMeal);
+                $log.log('updatedMeal', updatedMeal);
                 var scheduledMeal = vm.wrap(updatedMeal);
-                completeMeals.splice(Utils.collIndexOf(completeMeals, meal), 1);
-                placedMeals.push(scheduledMeal);
+                $log.log('scheduledMeal', scheduledMeal);
+                vm.completeMeals.splice(Utils.collIndexOf(vm.completeMeals, meal), 1);
+                vm.placedMeals.push(scheduledMeal);
+                vm.events.push(scheduledMeal);
                 if (completeMeals.length === 0) {
                   $modalInstance.close();
                 }

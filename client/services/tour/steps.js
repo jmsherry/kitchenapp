@@ -631,11 +631,13 @@
 
     function getSteps(customTour) {
       var tourType;
-      if ($window.offsetWidth < 300) {
+      if ($window.innerWidth/$window.devicePixelRatio < 768) {
         tourType = 'mobile';
       } else {
         tourType = 'desktop';
       }
+
+      $log.info('tourType = ' + tourType);
 
       for (var tour in tours) {
 
@@ -644,6 +646,8 @@
       return configuredTour;
 
   }
+
+  $log.info($window);
 
   return {
     getSteps: getSteps
