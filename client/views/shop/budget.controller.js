@@ -16,28 +16,30 @@
       $data;
 
     function paginateNext() {
-      $log.log('paginateNext');
+      $log.log('paginateNext', vm.currentDay);
       vm.currentDay.add(7, 'd');
+      $log.log(vm.currentDay);
       event.stopPropagation();
     }
 
     function paginatePrev() {
-      $log.log('paginatePrev');
+      $log.log('paginatePrev', vm.currentDay);
       vm.currentDay.subtract(7, 'd');
+      $log.log(vm.currentDay);
       event.stopPropagation();
     }
 
     function goToToday() {
       event.stopPropagation();
       $log.log('goToToday');
-      if(vm.currentDay.isSame(moment(), 'date')){
+      if(vm.currentDay.isSame(moment(), 'd')){
         $log.warn('Was already viewing this week');
         return;
       }
       vm.currentDay = moment();
     }
 
-    $scope.$watch('vm.currentDay', function(oldValue, newValue){
+    $scope.$watch('vm.currentDay', function(newValue, oldValue){
       $log.log('Day change! ', arguments);
       if(newValue.isSame(moment(), 'd')){
         vm.thisWeek = true;
