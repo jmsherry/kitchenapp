@@ -219,8 +219,8 @@
           $log.log('scheduledMeal', scheduledMeal);
           vm.placedMeals.splice(Utils.collIndexOf(vm.placedMeals, meal), 1);
           vm.events.splice(Utils.collIndexOf(vm.events, meal), 1);
-          vm.placedMeals.push(updatedMeal);
           vm.events.push(scheduledMeal);
+          vm.placedMeals.push(updatedMeal);
         });
       }
 

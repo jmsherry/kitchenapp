@@ -8,23 +8,24 @@
 
   function Transaction($q, $resource, Auth, Ingredients, toastr, Cupboard, $log, moment, _) {
 
+    var _purchases = $q.defer();
+
     function getPurchases() {
-      var $user = Auth.getUser(),
-        deferred = $q.defer();
+      var $user = Auth.getUser();
 
       $q.when($user, function (user) {
         $resource('/api/users/:userid/purchases', {
             userid: user._id
           })
-          .query(function (purchases) {
-            $q.when(purchases, function (data) {
+          .query(function ($data) {
+            $q.when($data, function (data) {
               $log.log(data);
-              deferred.resolve(data);
+              _purchases.resolve(data);
             });
           });
       });
 
-      return deferred.promise;
+      return _purchases.promise;
     }
 
     function getBudgetInformation(date) {
@@ -33,75 +34,89 @@
         spentValues = [],
         $user = Auth.getUser(),
         budget,
-        data, weeksPurchases = [],
+        $data, weeksPurchases = [],
         pdLen, wpCondensed = [],
         thisPurchase, amountSpent = 0,
-        thisDay;
+        thisDay, thisDayDate, lastKnownBudget;
 
-      data = this.getPurchases();
+      $data = this.getPurchases();
       deferred = $q.defer();
 
-      $q.when($user, function (user) {
-        budget = user.budget;
-        $q.when(data, function (purchaseData) {
-          pdLen = purchaseData.length;
-          $log.log('purchaseData', purchaseData);
-          startOfWeek = moment(date).startOf('isoweek');
-          endOfWeek = moment(date).endOf('isoweek');
+        $q.when($user, function (user) {
+          //budget = user.budget;
+          $q.when($data, function (purchaseData) {
+            pdLen = purchaseData.length;
+            $log.log('purchaseData', purchaseData);
+            startOfWeek = moment(date).startOf('isoweek');
+            endOfWeek = moment(date).endOf('isoweek');
 
-          $log.log(startOfWeek, endOfWeek);
+            $log.log(startOfWeek, endOfWeek);
 
-          //collect the relevant purchases
-          for (var i = 0; i < pdLen; i += 1) {
-            thisPurchase = purchaseData[i];
-            $log.log('thisPurchase', thisPurchase);
-            if (moment(thisPurchase.dateAdded).isBetween(startOfWeek, endOfWeek)) {
-              weeksPurchases.push(thisPurchase);
+            //collect the relevant purchases
+            for (var i = 0; i < pdLen; i += 1) {
+              thisPurchase = purchaseData[i];
+              thisPurchase.dateAdded = moment(thisPurchase.dateAdded).local();
+
+              if (thisPurchase.dateAdded.isBetween(startOfWeek, endOfWeek)) {
+                thisPurchase.dateAdded = thisPurchase.dateAdded.format('DD-MM-YYYY');
+                $log.log('thisPurchase', thisPurchase);
+                weeksPurchases.push(thisPurchase);
+              } else if(thisPurchase.dateAdded.isBefore(startOfWeek)){
+                lastKnownBudget = thisPurchase.currentBudget;
+              }
+
             }
-          }
 
-          //group them by day
-          wpCondensed = _.groupBy(weeksPurchases, 'dateAdded');
-          $log.log('wpCondensed', wpCondensed);
+            //group them by day
+            wpCondensed = _.groupBy(weeksPurchases, 'dateAdded');
+            $log.log('wpCondensed', wpCondensed);
 
-          //make the value an array of amounts
-          for (var prop in wpCondensed) {
-            if (wpCondensed.hasOwnProperty(prop)) {
-              wpCondensed[prop] = _.pluck(wpCondensed[prop], 'amount');
-              wpCondensed[prop] = _.sum(wpCondensed[prop]);
-              wpCondensed[moment(prop).isoWeekday()] = wpCondensed[prop];
-              delete(wpCondensed[prop]);
+            //make the value an array of amounts
+            for (var prop in wpCondensed) {
+              if (wpCondensed.hasOwnProperty(prop)) {
+                wpCondensed[prop] = {amount: _.pluck(wpCondensed[prop], 'amount'), budget: _.pluck(wpCondensed[prop], 'currentBudget')};
+                wpCondensed[prop].amount = _.sum(wpCondensed[prop].amount);
+                wpCondensed[prop].budget = _.max(wpCondensed[prop].budget);
+                wpCondensed[moment(prop).isoWeekday()] = angular.copy(wpCondensed[prop]);
+                delete(wpCondensed[prop]);
+              }
             }
-          }
 
-          for (i = 0, thisDay = null, amountSpent = 0; i < 7; i += 1) {
-            thisDay = moment(startOfWeek);
-            amountSpent += wpCondensed[i + 1] || 0; // +1 because isoWeekday is not zero based
-            thisDay.add(i, 'd');
-            if (thisDay.isAfter(moment())) {
-              break;
+            for (i = 0, thisDay = null, thisDayDate = null, amountSpent = 0; i < 7; i += 1) {
+              thisDay = moment(startOfWeek); //get start of week
+              thisDay.add(i, 'd'); //get day 1, day 2, each iteration of the loop, up to 7
+              if (thisDay.isAfter(moment())) { //break from loop if dates are in the future
+                break;
+              }
+
+              if(wpCondensed[i + 1]){
+                amountSpent += wpCondensed[i + 1]['amount'] // +1 because isoWeekday is not zero based
+                lastKnownBudget = budget = wpCondensed[i + 1]['budget'];
+              } else {
+                budget = lastKnownBudget;
+              }
+              thisDayDate = thisDay.toDate();
+              remValues.push({
+                x: thisDayDate,
+                y: budget - amountSpent,
+                series: 0
+              });
+              spentValues.push({
+                x: thisDayDate,
+                y: amountSpent,
+                series: 1
+              });
             }
-            remValues.push({
-              x: thisDay.toDate(),
-              y: budget - amountSpent,
-              series: 0
-            });
-            spentValues.push({
-              x: thisDay.toDate(),
-              y: amountSpent,
-              series: 1
-            });
-          }
 
-          deferred.resolve([{
-            "key": "Remaining Budget",
-            "values": remValues
-          }, {
-            "key": 'Amount Spent (in total)',
-            "values": spentValues
-          }]);
+            deferred.resolve([{
+              "key": "Remaining Budget",
+              "values": remValues
+            }, {
+              "key": 'Amount Spent (in total)',
+              "values": spentValues
+            }]);
+          });
         });
-      });
 
       return deferred.promise;
 

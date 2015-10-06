@@ -45,7 +45,7 @@
               onHidden: function (tour) {},
               onNext: function (tour) {
                 //$state.go('food-calendar');
-                //toggleMobileMenu('open');
+                toggleMobileMenu('open');
               },
               onPrev: function (tour) {},
               onPause: function (tour) {},
@@ -131,6 +131,60 @@
             onHidden: function (tour) {},
             onNext: function (tour) {
               toggleMobileMenu('close');
+            },
+            onPrev: function (tour) {},
+            onPause: function (tour) {},
+            onResume: function (tour) {},
+            onRedirectError: function (tour) {}
+          },{
+            path: "/",
+            host: "",
+            element: "#auth-menu li:first-child a",
+            placement: "right",
+            title: "Your Avatar",
+            content: "Your avatar is provided by gravatar.com and is adustable when you change your email",
+            orphan: false,
+            onShow: function (tour) {},
+            onShown: function (tour) {},
+            onHide: function (tour) {},
+            onHidden: function (tour) {},
+            onNext: function (tour) {
+            },
+            onPrev: function (tour) {},
+            onPause: function (tour) {},
+            onResume: function (tour) {},
+            onRedirectError: function (tour) {}
+          },{
+            path: "/",
+            host: "",
+            element: ".personal-details dd:first-of-type button",
+            placement: "above",
+            title: "Change Email",
+            content: "You can update your email here...",
+            orphan: false,
+            onShow: function (tour) {},
+            onShown: function (tour) {},
+            onHide: function (tour) {},
+            onHidden: function (tour) {},
+            onNext: function (tour) {
+            },
+            onPrev: function (tour) {},
+            onPause: function (tour) {},
+            onResume: function (tour) {},
+            onRedirectError: function (tour) {}
+          },{
+            path: "/",
+            host: "",
+            element: ".personal-details dd:last-of-type button",
+            placement: "above",
+            title: "Change Budget",
+            content: "You can adjust your weekly budget here.",
+            orphan: false,
+            onShow: function (tour) {},
+            onShown: function (tour) {},
+            onHide: function (tour) {},
+            onHidden: function (tour) {},
+            onNext: function (tour) {
             },
             onPrev: function (tour) {},
             onPause: function (tour) {},
@@ -466,7 +520,7 @@
           }],
           mobile: [{
             element: ".nav.navbar-nav:first-child > li:first-child a",
-            placement: "left",
+            placement: "right",
             title: "The Food Calendar",
             content: "This view lets you place meals...",
             // next: 2,
@@ -631,7 +685,7 @@
 
     function getSteps(customTour) {
       var tourType, configuredTour = [];
-      if ($window.innerWidth/$window.devicePixelRatio < 768) {
+      if ($window.innerWidth < 768) {
         tourType = 'mobile';
       } else {
         tourType = 'desktop';
@@ -640,7 +694,7 @@
       $log.info('tourType = ' + tourType);
 
       for (var tour in tours) {
-        configuredTour.push(tour[tourType]);
+        configuredTour.push(tours[tour][tourType]);
       }
 
       configuredTour = _.flatten(configuredTour);

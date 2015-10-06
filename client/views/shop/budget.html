@@ -6,6 +6,19 @@
 <div class="row">
 	<div class="col-xs-12">
 		<p>Graph of weekly shopping expenditure:</p>
-    <nvd3 options='options' data='data' api="api"></nvd3>
+		<div class="form-group">
+			<button class="btn btn-primary" ng-click="vm.paginatePrev()">
+				Last Week
+			</button>
+
+			<button class="btn btn-default" ng-click="vm.goToToday()">
+				This Week
+			</button>
+
+			<button class="btn btn-primary" ng-click="vm.paginateNext()" ng-disabled="vm.thisWeek">
+				Next Week
+			</button>
+		</div>
+    <nvd3 options='vm.options' data='vm.data' api="api"></nvd3>
 	</div>
 </div>
