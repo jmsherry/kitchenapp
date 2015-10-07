@@ -46,19 +46,24 @@
           //budget = user.budget;
           $q.when($data, function (purchaseData) {
             pdLen = purchaseData.length;
+
+            if(!pdLen){
+              deferred.resolve([]);
+            }
+
             $log.log('purchaseData', purchaseData);
-            startOfWeek = moment(date).startOf('isoweek');
-            endOfWeek = moment(date).endOf('isoweek');
+            startOfWeek = moment(date).startOf('isoWeek');
+            endOfWeek = moment(date).endOf('isoWeek');
 
             $log.log(startOfWeek, endOfWeek);
 
             //collect the relevant purchases
             for (var i = 0; i < pdLen; i += 1) {
               thisPurchase = purchaseData[i];
-              thisPurchase.dateAdded = moment(thisPurchase.dateAdded).local();
+              thisPurchase.dateAdded = moment().utc(thisPurchase.dateAdded, 'DD-MM-YYYY').local();
 
               if (thisPurchase.dateAdded.isBetween(startOfWeek, endOfWeek)) {
-                thisPurchase.dateAdded = thisPurchase.dateAdded.format('DD-MM-YYYY');
+                thisPurchase.dateAdded = thisPurchase.dateAdded;
                 $log.log('thisPurchase', thisPurchase);
                 weeksPurchases.push(thisPurchase);
               } else if(thisPurchase.dateAdded.isBefore(startOfWeek)){
@@ -93,7 +98,7 @@
                 amountSpent += wpCondensed[i + 1]['amount'] // +1 because isoWeekday is not zero based
                 lastKnownBudget = budget = wpCondensed[i + 1]['budget'];
               } else {
-                budget = lastKnownBudget;
+                budget = lastKnownBudget || user.budget;
               }
               thisDayDate = thisDay.toDate();
               remValues.push({

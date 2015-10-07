@@ -72,7 +72,7 @@
             top: 20,
             right: 20,
             bottom: 60,
-            left: 45
+            left: 60
           },
           callback: function (chart) {
             //$log.log('GYGYYGYGYGYGGYYYGYGYGYGYGYGY', chart);
@@ -99,7 +99,7 @@
             rotateYLabel: true,
             height: 60,
             ticks: null,
-            width: 75,
+            width: 200,
             margin: {
               top: 0,
               right: 0,
@@ -123,7 +123,7 @@
           },
           yAxis: {
             axisLabel: "Cost",
-            axisLabelDistance: 30,
+            axisLabelDistance: -15,
             tickFormat: function (d) {
               return '£' + d3.format(',.2f')(d);
             },
@@ -134,7 +134,7 @@
             showMaxMin: true,
             height: 60,
             ticks: null,
-            width: 75,
+            width: 30,
             margin: {
               top: 0,
               right: 0,

@@ -8,6 +8,7 @@
   var Ingredient = require('./../ingredient/ingredient.model');
   var CupboardItem = require('./cupboardItem.model');
   var Transaction = require('./../transaction/transaction.model');
+  var moment = require('moment');
   //var _ = require('lodash');
 
   function handleError(res, err) {
@@ -57,7 +58,7 @@
 
             var transaction = new Transaction({
               owner: req._params.userid,
-              dateAdded: new Date(),
+              dateAdded: new Date().toUTCString(),
               amount: ing.price,
               currentBudget: user.budget
             });

@@ -116,6 +116,60 @@
             onPause: function (tour) {},
             onResume: function (tour) {},
             onRedirectError: function (tour) {}
+          },{
+            path: "/",
+            host: "",
+            element: "#auth-menu li:first-child a",
+            placement: "right",
+            title: "Your Avatar",
+            content: "Your avatar is provided by gravatar.com and is adustable when you change your email",
+            orphan: false,
+            onShow: function (tour) {},
+            onShown: function (tour) {},
+            onHide: function (tour) {},
+            onHidden: function (tour) {},
+            onNext: function (tour) {
+            },
+            onPrev: function (tour) {},
+            onPause: function (tour) {},
+            onResume: function (tour) {},
+            onRedirectError: function (tour) {}
+          },{
+            path: "/",
+            host: "",
+            element: ".personal-details dd:first-of-type button",
+            placement: "above",
+            title: "Change Email",
+            content: "You can update your email here...",
+            orphan: false,
+            onShow: function (tour) {},
+            onShown: function (tour) {},
+            onHide: function (tour) {},
+            onHidden: function (tour) {},
+            onNext: function (tour) {
+            },
+            onPrev: function (tour) {},
+            onPause: function (tour) {},
+            onResume: function (tour) {},
+            onRedirectError: function (tour) {}
+          },{
+            path: "/",
+            host: "",
+            element: ".personal-details dd:last-of-type button",
+            placement: "above",
+            title: "Change Budget",
+            content: "You can adjust your weekly budget here.",
+            orphan: false,
+            onShow: function (tour) {},
+            onShown: function (tour) {},
+            onHide: function (tour) {},
+            onHidden: function (tour) {},
+            onNext: function (tour) {
+            },
+            onPrev: function (tour) {},
+            onPause: function (tour) {},
+            onResume: function (tour) {},
+            onRedirectError: function (tour) {}
           }],
           mobile: [{
             path: "/",

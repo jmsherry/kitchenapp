@@ -7,15 +7,15 @@
 	<div class="col-xs-12">
 		<p>Graph of weekly shopping expenditure:</p>
 		<div class="form-group">
-			<button class="btn btn-primary" ng-click="vm.paginatePrev()">
+			<button class="btn btn-primary" ng-click="vm.paginatePrev()" ng-disabled="vm.data.length === 0">
 				Last Week
 			</button>
 
-			<button class="btn btn-default" ng-click="vm.goToToday()">
+			<button class="btn btn-default" ng-click="vm.goToToday()" ng-disabled="vm.data.length === 0">
 				This Week
 			</button>
 
-			<button class="btn btn-primary" ng-click="vm.paginateNext()" ng-disabled="vm.thisWeek">
+			<button class="btn btn-primary" ng-click="vm.paginateNext()" ng-disabled="vm.thisWeek || vm.data.length === 0">
 				Next Week
 			</button>
 		</div>
