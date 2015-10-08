@@ -36,7 +36,7 @@
       return jwt.sign(
         { _id: id },
         config.secrets.session,
-        { expiresInMinutes: 60 * 5 }
+        { expiresInMinutes: 60 * 15 }
       );
     }
 
