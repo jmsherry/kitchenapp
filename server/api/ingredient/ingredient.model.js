@@ -7,7 +7,7 @@
   var IngredientSchema = new Schema({
     name: {type: String, required: true},
     description: {type: String, required: true},
-    imageURL: String,
+    imageURL: {type: String, default: ""},
     quantity: {type: String, required: true},
     price: {type: Number, required: true}
   });
