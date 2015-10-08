@@ -87,7 +87,7 @@
               onHide: function (tour) {},
               onHidden: function (tour) {},
               onNext: function (tour) {
-                $state.go('profile');
+
                 toggleMobileMenu('open');
               },
               onPrev: function (tour) {},
@@ -100,12 +100,14 @@
           desktop: [{
             path: "/",
             host: "",
-            element: "#auth-menu li:first-child a",
+            element: '[ui-sref="profile"]',
             placement: "left",
             title: "Profile",
             content: "View and edit your profile here",
             orphan: false,
-            onShow: function (tour) {},
+            onShow: function (tour) {
+              $state.go('profile');
+            },
             onShown: function (tour) {},
             onHide: function (tour) {},
             onHidden: function (tour) {},
@@ -117,9 +119,7 @@
             onResume: function (tour) {},
             onRedirectError: function (tour) {}
           },{
-            path: "/",
-            host: "",
-            element: "#auth-menu li:first-child a",
+            element: "#avatar",
             placement: "right",
             title: "Your Avatar",
             content: "Your avatar is provided by gravatar.com and is adustable when you change your email",
@@ -135,10 +135,8 @@
             onResume: function (tour) {},
             onRedirectError: function (tour) {}
           },{
-            path: "/",
-            host: "",
             element: ".personal-details dd:first-of-type button",
-            placement: "above",
+            placement: "right",
             title: "Change Email",
             content: "You can update your email here...",
             orphan: false,
@@ -153,10 +151,8 @@
             onResume: function (tour) {},
             onRedirectError: function (tour) {}
           },{
-            path: "/",
-            host: "",
             element: ".personal-details dd:last-of-type button",
-            placement: "above",
+            placement: "right",
             title: "Change Budget",
             content: "You can adjust your weekly budget here.",
             orphan: false,
@@ -165,6 +161,7 @@
             onHide: function (tour) {},
             onHidden: function (tour) {},
             onNext: function (tour) {
+              $state.go('ingredients.list');
             },
             onPrev: function (tour) {},
             onPause: function (tour) {},
@@ -174,26 +171,26 @@
           mobile: [{
             path: "/",
             host: "",
-            element: "#auth-menu li:first-child a",
-            placement: "above",
+            element: '[ui-sref="profile"]',
+            placement: "left",
             title: "Profile",
             content: "View and edit your profile here",
             orphan: false,
-            onShow: function (tour) {},
+            onShow: function (tour) {
+              $state.go('profile');
+            },
             onShown: function (tour) {},
             onHide: function (tour) {},
             onHidden: function (tour) {},
             onNext: function (tour) {
-              toggleMobileMenu('close');
+
             },
             onPrev: function (tour) {},
             onPause: function (tour) {},
             onResume: function (tour) {},
             onRedirectError: function (tour) {}
           },{
-            path: "/",
-            host: "",
-            element: "#auth-menu li:first-child a",
+            element: "#avatar",
             placement: "right",
             title: "Your Avatar",
             content: "Your avatar is provided by gravatar.com and is adustable when you change your email",
@@ -209,10 +206,8 @@
             onResume: function (tour) {},
             onRedirectError: function (tour) {}
           },{
-            path: "/",
-            host: "",
             element: ".personal-details dd:first-of-type button",
-            placement: "above",
+            placement: "right",
             title: "Change Email",
             content: "You can update your email here...",
             orphan: false,
@@ -227,10 +222,8 @@
             onResume: function (tour) {},
             onRedirectError: function (tour) {}
           },{
-            path: "/",
-            host: "",
             element: ".personal-details dd:last-of-type button",
-            placement: "above",
+            placement: "right",
             title: "Change Budget",
             content: "You can adjust your weekly budget here.",
             orphan: false,
@@ -239,6 +232,11 @@
             onHide: function (tour) {},
             onHidden: function (tour) {},
             onNext: function (tour) {
+              $state.go('ingredients.list');
+              var $ingsToggle = $('.dropdown-toggle').eq(2);
+              if(!$ingsToggle.parent().hasClass('open')){
+                $ingsToggle.click();
+              }
             },
             onPrev: function (tour) {},
             onPause: function (tour) {},
@@ -250,8 +248,8 @@
           desktop: [{
             element: ".nav.navbar-nav:first-child > li:first-child a",
             placement: "left",
-            title: "The Food Calendar",
-            content: "This view lets you place meals...",
+            title: "The Ingredients List",
+            content: "This view lets you find and interact ith ingredients...",
             // next: 2,
             // prev: 0,
             animation: true,

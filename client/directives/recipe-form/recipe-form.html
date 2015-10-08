@@ -4,26 +4,26 @@
 
   <div class="form-group" ng-class="{ 'has-error' : recipeForm.name.$invalid && !recipeForm.name.$pristine }">
     <label for="recipe_name">Name</label>
-    <input type="text" name="name" id="recipe_name" placeholder="Give it a name" ng-model="vm.newRecipe.name" ng-required="true" ng-minlength="2" ng-maxlength="30">
+    <input type="text" name="name" id="recipe_name" class="form-control" placeholder="Give it a name" ng-model="vm.newRecipe.name" ng-required="true" ng-minlength="2" ng-maxlength="30">
     <p ng-show="recipeForm.name.$invalid && !recipeForm.name.$pristine" class="help-block">A name is required for the recipe.</p>
     </div>
   </div>
 
   <div class="form-group" ng-class="{ 'has-error' : recipeForm.description.$invalid && !recipeForm.description.$pristine }">
     <label for="recipe_description">Description</label>
-    <textarea name="description" id="recipe_description" placeholder="Add a description" ng-model="vm.newRecipe.description" ng-required="true" ng-minlength="2" ng-maxlength="50"></textarea>
+    <textarea name="description" id="recipe_description" class="form-control" placeholder="Add a description" ng-model="vm.newRecipe.description" ng-required="true" ng-minlength="2" ng-maxlength="50"></textarea>
     <p ng-show="recipeForm.description.$invalid && !recipeForm.description.$pristine" class="help-block">A description is required.</p>
   </div>
 
   <div class="form-group" ng-class="{ 'has-error' : recipeForm.mg_url.$invalid && !recipeForm.mg_url.$pristine }">
     <label for="recipe_img_url">Image URL</label>
-    <input type="url" id="recipe_img_url" name="img_url" placeholder="Provide a link to an image of the recipe" ng-model="vm.newRecipe.imageURL">
+    <input type="url" id="recipe_img_url" class="form-control" name="img_url" placeholder="Provide a link to an image of the recipe" ng-model="vm.newRecipe.imageURL">
     <p ng-show="recipeForm.mg_url.$invalid && !recipeForm.mg_url.$pristine" class="help-block">Incorrect URL format.</p>
   </div>
 
   <div class="form-group" ng-class="{ 'has-error' : recipeForm.ingredients.$invalid && !recipeForm.recipes.$pristine }">
     <label for="ingredientSelect" class="bg-info">Select ingredients (Hold down ctrl or cmd to select multiple ingredients)</label>
-    <select multiple id="ingredientSelect" name="ingredients" ng-model="vm.newRecipe.ingredients">
+    <select multiple id="ingredientSelect" class="form-control" name="ingredients" ng-model="vm.newRecipe.ingredients">
       <option value="{{ing._id}}" ng-repeat="ing in vm.ingredients">{{ing.name}}</option>
     </select>
     <p ng-show="recipeForm.ingredients.$invalid && !recipeForm.ingredients.$pristine" class="help-block">You need to add some ingredients</p>

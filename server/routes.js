@@ -28,6 +28,9 @@
     app.use('/api/users/cupboard', handleExpired);
     app.use('/api/users/purchases', handleExpired);
 
+    //Email service
+    app.use('/api/email', paramFix, require('./api/email'));
+
     // Auth
     app.use('/auth', require('./auth'));
 

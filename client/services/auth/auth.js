@@ -102,7 +102,6 @@
           deferred.resolve(usr);
         });
         return deferred.promise;
-        //return _user;
       };
 
 

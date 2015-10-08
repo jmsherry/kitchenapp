@@ -20,34 +20,50 @@ body {
   padding-top: 50px;
   padding-bottom: 50px;
 }
-
 @media (max-width: 768px) {
   .main-content {
     padding-bottom: 100px;
   }
 }
-
+.form-group .faux-label {
+  max-width: 100%;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #000;
+}
+.faux-value {
+  font-weight: normal;
+  margin-left: 5px;
+}
+.dropdown-menu > li > a.active,
+.navbar-default .navbar-brand.active,
+.navbar .nav > li > a.active {
+  color: #000;
+}
+.dropdown-menu > li > a.active,
+.navbar .nav > li > a.active {
+  font-weight: 600;
+}
 footer {
   background-color: #f8f8f8;
   border-top: 1px solid #e7e7e7;
   padding: 15px;
   position: fixed;
-  bottom:0;
+  bottom: 0;
   left: 0;
   width: 100%;
   .copywrite-statement,
   .contact-link {
     color: #333;
-
     display: inline-block;
   }
   .contact-link {
-    cursor:pointer;
+    cursor: pointer;
   }
   .glyphicon {
     margin-right: 5px;
   }
-  .copywrite-statement{
+  .copywrite-statement {
     margin-bottom: 0;
   }
 }
@@ -124,52 +140,23 @@ input.ng-dirty.ng-invalid {
   border: 1px solid red;
 }
 
-/*
-.ng-pristine    {  }
-.ng-dirty       {  }
-.ng-invalid-required        {  }
-.ng-invalid-minlength       {  }
-.ng-valid-max-length        {  }*/
-/* Have to set height explicity on ui-view
-to prevent collapsing during animation*/
-/*
-.ui-view-container {
-  position: relative;
-  height: 65px;
+[ui-view],
+.main-content {
+
+  .ng-enter, .ng-move{
+  	-webkit-animation: fadeInLeft 1s;
+  	-moz-animation: fadeInLeft 1s;
+  	-o-animation: fadeInLeft 1s;
+  	animation: fadeInLeft 1s;
+  }
+
+  &.ng-leave{
+    display: none;
+  }
+
 }
 
-[ui-view].ng-enter, [ui-view].ng-leave {
-  position: absolute;
-  left: 0;
-  right: 0;
-  -webkit-transition:all .5s ease-in-out;
-    -moz-transition:all .5s ease-in-out;
-    -o-transition:all .5s ease-in-out;
-    transition:all .5s ease-in-out;
-}
 
-[ui-view].ng-enter {
-  opacity: 0;
-  -webkit-transform:scale3d(0.5, 0.5, 0.5);
-  -moz-transform:scale3d(0.5, 0.5, 0.5);
-  transform:scale3d(0.5, 0.5, 0.5);
-}
-
-[ui-view].ng-enter-active {
-  opacity: 1;
-  -webkit-transform:scale3d(0.8, 0.8, 0.8);
-  -moz-transform:scale3d(0.8, 0.8, 0.8);
-  transform:scale3d(0.8, 0.8, 0.8);
-}
-
-[ui-view].ng-leave {
-  opacity: 0;
-}
-
-[ui-view].ng-leave-active {
-  opacity: 0;
-}
-*/
 .select2-container {
   width: 80%;
 }
@@ -237,11 +224,12 @@ to prevent collapsing during animation*/
     border-radius: 50%;
     padding: 2px 6px;
   }
-  .navbar-nav{
+  .navbar-nav {
     margin: 0 -15px;
   }
   .navbar-nav.navbar-right li a,
   .navbar-nav li a {
+
     //padding-left: 0;
   }
 }
@@ -485,7 +473,12 @@ select {
 }
 .modal-container {
   overflow: hidden;
-  padding: 5px;
+  padding: 15px;
+}
+@media (max-width: 320px) {
+  .modal-container {
+    padding: 5px;
+  }
 }
 .info-messages p {
   padding: 10px;

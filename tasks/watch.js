@@ -20,18 +20,20 @@ var toExclude  = require('./config/bowerFilesToExclude');
 module.exports = function () {
 
   gulp.watch('bower.json', function () {
-    gulp.src('client/index.html')
+    //gulp.src('client/index.html')
       // .pipe(inject(gulp.src(bowerFiles(), { read: false }), {
       //   name: 'bower',
       //   relative: 'true',
       //   ignorePath: toExclude
       // }))
       //.pipe(gulp.dest('client'))
-      .pipe(function(){
-        gulp.run('inject');
-      })
-      .pipe(gulp.dest('client'))
-      .pipe(bsync.reload({ stream: true }))
+      // .pipe(function(){
+      //   gulp.run('inject');
+      // })
+      // .pipe(gulp.dest('client'))
+      gulp.run('inject')
+      bsync.reload();
+      //.pipe(bsync.reload({ stream: true }))
 
   });
 

@@ -1,0 +1,54 @@
+<div class="modal-container">
+  <button type="button" class="close" aria-label="Close" ng-click="$close(null)">
+    <span aria-hidden="true">&times;</span>
+  </button>
+
+  <div class="content">
+    <h1>Contact Us</h1>
+    <div class="contact-form">
+      <form ng-submit="vm.sendMessage(this)" novalidate name="contactForm">
+
+        <div class="form-group">
+          <p class="faux-label">From: <span class="faux-value">{{vm.user.email}}</span></p>
+        </div>
+
+        <div class="form-group" ng-class="{ 'has-error' : contactForm.subject.$invalid && !contactForm.subject.$pristine }">
+          <label for="subject">Subject</label>
+          <input type="text" name="subject" id="subject" class="form-control" placeholder="Subject" ng-model="vm.email.subject" ng-maxlength="30">
+          <ul ng-if="contactForm.subject.$invalid && !contactForm.subject.$pristine" ng-messages="contactForm.subject.$error" class="help-block list-unstyled">
+            <li ng-message="maxlength">The subject must be less than 30 characters.</li>
+          </ul>
+        </div>
+
+
+        <div class="form-group" ng-class="{ 'has-error' : contactForm.message.$invalid && !contactForm.message.$pristine }">
+          <label for="message">Message</label>
+          <textarea name="message" id="message" class="form-control" placeholder="Message..." ng-model="vm.email.body" ng-required="true" ng-minlength="10" ng-maxlength="500"></textarea>
+          <ul ng-if="contactForm.message.$invalid && !contactForm.message.$pristine" ng-messages="contactForm.message.$error" class="help-block list-unstyled">
+            <li ng-message="required">A description is required.</li>
+            <li ng-message="minlength">The name must be longer than 10 characters.</li>
+            <li ng-message="maxlength">The name must be less than 500 characters.</li>
+          </ul>
+        </div>
+
+        <div class="form-group">
+          <div class="checkbox">
+            <label for="cc_self">
+              <input type="checkbox" id="cc_self" name="cc_self" ng-model="vm.email.cc_self">Send a copy to my email.
+            </label>
+          </div>
+        </div>
+
+
+        <div class="form-group">
+          <div class="pull-right">
+            <button type="submit" class="btn btn-primary" ng-disabled="contactForm.$invalid">Send</button>
+          </div>
+        </div>
+
+      </form>
+
+    </div>
+
+  </div>
+</div>

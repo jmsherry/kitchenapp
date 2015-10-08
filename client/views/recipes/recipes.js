@@ -4,13 +4,17 @@ angular.module('kitchenapp')
   .config(function ($stateProvider) {
     $stateProvider
       .state('recipes', {
-      	url: '/recipes',
+        abstract: true,
+        template: '<ui-view/>'
+      })
+      .state('recipes.list', {
+        url: '/recipes',
         templateUrl: 'views/recipes/recipes.list.html',
         controller: 'RecipesCtrl',
         controllerAs: 'vm'
       })
-      .state('addRecipe', {
-      	url: '/recipe/add',
+      .state('recipes.add', {
+        url: '/recipes/add',
         templateUrl: 'views/recipes/recipes.add.html',
         controller: 'RecipesAddCtrl',
         controllerAs: 'vm'

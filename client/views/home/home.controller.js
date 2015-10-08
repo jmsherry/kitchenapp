@@ -12,6 +12,7 @@
       $user = Auth.getUser();
 
     $q.when($user, function (user) {
+      $log.log('USER: ', user);
       vm.user = user;
       if (!user.inducted) {
         $timeout(function () {
