@@ -11,10 +11,13 @@
     var vm = this,
       $user = Auth.getUser();
 
+
+
     $q.when($user, function (user) {
+      var anonUserInducted = ($window.sessionStorage.getItem('inducted') === 'true');
       $log.log('USER: ', user);
       vm.user = user;
-      if (!user.inducted) {
+      if (!user.inducted && !anonUserInducted) {
         $timeout(function () {
           $('#introVideoBtn').click();
         });
@@ -75,8 +78,7 @@
           $scope.inductUser = function inductUser() {
             var $inducted;
             $log.log('inductUser');
-            if (!vm.user.inducted) {
-              $log.log('inductUser');
+            if (vm.user && !vm.user.inducted) {
               vm.user.inducted = true;
               $inducted = Auth.updateUser(vm.user);
               $q.when($inducted, function(inducted){
@@ -84,6 +86,7 @@
               });
             } else {
               $modalInstance.close();
+              $window.sessionStorage.setItem('inducted', 'true');
             }
           };
           $scope.user = vm.user;
