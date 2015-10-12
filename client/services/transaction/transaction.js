@@ -60,7 +60,8 @@
             //collect the relevant purchases
             for (var i = 0; i < pdLen; i += 1) {
               thisPurchase = purchaseData[i];
-              thisPurchase.dateAdded = moment().utc(thisPurchase.dateAdded, 'DD-MM-YYYY').local();
+              //thisPurchase.dateAdded = moment().utc(thisPurchase.dateAdded, 'DD-MM-YYYY').local();
+              thisPurchase.dateAdded = moment(thisPurchase.dateAdded, 'YYYY-MM-DD').local();
 
               if (thisPurchase.dateAdded.isBetween(startOfWeek, endOfWeek)) {
                 thisPurchase.dateAdded = thisPurchase.dateAdded;
