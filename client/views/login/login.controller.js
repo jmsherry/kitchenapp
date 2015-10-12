@@ -13,6 +13,7 @@
       angular.extend(vm, {
 
         name: 'LoginCtrl',
+        messages: messages,
 
         /**
          * Login method

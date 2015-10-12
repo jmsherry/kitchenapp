@@ -73,18 +73,19 @@
         });
       }
 
-      function errCB(err) {
-        $log.log('in errCB', arguments);
-        // if (err.status === 401) {
-        //   $state.go('login', {
-        //     messages: [{
-        //       service: 'Auth',
-        //       msg: "Your session has expired. Please log in to continue..."
-        //     }]
-        //   });
-        // } else {
-        toastr.error('Failed to load meals!', 'Server Error ' + err.status + ' ' + err.data.message);
-        //}
+      function errorCB(err) {
+        $log.log('in Meals init errCB', arguments);
+        if (err.status === 401) {
+          $state.go('login', {
+            messages: [{
+              service: 'Auth',
+              type: 'error',
+              msg: "Your session has expired. Please log in to continue..."
+            }]
+          });
+        } else {
+          toastr.error('Failed to load meals!', 'Server Error ' + err.status + ' ' + err.data.message);
+        }
         $deferred.reject(err);
       }
 
@@ -102,7 +103,7 @@
         });
 
         //setup local
-        server.query(_.bind(successCB, self), _.bind(errCB, self));
+        server.query(_.bind(successCB, self), _.bind(errorCB, self));
       });
 
     }
@@ -442,7 +443,7 @@
       function errCB(meal, err) {
         var errString;
         $log.log('update errCB: ', err);
-        if(err){
+        if (err) {
           errString = err.status + ' ' + err.data.message
         } else {
           errString = '';

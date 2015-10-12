@@ -66,7 +66,16 @@
     }
 
     function errorCB(err) {
-      self.toastr.error('Error initialising shopping service: ', err);
+      if (err.status === 401) {
+        self.$state.go('login', {
+          messages: [{
+            service: 'Auth',
+            msg: "Your session has expired. Please log in to continue..."
+          }]
+        });
+      } else {
+        self.toastr.error('Error initialising shopping service', err);
+      }
       self.deferred.reject(err);
     }
 

@@ -70,13 +70,13 @@
         self.$state.go('login', {
           messages: [{
             service: 'Auth',
+            type: 'error',
             msg: "Your session has expired. Please log in to continue..."
           }]
         });
       } else {
         self.toastr.error('Error initialising cupboard service', err);
       }
-
       self.deferred.reject(err);
     }
 

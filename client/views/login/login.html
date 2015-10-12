@@ -12,8 +12,8 @@
   <h1>Log In</h1>
 
   <ul class="messages list-unstyled">
-    <li ng-repeat="message in messages">
-      {{message | json}}
+    <li ng-repeat="message in messages" class="alert alert-{{message.type}}" role="alert">
+      {{message.msg}}
     </li>
   </ul>
 

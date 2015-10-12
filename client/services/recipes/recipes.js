@@ -24,10 +24,20 @@
         console.log('Recipes service loaded.', _recipes, data);
       }
 
-      function errCB(err) {
-        console.log('in errCB', arguments);
-        $deferred.reject(err);
-        toastr.error('Failed to load recipes!', 'Server Error ' + err.status + ' ' + err.data.message);
+      function errorCB(err) {
+        $log.log('in recs init errCB', arguments);
+        if (err.status === 401) {
+          self.$state.go('login', {
+            messages: [{
+              service: 'Auth',
+              type: 'error',
+              msg: "Your session has expired. Please log in to continue..."
+            }]
+          });
+        } else {
+          toastr.error('Failed to load recipes!', 'Server Error ' + err.status + ' ' + err.data.message);
+        }
+        deferred.reject(err);
       }
 
       _recipes.then(function (data) {
@@ -36,7 +46,7 @@
         _recipes = data;
       });
 
-      _resource.query(successCB, errCB);
+      _resource.query(successCB, errorCB);
     }
 
     function get() {

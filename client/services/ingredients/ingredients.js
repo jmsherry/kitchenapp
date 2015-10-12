@@ -24,10 +24,20 @@ angular.module('kitchenapp.services')
               $log.log('Ingredients service loaded.', _ingredients, data);
             }
 
-            function errCB(err){
-              $log.log('in errCB', arguments);
-              $deferred.reject(err);
-              toastr.error('Failed to load ingredients!', 'Server Error ' + err.status + ' ' + err.data.message);
+            function errorCB(err) {
+              $log.log('in ings init errCB', arguments);
+              if (err.status === 401) {
+                self.$state.go('login', {
+                  messages: [{
+                    service: 'Auth',
+                    type: 'error',
+                    msg: "Your session has expired. Please log in to continue..."
+                  }]
+                });
+              } else {
+                self.toastr.error('Failed to load ingredients!', 'Server Error ' + err.status + ' ' + err.data.message);
+              }
+              deferred.reject(err);
             }
 
             _ingredients.then(function(data){
@@ -37,7 +47,7 @@ angular.module('kitchenapp.services')
               $log.log('_ingredients after', _ingredients);
             });
 
-            _resource.query(successCB, errCB);
+            _resource.query(successCB, errorCB);
          }
 
         function get() {
