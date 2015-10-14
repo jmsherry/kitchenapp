@@ -85,12 +85,12 @@
           });
 
 
-      	it('shows a toastr error if the server responds with an error', function(){
-      		ingsRequestHandler.respond(500, {message: 'balls'});
-      		spyOn(toastr, 'error').and.callThrough();
-              $httpBackend.flush();
-      		expect(toastr.error).toHaveBeenCalled();
-      	});
+      	// it('shows a toastr error if the server responds with an error', function(){
+      	// 	ingsRequestHandler.respond(500, {message: 'balls'});
+      	// 	spyOn(toastr, 'error').and.callThrough();
+        //       $httpBackend.flush();
+      	// 	expect(toastr.error).toHaveBeenCalled();
+      	// });
       });
 
 

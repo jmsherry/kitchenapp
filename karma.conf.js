@@ -62,6 +62,7 @@ module.exports = function (config) {
       'views/**/*.js',
       'views/**/*.html',
       'services/**/*.js',
+      'interceptors/**/*.js',
       'directives/**/*.js',
       'directives/**/*.html'
     ],
