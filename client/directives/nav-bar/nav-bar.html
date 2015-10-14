@@ -19,13 +19,13 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav" ng-hide="isLoading">
         <li ng-show="vm.isLogged">
-          <a ui-sref="food-calendar" href="#" ui-sref-active="active">Schedule Meals</a>
+          <a ui-sref="food-calendar" href="#" ui-sref-active="active">Schedule<span class="full-title"> Meals</span></a>
         </li>
         <li ng-show="vm.isLogged">
           <a ui-sref="meals" href="#" ui-sref-active="active">Build Meals</a>
         </li>
         <li ng-show="vm.isLogged">
-          <a ui-sref="cupboard" href="#" ui-sref-active="active">My Cupboard</a>
+          <a ui-sref="cupboard" href="#" ui-sref-active="active"><span class="full-title">My </span>Cupboard</a>
         </li>
         <li class="dropdown" ng-show="vm.isLogged">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" target="_self" ng-class="{ active: vm.shoppingState }">Shopping<span class="caret"></span></a>
