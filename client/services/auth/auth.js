@@ -13,13 +13,11 @@
       if ($cookieStore.get('token')) {
         $http.get('/api/users/me')
           .then(function (res) {
-            $log.log('Logged in: ', err);
+            $log.log('Logged in: ', res);
             _user = res.data;
           })
           .catch(function (err) {
             $log.info('Tried early log in and failed');
-              //toastr.error('Error logging in. Please try again later.');
-              //$log.error('Not logged in: ', err);
           });
       }
 
@@ -55,6 +53,7 @@
           .then(function (res) {
             _user = res.data.user;
             $cookieStore.put('token', res.data.token);
+            $rootScope.$broadcast('login');
             deferred.resolve(_user);
           })
           .catch(function (err) {
@@ -70,10 +69,11 @@
         $rootScope.isLoggingOut = true;
         $cookieStore.remove('token');
         $state.go('home');
+        $rootScope.$broadcast('logout');
         _user = {};
         $timeout(function(){
           $rootScope.isLoggingOut = false;
-          console.log('logging out done');
+          $log.log('logging out done');
         }, 500);
 
       };

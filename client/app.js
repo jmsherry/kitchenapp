@@ -45,7 +45,7 @@
         positionClass = 'toast-bottom-right';
       }
 
-      //$httpProvider.interceptors.push('AuthInterceptor');
+      $httpProvider.interceptors.push('AuthInterceptor');
 
       //https://github.com/moment/moment/issues/1407
       moment.createFromInputFallback = function (config) {

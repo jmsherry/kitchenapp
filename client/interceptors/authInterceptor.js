@@ -1,4 +1,4 @@
-(function () {
+//(function () {
   'use strict';
 
 angular.module('kitchenapp').factory('AuthInterceptor', AuthInterceptor);
@@ -9,7 +9,7 @@ function AuthInterceptor($injector, $log) {
 
     return {
       response: function(res){
-        $log.log('In interceptor: response', res);
+        //$log.log('In interceptor: response', res);
         return res;
       },
       responseError: function (rejection) {
@@ -29,4 +29,4 @@ function AuthInterceptor($injector, $log) {
     };
   }
 
-});
+//});

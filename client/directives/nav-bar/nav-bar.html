@@ -64,7 +64,6 @@
       </ul>
 
       <ul class="nav navbar-nav navbar-right" id="auth-menu"  ng-if="!isLoading || !isLoggingOut">
-        <li>{{vm | json}}</li>
         <li ng-hide="Auth.isLogged()">
           <a href="#" ui-sref="signup" ui-sref-active="active">signup</a>
         </li>
