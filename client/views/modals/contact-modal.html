@@ -14,7 +14,7 @@
 
         <div class="form-group" ng-class="{ 'has-error' : contactForm.from.$invalid && !contactForm.from.$pristine }" ng-if="!vm.user || !vm.user.email">
           <label for="subject">From</label>
-          <input type="email" name="from" id="from" class="form-control" placeholder="From" ng-model="vm.user.email" ng-maxlength="30" ng-required="true">
+          <input type="email" name="from" id="from" class="form-control" placeholder="From" ng-model="vm.user.email" ng-maxlength="30" ng-required="true" autofocus>
           <ul ng-if="contactForm.from.$invalid && !contactForm.from.$pristine" ng-messages="contactForm.from.$error" class="help-block list-unstyled">
             <li ng-message="maxlength">The subject must be less than 30 characters.</li>
             <li ng-message="email">Not a valid email. Please check carefully and try again...</li>
@@ -40,12 +40,13 @@
           </ul>
         </div>
 
-        <div class="form-group">
+        <!-- <div class="form-group"> -->
           <div class="checkbox">
-              <label for="cc_self"><input type="checkbox" id="cc_self" name="cc_self" ng-model="vm.email.cc_self">Send a copy to my email.
+              <label for="cc_self">
+                <input type="checkbox" id="cc_self" name="cc_self" ng-model="vm.email.cc_self">Send a copy to my email.
               </label>
           </div>
-        </div>
+        <!-- </div> -->
 
 
         <div class="form-group">
