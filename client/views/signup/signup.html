@@ -13,7 +13,7 @@
 
   <div class="form-group" ng-class="{ 'has-error' : signupForm.email.$invalid && !signupForm.email.$pristine }">
     <label for="email">Email address</label>
-    <input type="text" name="email" id="email" placeholder="Enter an email address" ng-model="vm.user.email" ng-required="true" ng-minlength="2" ng-maxlength="30" class="form-control">
+    <input type="email" name="email" id="email" placeholder="Enter an email address" ng-model="vm.user.email" ng-required="true" ng-minlength="2" ng-maxlength="30" class="form-control">
     <p ng-show="signupForm.email.$invalid && !signupForm.email.$pristine" class="help-block">A valid email is required.</p>
     </div>
   </div>
