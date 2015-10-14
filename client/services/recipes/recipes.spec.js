@@ -78,7 +78,7 @@
 					recsRequestHandler.respond(500, {message: 'balls'});
 					spyOn(toastr, 'error').and.callThrough();
 					$httpBackend.flush();
-					//expect(toastr.error).toHaveBeenCalled();
+					expect(toastr.error).toHaveBeenCalled();
 				});
 			});
 

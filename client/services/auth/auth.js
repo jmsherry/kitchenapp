@@ -4,26 +4,22 @@
   angular.module('kitchenapp.services')
     .service('Auth', Auth);
 
-    Auth.$inject = ['$rootScope', '$cookieStore', '$q', '$http', '$location', '$timeout', '$state', '$log'];
+    Auth.$inject = ['$rootScope', '$cookieStore', '$q', '$http', '$timeout', '$state', '$log', 'toastr'];
 
-    function Auth($rootScope, $cookieStore, $q, $http, $location, $timeout, $state, $log) {
+    function Auth($rootScope, $cookieStore, $q, $http, $timeout, $state, $log, toastr) {
 
       var _user = {};
 
       if ($cookieStore.get('token')) {
         $http.get('/api/users/me')
           .then(function (res) {
+            $log.log('Logged in: ', err);
             _user = res.data;
           })
           .catch(function (err) {
-            if(err.status === 401){
-              $state.go('login', {
-                messages: [{
-                service: 'Auth',
-                msg: "Your session has expired. Please log in to continue..."
-                }]
-              });
-            }
+            $log.info('Tried early log in and failed');
+              //toastr.error('Error logging in. Please try again later.');
+              //$log.error('Not logged in: ', err);
           });
       }
 

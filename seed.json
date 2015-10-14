@@ -1,5 +1,5 @@
 {
-	"undefined": "localhost/kitchenapp",
+	"undefined": "localhost/kitchenapp-dev",
 	"dev": "localhost/kitchenapp-dev",
 	"prod": "localhost/kitchenapp"
 }

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('kitchenapp')
-  .config(function ($stateProvider) {
+  .config(['$stateProvider', function ($stateProvider) {
     $stateProvider
       .state('food-calendar', {
       	url: '/food-calendar',
@@ -9,4 +9,4 @@ angular.module('kitchenapp')
         controller: 'FoodCalendarCtrl',
         controllerAs: 'vm'
       });
-  });
+  }]);

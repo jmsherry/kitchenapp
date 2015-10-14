@@ -45,6 +45,9 @@
         positionClass = 'toast-bottom-right';
       }
 
+      //$httpProvider.interceptors.push('AuthInterceptor');
+
+      //https://github.com/moment/moment/issues/1407
       moment.createFromInputFallback = function (config) {
         // your favorite unreliable string magic, or
         config._d = new Date(config._i);
@@ -52,7 +55,6 @@
 
       $urlRouterProvider.otherwise('/');
       $locationProvider.html5Mode(true);
-      $httpProvider.interceptors.push('authInterceptor');
 
       uiSelectConfig.theme = 'select2';
 
@@ -77,32 +79,10 @@
 
       angular.extend(toastrConfig, {
         timeOut: 5000,
+        preventDuplicates: true,
         positionClass: positionClass
       });
 
-    }])
-    .factory('authInterceptor', ['$rootScope', '$q', '$cookieStore', '$location', function authInterceptor($rootScope, $q, $cookieStore, $location) {
-      return {
-
-        request: function (config) {
-          config.headers = config.headers || {};
-          if ($cookieStore.get('token')) {
-            config.headers.Authorization = 'Bearer ' + $cookieStore.get('token');
-          }
-          return config;
-        },
-
-        responseError: function (response) {
-          if (response.status === 401) {
-            $location.path('/login');
-            $cookieStore.remove('token');
-            return $q.reject(response);
-          } else {
-            return $q.reject(response);
-          }
-        }
-
-      };
     }])
     .run(['$rootScope', 'Auth', '$log', '$window', function runBlock($rootScope, Auth, $log, $window) {
 
@@ -110,19 +90,10 @@
       $rootScope.isLoading = false;
       $rootScope.isLoggingOut = false;
 
-      $window.ka = {
-        e: jQuery.Event("keydown")
-      };
-
       $("body").on('click.bgActive', ".btn-group > .btn", function () {
         $(this).addClass("active").siblings().removeClass("active");
       }).on('click.menuSelected', '.navbar-collapse ul a:not(.dropdown-toggle)', function () {
         $('.navbar-toggle:visible').click();
-      }).on('mousedown.drag', 'a.event-info.balls', function () {
-        var $this = $(this)
-        $log.log($this.offset());
-        $window.lastDraggedInitialPosition = $this.offset();
-        $window.lastDragged = $this;
       });
 
     }]);

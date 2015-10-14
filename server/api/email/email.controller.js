@@ -26,6 +26,14 @@
       }
     });
 
+    // var transporter = nodemailer.createTransport({
+    //   service: 'Mailgun',
+    //   auth: {
+    //     user: 'postmaster@app85d3d857c18d49279919ab4666a10082.mailgun.org',
+    //     pass: 'a7c3550c481b36600c75fe067792cd8f'
+    //   }
+    // });
+
     var email = req.body.email;
     var mailOptions = {
       from: email.cc,

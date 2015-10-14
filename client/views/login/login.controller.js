@@ -4,16 +4,16 @@
   angular.module('kitchenapp.controllers')
     .controller('LoginCtrl', LoginCtrl);
 
-    LoginCtrl.$inject = ['$location', 'Auth', 'toastr'];
+    LoginCtrl.$inject = ['$location', 'Auth', 'toastr', '$stateParams', '$log'];
 
-    function LoginCtrl($location, Auth, toastr) {
+    function LoginCtrl($location, Auth, toastr, $stateParams, $log) {
   //console.log(arguments);
       var vm = this;
 
       angular.extend(vm, {
 
         name: 'LoginCtrl',
-        messages: messages,
+        messages: $stateParams.messages,
 
         /**
          * Login method
@@ -22,7 +22,7 @@
           Auth.login(vm.user)
             .then(function () {
               $location.path('/');
-              console.log(Auth.isLogged());
+              $log.log('User logged in: ', Auth.isLogged());
 
             })
             .catch(function (err) {

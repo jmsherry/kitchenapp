@@ -2,7 +2,11 @@
   'use strict';
 
   angular.module('kitchenapp.controllers')
-    .controller('SignupCtrl', function ($location, Auth, toastr) {
+    .controller('SignupCtrl', SignupCtrl);
+
+    SignupCtrl.$inject = ['$location', 'Auth', 'toastr'];
+
+    function SignupCtrl($location, Auth, toastr) {
 
       var vm = this;
 
@@ -108,5 +112,5 @@
 
       });
 
-    });
+    }
 }());

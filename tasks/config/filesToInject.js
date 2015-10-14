@@ -5,6 +5,7 @@
 
 module.exports = {
   js: [
+    'client/interceptors/*.js',
     'client/app.js',
     'client/constants.js',
     'client/templates/templates.js',

@@ -26,17 +26,17 @@
 
       function errorCB(err) {
         $log.log('in recs init errCB', arguments);
-        if (err.status === 401) {
-          self.$state.go('login', {
-            messages: [{
-              service: 'Auth',
-              type: 'error',
-              msg: "Your session has expired. Please log in to continue..."
-            }]
-          });
-        } else {
+        // if (err.status === 401) {
+        //   self.$state.go('login', {
+        //     messages: [{
+        //       service: 'Auth',
+        //       type: 'error',
+        //       msg: "Your session has expired. Please log in to continue..."
+        //     }]
+        //   });
+        // } else {
           toastr.error('Failed to load recipes!', 'Server Error ' + err.status + ' ' + err.data.message);
-        }
+        //}
         deferred.reject(err);
       }
 

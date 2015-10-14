@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('kitchenapp')
-    .config(function ($stateProvider) {
+    .config(['$stateProvider', function ($stateProvider) {
       $stateProvider
         .state('login', {
         	url: '/login',
@@ -10,5 +10,5 @@
           controller: 'LoginCtrl',
           controllerAs: 'vm'
         });
-    });
+    }]);
 }());

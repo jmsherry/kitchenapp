@@ -4,9 +4,9 @@
 angular.module('kitchenapp.services')
     .factory('Ingredients', Ingredients);
 
-    Ingredients.$inject = ['$rootScope', '$cookieStore', '$q', '$http', '$resource', 'toastr', '$', '_', '$log'];
+    Ingredients.$inject = ['$rootScope', '$cookieStore', '$q', '$http', '$resource', 'toastr', '$', '_', '$log', '$state'];
 
-    function Ingredients($rootScope, $cookieStore, $q, $http, $resource, toastr, $, _, $log) {
+    function Ingredients($rootScope, $cookieStore, $q, $http, $resource, toastr, $, _, $log, $state) {
 
         var _ingredients = [],
         _resource = $resource('/api/ingredients/:itemid', {
@@ -15,28 +15,28 @@ angular.module('kitchenapp.services')
 
          function init() {
           $log.log('ingredients init');
-          var $deferred = $q.defer();
-          _ingredients = $deferred.promise;
+          var deferred = $q.defer();
+          _ingredients = deferred.promise;
 
             function successCB(data){
               $log.log('in successCB', arguments);
-              $deferred.resolve(data);
+              deferred.resolve(data);
               $log.log('Ingredients service loaded.', _ingredients, data);
             }
 
             function errorCB(err) {
               $log.log('in ings init errCB', arguments);
-              if (err.status === 401) {
-                self.$state.go('login', {
-                  messages: [{
-                    service: 'Auth',
-                    type: 'error',
-                    msg: "Your session has expired. Please log in to continue..."
-                  }]
-                });
-              } else {
-                self.toastr.error('Failed to load ingredients!', 'Server Error ' + err.status + ' ' + err.data.message);
-              }
+              // if (err.status === 401) {
+              //   $state.go('login', {
+              //     messages: [{
+              //       service: 'Auth',
+              //       type: 'error',
+              //       msg: "Your session has expired. Please log in to continue..."
+              //     }]
+              //   });
+              // } else {
+                toastr.error('Failed to load ingredients!', 'Server Error ' + err.status + ' ' + err.data.message);
+              //}
               deferred.reject(err);
             }
 

@@ -4,9 +4,9 @@
   angular.module('kitchenapp.services')
     .factory('Transaction', Transaction);
 
-  Transaction.$inject = ['$q', '$resource', 'Auth', 'Ingredients', 'toastr', 'Cupboard', '$log', 'moment', '_'];
+  Transaction.$inject = ['$q', '$resource', 'Auth', '$log', 'moment', '_'];
 
-  function Transaction($q, $resource, Auth, Ingredients, toastr, Cupboard, $log, moment, _) {
+  function Transaction($q, $resource, Auth, $log, moment, _) {
 
     var _purchases = $q.defer();
 
@@ -37,7 +37,7 @@
         $data, weeksPurchases = [],
         pdLen, wpCondensed = [],
         thisPurchase, amountSpent = 0,
-        thisDay, thisDayDate, lastKnownBudget;
+        lastKnownBudget, i, keys, thisDay = null, thisDayDate = null;
 
       $data = this.getPurchases();
       deferred = $q.defer();
@@ -58,7 +58,7 @@
             $log.log(startOfWeek, endOfWeek);
 
             //collect the relevant purchases
-            for (var i = 0; i < pdLen; i += 1) {
+            for (i = 0; i < pdLen; i += 1) {
               thisPurchase = purchaseData[i];
               //thisPurchase.dateAdded = moment().utc(thisPurchase.dateAdded, 'DD-MM-YYYY').local();
               thisPurchase.dateAdded = moment(thisPurchase.dateAdded, 'YYYY-MM-DD').local();
@@ -77,18 +77,18 @@
             wpCondensed = _.groupBy(weeksPurchases, 'dateAdded');
             $log.log('wpCondensed', wpCondensed);
 
+            keys = Object.keys(wpCondensed);
+
             //make the value an array of amounts
-            for (var prop in wpCondensed) {
-              if (wpCondensed.hasOwnProperty(prop)) {
+            keys.map(function(prop){
                 wpCondensed[prop] = {amount: _.pluck(wpCondensed[prop], 'amount'), budget: _.pluck(wpCondensed[prop], 'currentBudget')};
                 wpCondensed[prop].amount = _.sum(wpCondensed[prop].amount);
                 wpCondensed[prop].budget = _.max(wpCondensed[prop].budget);
                 wpCondensed[moment(prop).isoWeekday()] = angular.copy(wpCondensed[prop]);
                 delete(wpCondensed[prop]);
-              }
-            }
+            });
 
-            for (i = 0, thisDay = null, thisDayDate = null, amountSpent = 0; i < 7; i += 1) {
+            for (i = 0; i < 7; i += 1) {
               thisDay = moment(startOfWeek); //get start of week
               thisDay.add(i, 'd'); //get day 1, day 2, each iteration of the loop, up to 7
               if (thisDay.isAfter(moment())) { //break from loop if dates are in the future
@@ -96,7 +96,7 @@
               }
 
               if(wpCondensed[i + 1]){
-                amountSpent += wpCondensed[i + 1]['amount'] // +1 because isoWeekday is not zero based
+                amountSpent += wpCondensed[i + 1]['amount']; // +1 because isoWeekday is not zero based
                 lastKnownBudget = budget = wpCondensed[i + 1]['budget'];
               } else {
                 budget = lastKnownBudget || user.budget;
@@ -115,11 +115,11 @@
             }
 
             deferred.resolve([{
-              "key": "Remaining Budget",
-              "values": remValues
+              key: "Remaining Budget",
+              values: remValues
             }, {
-              "key": 'Amount Spent (in total)',
-              "values": spentValues
+              key: 'Amount Spent (in total)',
+              values: spentValues
             }]);
           });
         });

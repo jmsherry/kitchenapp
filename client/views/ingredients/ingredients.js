@@ -1,22 +1,22 @@
-(function(){
+(function () {
 
   'use strict';
 
   angular.module('kitchenapp')
-    .config(function ($stateProvider) {
+    .config(['$stateProvider', function ($stateProvider) {
       $stateProvider
         .state('ingredients', {
-        	url: '/ingredients',
+          url: '/ingredients',
           templateUrl: 'views/ingredients/ingredients.list.html',
           controller: 'IngredientsCtrl',
           controllerAs: 'vm'
         })
         .state('addIngredient', {
-        	url: '/ingredient/add',
+          url: '/ingredient/add',
           templateUrl: 'views/ingredients/ingredients.add.html',
           controller: 'IngredientsAddCtrl',
           controllerAs: 'vm'
         });
-    });
+    }]);
 
 }());

@@ -50,7 +50,6 @@ module.exports = function (config) {
       './bower_components/angular-ui-router/release/angular-ui-router.js',
       './bower_components/angular-ui-select/dist/select.js',
       './bower_components/fastdom/index.js',
-      './bower_components/i18n/i18n.js',
       './bower_components/interact/interact.js',
       './bower_components/lodash/lodash.js',
       './bower_components/lodash-deep/lodash-deep.js',

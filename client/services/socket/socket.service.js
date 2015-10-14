@@ -2,7 +2,11 @@
   'use strict';
 
   angular.module('kitchenapp.services')
-    .factory('Socket', function (socketFactory) {
+    .factory('Socket', Socket);
+
+    Socket.$inject = ['socketFactory'];
+
+    function Socket(socketFactory) {
 
       var ioSocket = io('', {
         path: '/socket.io'
@@ -74,5 +78,5 @@
         }
       };
 
-    });
+    }
 }());

@@ -1,7 +1,7 @@
 exports.config = { // jshint ignore:line
 
   // The version is susceptible to change
-  seleniumServerJar: './node_modules/gulp-protractor/node_modules/protractor/selenium/selenium-server-standalone-2.45.0.jar',
+  seleniumServerJar: '/Users/jamessherry/sites/ka2/node_modules/gulp-protractor/node_modules/protractor/selenium/selenium-server-standalone-2.47.1.jar',
   // chromeDriver: './node_modules/gulp-protractor/node_modules/protractor/selenium/chromedriver',
 
   baseUrl: 'http://localhost:9000',

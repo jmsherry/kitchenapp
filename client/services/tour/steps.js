@@ -249,7 +249,7 @@
             element: ".nav.navbar-nav:first-child > li:first-child a",
             placement: "left",
             title: "The Ingredients List",
-            content: "This view lets you find and interact ith ingredients...",
+            content: "This view lets you find and interact with ingredients...",
             // next: 2,
             // prev: 0,
             animation: true,
@@ -274,7 +274,7 @@
             onResume: function (tour) {},
             onRedirectError: function (tour) {}
           }, {
-            element: ".nav.navbar-nav:first-child > li:first-child a",
+            element: ".ui-grid-selection-row-header-buttons",
             placement: "bottom",
             title: "The Food Calendar",
             content: "This view lets you place meals...",

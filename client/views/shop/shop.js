@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('kitchenapp')
-    .config(function ($stateProvider) {
+    .config(['$stateProvider', function ($stateProvider) {
       $stateProvider
         .state('shop', {
         	url: '/shop',
@@ -16,5 +16,5 @@
           controller: 'BudgetCtrl',
           controllerAs: 'vm'
         });
-    });
+    }]);
 }());
