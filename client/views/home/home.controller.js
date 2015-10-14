@@ -14,7 +14,7 @@
 
 
     $q.when($user, function (user) {
-      var anonUserInducted = ($window.sessionStorage.getItem('inducted') === 'true');
+      var anonUserInducted = ($window.localStorage.getItem('inducted') === 'true');
       $log.log('USER: ', user);
       vm.user = user;
       if (!user.inducted && !anonUserInducted) {
@@ -75,7 +75,7 @@
       $modal.open({
         templateUrl: '/views/modals/intro-modal.html',
         controller: function ($modalInstance, $scope) {
-          $scope.inductUser = function inductUser() {
+          $scope.vm.inductUser = function inductUser() {
             var $inducted;
             $log.log('inductUser');
             if (vm.user && !vm.user.inducted) {
@@ -86,10 +86,10 @@
               });
             } else {
               $modalInstance.close();
-              $window.sessionStorage.setItem('inducted', 'true');
+              $window.localStorage.setItem('inducted', 'true');
             }
           };
-          $scope.user = vm.user;
+          $scope.vm.user = vm.user;
         }
       });
     }

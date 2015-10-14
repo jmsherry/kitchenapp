@@ -13,7 +13,7 @@
       if ($cookieStore.get('token')) {
         $http.get('/api/users/me')
           .then(function (res) {
-            $log.log('Logged in: ', res);
+            $log.log('Logged in: ', res.data);
             _user = res.data;
           })
           .catch(function (err) {

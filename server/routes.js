@@ -23,6 +23,7 @@
     app.use('/api/users/:userid/cupboard', paramFix, require('./api/cupboard'));
     app.use('/api/users/:userid/purchases', paramFix, require('./api/transaction'));
 
+    //Accidental Routes
     app.use('/api/users/meals', handleExpired);
     app.use('/api/users/shopping', handleExpired);
     app.use('/api/users/cupboard', handleExpired);
@@ -34,10 +35,10 @@
     // Auth
     app.use('/auth', require('./auth'));
 
-    app.route('/:url(api|app|bower_components|assets)/*')
-      .get(function (req, res) {
-        res.status(404).end();
-      });
+    // app.route('/:url(api|app|bower_components|assets)/*')
+    //   .get(function (req, res) {
+    //     res.status(404).end();
+    //   });
 
     //load testing token url
     app.route('/loaderio-133d97e6bd54d83cb2c846d835a829b4/').get(function (req, res) {
