@@ -23,10 +23,8 @@
             .then(function () {
               $location.path('/');
               $log.log('User logged in: ', Auth.isLogged());
-
             })
             .catch(function (err) {
-              //vm.error = err;
               toastr.error('Error logging in ', err.msg);
             });
         }

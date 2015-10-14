@@ -3,9 +3,9 @@
 
 angular.module('kitchenapp').factory('AuthInterceptor', AuthInterceptor);
 
-AuthInterceptor.$inject = ['$injector', '$log', '$cookieStore'];
+AuthInterceptor.$inject = ['$injector', '$log', '$cookieStore', '$q'];
 
-function AuthInterceptor($injector, $log, $cookieStore) {
+function AuthInterceptor($injector, $log, $cookieStore, $q) {
 
   return {
     request: function (config) {
@@ -23,6 +23,7 @@ function AuthInterceptor($injector, $log, $cookieStore) {
       var $stateService = $injector.get('$state');
 
       if (rejection.status === 401) {
+        $q.reject(rejection).catch(function(){
         $cookieStore.remove('token');
         $stateService.go('login', {
           messages: [{
@@ -31,7 +32,7 @@ function AuthInterceptor($injector, $log, $cookieStore) {
             msg: "Your session has expired. Please log in to continue..."
           }]
         });
-        return $q.reject(rejection);
+        });
       } else {
         return rejection;
       }

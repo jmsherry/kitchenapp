@@ -12,7 +12,8 @@
   <h1>Log In</h1>
 
   <ul class="messages list-unstyled">
-    <li ng-repeat="message in messages" class="alert alert-{{message.type}}" role="alert">
+    <li ng-repeat="message in vm.messages" class="alert" ng-class="{'alert-danger': message.type === 'error', 'alert-{{message.type}}': message.type!== 'error'}" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
       {{message.msg}}
     </li>
   </ul>

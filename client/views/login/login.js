@@ -6,6 +6,7 @@
       $stateProvider
         .state('login', {
         	url: '/login',
+          params: { messages : null },
           templateUrl: 'views/login/login.html',
           controller: 'LoginCtrl',
           controllerAs: 'vm'
