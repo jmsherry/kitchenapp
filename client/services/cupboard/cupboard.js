@@ -513,7 +513,7 @@
       self.toastr.error('Error in processing meal. Please contact the maintainer.')
       throw new Error('No ingredients supplied to Cupboard.process')
     } else if (ings.length === 0) {
-      $log.warn('Empty array supplied to cupboard process');
+      self.$log.warn('Empty array supplied to cupboard process');
       return ingsObj;
     }
 
