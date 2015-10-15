@@ -1,8 +1,6 @@
 # Kitchenapp
 
 [![Generated with](https://img.shields.io/badge/generated%20with-bangular-blue.svg?style=flat-square)](https://github.com/42Zavattas/generator-bangular)
-[![Build Status](https://travis-ci.org/jmsherry/kitchenapp.svg?branch=master)](https://travis-ci.org/jmsherry/kitchenapp)
-
 [ ![Codeship Status for jmsherry/kitchenapp](https://codeship.com/projects/2eabc9b0-2ace-0133-8c51-622b866f1c07/status?branch=master)](https://codeship.com/projects/98338)
 [![Codacy Badge](https://www.codacy.com/project/badge/01f2c1ccfd1147f8a7e449c8de41a712)](https://www.codacy.com/app/james-m-sherry/kitchenapp)
 [![Dependency Status](https://david-dm.org/jmsherry/kitchenapp.svg?style=flat)](https://david-dm.org/jmsherry/kitchenapp)
