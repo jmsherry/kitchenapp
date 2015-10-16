@@ -7,7 +7,6 @@
 [![Dependency Status](https://david-dm.org/jmsherry/kitchenapp.svg?style=flat)](https://david-dm.org/jmsherry/kitchenapp)
 [![devDependency Status](https://david-dm.org/jmsherry/kitchenapp/dev-status.svg)](https://david-dm.org/jmsherry/kitchenapp#info=devDependencies)
 
-/play ohmy
 
 Kitchenapp is a MEAN (Mongodb [with Mongoose ODM], Express js, Angular and Node) stack demo created using the bangular yeoman template.
 
