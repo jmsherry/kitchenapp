@@ -19,11 +19,11 @@ function AuthInterceptor($injector, $log, $cookieStore, $q) {
       //$log.log('In interceptor: response', res);
       return res;
     },
-    responseError: function (rejection) {
+    responseError: function (err) {
       var $stateService = $injector.get('$state');
 
-      if (rejection.status === 401) {
-        $q.reject(rejection).catch(function(){
+      if (err.status === 401) {
+        $q.reject(err).catch(function(){
         $cookieStore.remove('token');
         $stateService.go('login', {
           messages: [{
@@ -34,7 +34,7 @@ function AuthInterceptor($injector, $log, $cookieStore, $q) {
         });
         });
       } else {
-        return rejection;
+        return $q.reject(err);
       }
     }
   };
