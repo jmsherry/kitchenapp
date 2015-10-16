@@ -25,7 +25,7 @@ gulp.task('e2e',        ['serve'],    require('./tasks/test').e2eTests);
 //gulp.task('test',        ['updateKarmaConf'],   require('./tasks/test').test);
 gulp.task('test',                     require('./tasks/test').test);
 gulp.task('sassdoc',                  require('./tasks/doc').sassdoc);
+gulp.task('apidoc',                 require('./tasks/apidoc'));
 //gulp.task('appcache',   ['build'],    require('./tasks/appcache'));
 gulp.task('appcache',                 require('./tasks/appcache'));
 gulp.task('formatSeed',                 require('./tasks/format_seed'));
-gulp.task('apidoc',                 require('./tasks/apidoc'));

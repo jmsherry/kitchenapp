@@ -68,6 +68,7 @@
     "node-sass": "^3.3.3",
     "run-sequence": "^1.0.2",
     "sassdoc": "^2.1.8",
+    "sassdoc-extras": "^2.3.0",
     "should": "^7.0.0",
     "streamqueue": "^1.0.0",
     "supertest": "^1.0.0"

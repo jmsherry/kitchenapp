@@ -1,3 +1,10 @@
+////
+/// This is a poster comment.
+/// It will apply annotations to all items from file.
+/// @group API
+/// @author James Sherry
+////
+
 @-webkit-viewport {
   width: device-width;
 }
@@ -16,6 +23,28 @@
 body {
   font-family: sans-serif;
 }
+
+///
+/// {
+///  start: 37,
+///  end: 44,
+/// }
+/// Border Radius fill.
+/// This is an example of sassdoc in action and is not used
+/// @access private
+/// @deprecated Example only, do not use.
+/// @param {String} $radius - Pixel value, e.g. '32px'.
+
+@mixin border-radius($radius) {
+  -webkit-border-radius: $radius;
+     -moz-border-radius: $radius;
+      -ms-border-radius: $radius;
+          border-radius: $radius;
+}
+
+.box { @include border-radius(10px); }
+
+
 .main-content {
   padding-top: 50px;
   padding-bottom: 100px;
