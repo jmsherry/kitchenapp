@@ -28,3 +28,4 @@ gulp.task('sassdoc',                  require('./tasks/doc').sassdoc);
 //gulp.task('appcache',   ['build'],    require('./tasks/appcache'));
 gulp.task('appcache',                 require('./tasks/appcache'));
 gulp.task('formatSeed',                 require('./tasks/format_seed'));
+gulp.task('apidoc',                 require('./tasks/apidoc'));
