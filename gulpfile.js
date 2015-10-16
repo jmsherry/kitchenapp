@@ -12,6 +12,7 @@ gulp.task('watch',      ['inject'],   require('./tasks/watch'));
 gulp.task('inject',     ['sass'],     require('./tasks/inject'));
 gulp.task('sass',                     require('./tasks/sass'));
 gulp.task('images',                   require('./tasks/images'));
+gulp.task('sprite',                   require('./tasks/spriting'));
 gulp.task('preview',    ['build'],    require('./tasks/preview'));
 gulp.task('build',                    require('./tasks/build'));
 gulp.task('bump',       ['version'],  require('./tasks/chore').bump);
