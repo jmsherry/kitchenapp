@@ -1,12 +1,11 @@
 (function () {
 
   'use strict';
-  var nodemailer = require('nodemailer');
-  var wellknown = require('nodemailer-wellknown');
+  var sendgrid  = require('sendgrid')('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');
 
   function handleError(res, err) {
     console.log(err);
-    return res.sendStatus(500).send(err);
+    return res.status(500).send(err);
   }
 
   /**
@@ -17,38 +16,25 @@
    */
   exports.forwardMail = function forwardMail(req, res) {
     console.log('in addToCupboard \nreq.params', req.params, '\nreq._params', req._params, '\nreq.body: ', req.body);
-    // create reusable transporter object using SMTP transport
-    var transporter = nodemailer.createTransport({
-      service: 'Gmail',
-      auth: {
-        user: 'mytime.email@gmail.com',
-        pass: 'Tori1977'
-      }
-    });
-
-    // var transporter = nodemailer.createTransport({
-    //   service: 'Mailgun',
-    //   auth: {
-    //     user: 'postmaster@app85d3d857c18d49279919ab4666a10082.mailgun.org',
-    //     pass: 'a7c3550c481b36600c75fe067792cd8f'
-    //   }
-    // });
-
     var email = req.body.email;
+    var cc = "";
+    console.log('ccing', email.cc_self);
+    if(email.cc_self){
+      cc = email.email;
+    }
+    console.log('cc', cc);
     var mailOptions = {
-      from: email.cc,
+      from: email.email,
       to: 'james.m.sherry@gmail.com',
+      cc: cc,
       subject: email.subject,
-      text: email.message
+      text: email.body
     };
 
-    // send mail with defined transport object
-    transporter.sendMail(mailOptions, function (error, info) {
-      if (error) {
-        return handleError(res, error);
-      }
-      console.log('Message sent: ' + info.response);
-      res.send(200);
+    sendgrid.send(mailOptions, function(err, json) {
+      if (err) { return handleError(res, err); }
+      console.log('Mail sent: ', json);
+      return res.status(200).send(json);
     });
   };
 
