@@ -1,0 +1,33 @@
+<div class="modal-container" stop-event="touchend">
+  <button type="button" class="close" aria-label="Close" ng-click="$close(null)">
+    <span aria-hidden="true">&times;</span>
+  </button>
+
+  <div class="content">
+    <div class="form-group">
+      <h1>Settings</h1>
+    </div>
+    <div class="alert alert-info" role="alert"><p>The changes made here are for demo purposes and only affect
+    the first content pod on the homepage for language.</p></div>
+    <div class="form-group">
+      <label for="languagePref">Language</label>
+      <select name="languagePref" id="languagePref" ng-model="vm.lang" ng-change="vm.updateLanguage(this)" class="form-control">
+        <option ng-repeat="language in vm.languages" value="{{language.code}}" ng-selected="vm.lang === language.code">{{language.name}}</option>
+      </select>
+    </div>
+    <hr>
+    <div class="form-group">
+      <label for="currencyPref">Locale</label>
+      <select name="currencyPref" id="currencyPref" ng-model="vm.locale" ng-change="vm.updateLocale(this)" class="form-control">
+        <option ng-repeat="locale in vm.locales" value="{{locale.code}}" ng-selected="vm.locale === locale.code">{{locale.name}}</option>
+      </select>
+    </div>
+    <hr>
+    <div class="form-group">
+      <div class="pull-right">
+        <button type="submit" class="btn btn-primary" ng-disabled="contactForm.$invalid" ng-click="$close(null)">Done</button>
+      </div>
+    </div>
+  </div>
+
+</div>
