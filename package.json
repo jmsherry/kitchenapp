@@ -75,7 +75,7 @@
     "supertest": "^1.0.0"
   },
   "dependencies": {
-    "async": "^1.0.0",
+    "async": "^0.9.0",
     "body-parser": "^1.12.0",
     "chalk": "^1.0.0",
     "composable-middleware": "^0.3.0",

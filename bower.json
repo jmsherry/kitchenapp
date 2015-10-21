@@ -37,7 +37,12 @@
     "bootstrap-tour": "~0.10.2",
     "moment-timezone": "~0.4.0",
     "animate.css": "~3.4.0",
-    "fastclick": "~1.0.6"
+    "fastclick": "~1.0.6",
+    "angular-translate": "~2.8.1",
+    "angular-translate-loader-static-files": "~2.8.1",
+    "angular-translate-storage-local": "~2.8.1",
+    "angular-moment": "~0.10.3",
+    "angular-dynamic-locale": "~0.1.27"
   },
   "resolutions": {
     "jquery": "~2.x",
