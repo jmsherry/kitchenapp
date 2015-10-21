@@ -1,7 +1,7 @@
 (function () {
 
   'use strict';
-  var sendgrid  = require('sendgrid')('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');
+  var sendgrid  = require('sendgrid')(process.env.SENDGRID_API_TOKEN);
 
   function handleError(res, err) {
     console.log(err);
