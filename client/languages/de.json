@@ -1,0 +1,6 @@
+{
+  "PURPOSE": "Sie Damit Beabsichtigt",
+  "INTRO_VID": "Sehen Sie sich das Intro-Video",
+  "TOUR": "An der Tour teilnehmen",
+  "PURPOSE_COPY": "<p>Die Idee hinter Küche App ist Ihnen zu erlauben, Mahlzeiten und Shopping planen Durch den Aufbau von Mahlzeiten und dann packe es einfach in den Kalender, wird das System können Sie:</p><ul><li>Plan Mahlzeiten</li><li>sehen, was Sie in Ihren Schränken</li><li>halten eine Einkaufsliste</li></ul><p>...und Sie können sogar Ihre eigenen Rezepte und Zutaten!</p><p>Currency: {{vm.testAmount | currency:undfined:2}}</p><p>Date: {{vm.testDate | date}}</p>"
+}
