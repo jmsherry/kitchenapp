@@ -16,6 +16,9 @@ Use `gulp` to run in development and `gulp preview` to run the optimised project
 
 To populate the database with some initial ingredients and recipes type `$ seed` (N.B. it will blow away all the data in your current collections).
 
+## Internationalisation and localisation
+There are controls to enable you to pick your preferred language and your current locale, in the footer bar (under settings). Changing these *should* change time/currency, etc. in various parts of the app, but the language will only change in the first content column on the homepage.
+
 ## Live demo - [HERE](https://kitchenapp2.herokuapp.com/)
  The app is viewable live on heroku. (Please be aware the A/B testing is live on the site and that's why it may have a red heading on the first page. You can confirm this by clearing your cookies and storages, and reloading a few times).
 
