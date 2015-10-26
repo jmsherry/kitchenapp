@@ -4,9 +4,9 @@
 angular.module('kitchenapp.services')
     .factory('Ingredients', Ingredients);
 
-    Ingredients.$inject = ['$rootScope', '$cookieStore', '$q', '$http', '$resource', 'toastr', '$', '_', '$log', '$state'];
+    Ingredients.$inject = ['$rootScope', '$cookies', '$q', '$http', '$resource', 'toastr', '_', '$log', '$state'];
 
-    function Ingredients($rootScope, $cookieStore, $q, $http, $resource, toastr, $, _, $log, $state) {
+    function Ingredients($rootScope, $cookies, $q, $http, $resource, toastr, _, $log, $state) {
 
         var _ingredients = [],
         _resource = $resource('/api/ingredients/:itemid', {
@@ -26,17 +26,7 @@ angular.module('kitchenapp.services')
 
             function errorCB(err) {
               $log.log('in ings init errCB', arguments);
-              // if (err.status === 401) {
-              //   $state.go('login', {
-              //     messages: [{
-              //       service: 'Auth',
-              //       type: 'error',
-              //       msg: "Your session has expired. Please log in to continue..."
-              //     }]
-              //   });
-              // } else {
-                toastr.error('Failed to load ingredients!', 'Server Error ' + err.status + ' ' + err.data.message);
-              //}
+              toastr.error('Failed to load ingredients!', 'Server Error ' + err.status + ' ' + err.data.message);
               deferred.reject(err);
             }
 

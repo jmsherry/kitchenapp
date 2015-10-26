@@ -28,7 +28,7 @@ function IngredientsCtrl(Ingredients, $scope, $q, $log, uiGridConstants, Shoppin
 	    	data: data,
 		    columnDefs: [
 		      { name: 'name', field: 'name' },
-		      { name: 'Price', field: 'price', enableFiltering: false, cellFilter : 'currency:"£"' },
+		      { name: 'Price', field: 'price', enableFiltering: false, cellFilter : 'currency:2' },
 		      { name: 'Quantity', field: 'quantity',enableFiltering: false },
 		      { name: 'Description', field: 'description' }]
 		};

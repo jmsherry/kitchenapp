@@ -7,6 +7,7 @@
         .state('home', {
         	url: '/',
           templateUrl: 'views/home/home.html',
+          params: { messages : null },
           controller: 'HomeCtrl',
           controllerAs: 'vm'
         });

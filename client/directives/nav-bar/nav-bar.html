@@ -18,16 +18,16 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav" ng-hide="isLoading">
-        <li ng-show="vm.isLogged">
+        <li ng-show="vm.isLoggedIn">
           <a ui-sref="food-calendar" href="#" ui-sref-active="active">Schedule<span class="full-title"> Meals</span></a>
         </li>
-        <li ng-show="vm.isLogged">
+        <li ng-show="vm.isLoggedIn">
           <a ui-sref="meals" href="#" ui-sref-active="active">Build Meals</a>
         </li>
-        <li ng-show="vm.isLogged">
+        <li ng-show="vm.isLoggedIn">
           <a ui-sref="cupboard" href="#" ui-sref-active="active"><span class="full-title">My </span>Cupboard</a>
         </li>
-        <li class="dropdown" ng-show="vm.isLogged">
+        <li class="dropdown" ng-show="vm.isLoggedIn">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" target="_self" ng-class="{ active: vm.shoppingState }">Shopping<span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
             <li>
@@ -38,25 +38,25 @@
             </li>
           </ul>
         </li>
-        <li class="dropdown" ng-show="vm.isLogged">
+        <li class="dropdown" ng-show="vm.isLoggedIn">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" target="_self" ng-class="{ active: vm.recipeState }">Recipes<span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
             <li>
               <a href="#" ui-sref="recipes" ui-sref-active="active">List Recipes</a>
             </li>
-            <li ng-show="vm.isLogged">
+            <li ng-show="vm.isLoggedIn">
               <a href="#" ui-sref="addRecipe" ui-sref-active="active">Add Recipe</a>
             </li>
           </ul>
         </li>
 
-        <li class="dropdown" ng-show="vm.isLogged">
+        <li class="dropdown" ng-show="vm.isLoggedIn">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" target="_self" ng-class="{ active: vm.ingredientState }">Ingredients<span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
             <li>
               <a href="#" ui-sref="ingredients" ui-sref-active="active">List Ingredients</a>
             </li>
-            <li ng-show="vm.isLogged">
+            <li ng-show="vm.isLoggedIn">
               <a href="#" ui-sref="addIngredient" ui-sref-active="active">Add Ingredient</a>
             </li>
           </ul>
@@ -64,16 +64,16 @@
       </ul>
 
       <ul class="nav navbar-nav navbar-right" id="auth-menu"  ng-if="!isLoading || !isLoggingOut">
-        <li ng-hide="vm.isLogged">
+        <li ng-hide="vm.isLoggedIn">
           <a href="#" ui-sref="signup" ui-sref-active="active">signup</a>
         </li>
-        <li ng-hide="vm.isLogged">
+        <li ng-hide="vm.isLoggedIn">
           <a href="#" ui-sref="login" ui-sref-active="active">login</a>
         </li>
-        <li ng-show="vm.isLogged">
+        <li ng-show="vm.isLoggedIn">
           <a href="#" ui-sref="profile" ui-sref-active="active">Profile</a>
         </li>
-        <li ng-show="vm.isLogged" ui-sref-active="active">
+        <li ng-show="vm.isLoggedIn" ui-sref-active="active">
           <a href="#" ng-click="Auth.logout()">logout</a>
         </li>
       </ul>

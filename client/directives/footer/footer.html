@@ -1,9 +1,21 @@
 <footer>
   <p class="copywrite-statement">
-    <span class="glyphicon glyphicon-copyright-mark" aria-hidden="true"></span>{{vm.year}} {{vm.companyName}} All rights reserved.</p>
+    <span class="glyphicon glyphicon-copyright-mark" aria-hidden="true"></span>{{vm.date | date:'yyyy'}} {{vm.companyName}} All rights reserved.</p>
 
   <div class="pull-right">
-    <a class="contact-link" href="#" ng-click="vm.contact()">
-      <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>Contact Us</a>
+    <ul class="list-inline">
+      <li>
+        <a class="settings-link" href="#" ng-click="vm.reviewSettings()">
+          <span class="glyphicon glyphicon-cog"></span>
+          <span>Settings</span>
+        </a>
+      </li>
+      <li>
+        <a class="contact-link" href="#" ng-click="vm.contact()">
+          <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>Contact Us</a>
+      </li>
+    </ul>
+
+
   </div>
 </footer>

@@ -10,19 +10,21 @@
 
   <div class="row">
     <div class="col-md-6">
-      <h2>Purpose</h2>
-      <p>The idea behind kitchen app is to allow you to plan meals and shopping. By building meals and then placing them into the calendar, the system will allow you to:</p>
+      <h2 translate-cloak>{{ 'PURPOSE' | translate }}</h2>
+      <!-- <p>The idea behind kitchen app is to allow you to plan meals and shopping. By building meals and then placing them into the calendar, the system will allow you to:</p>
       <ul>
         <li>plan meals</li>
         <li>see what you have in your cupboards</li>
         <li>keep a shopping list</li>
       </ul>
-      <p>...and you can even add your own recipes and ingredients!</p>
+      <p>...and you can even add your own recipes and ingredients!</p> -->
+      <div data-ng-bind-html="'PURPOSE_COPY' | translate:this | htmlSafe"></div>
       <div class="intros">
-        <button id="introVideoBtn" class="btn btn-primary" ng-click="vm.introVideo()">Watch the intro video</button>
-        <button class="btn btn-primary" ng-click="vm.takeTour()" ng-if="Auth.isLogged()">Take Tour</button>
+        <button id="introVideoBtn" class="btn btn-primary" ng-click="vm.introVideo()"  translate="INTRO_VID">Watch the intro video</button>
+        <button class="btn btn-primary" ng-click="vm.takeTour()" ng-if="vm.isLoggedIn" translate="TOUR">Take the Tour</button>
       </div>
-      <strong ng-if="!Auth.isLogged()">To begin, please register or sign in above...</strong>
+      <strong ng-if="!vm.isLoggedIn">To begin, please register or sign in above...</strong>
+      <p>Yearly subscription: {{vm.testAmount | convert | currency:undefined:2}} available from {{vm.testDate |  date:'fullDate'}}</p>
     </div>
     <div class="col-md-6">
       <h2>How to use the app</h2>

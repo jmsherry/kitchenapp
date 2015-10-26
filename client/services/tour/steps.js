@@ -4,9 +4,9 @@
     angular.module('kitchenapp.services')
       .factory('TourSteps', TourSteps);
 
-    TourSteps.$inject = ['$log', '$', '_', '$state', '$timeout', 'toastr', '$window'];
+    TourSteps.$inject = ['$log',  '_', '$state', '$timeout', 'toastr', '$window'];
 
-    function TourSteps($log, $, _, $state, $timeout, toastr, $window) {
+    function TourSteps($log, _, $state, $timeout, toastr, $window) {
 
       var configuredTour = [],
         tours = {
@@ -233,7 +233,7 @@
             onHidden: function (tour) {},
             onNext: function (tour) {
               $state.go('ingredients.list');
-              var $ingsToggle = $('.dropdown-toggle').eq(2);
+              var $ingsToggle = $angular.element('.dropdown-toggle').eq(2);
               if(!$ingsToggle.parent().hasClass('open')){
                 $ingsToggle.click();
               }
@@ -265,7 +265,7 @@
             onHide: function (tour) {},
             onHidden: function (tour) {},
             onNext: function (tour) {
-              $('.navbar-toggle').click();
+              toggleMobileMenu('open');
             },
             onPrev: function (tour) {
               //$('.navbar-toggle').click();
@@ -294,7 +294,7 @@
             onHidden: function (tour) {},
             onNext: function (tour) {},
             onPrev: function (tour) {
-              $('.navbar-toggle').click();
+              toggleMobileMenu('close');
             },
             onPause: function (tour) {},
             onResume: function (tour) {},
@@ -447,7 +447,7 @@
             onHide: function (tour) {},
             onHidden: function (tour) {},
             onNext: function (tour) {
-              $('.navbar-toggle').click();
+              toggleMobileMenu('open');
             },
             onPrev: function (tour) {
               //$('.navbar-toggle').click();
@@ -545,7 +545,7 @@
             reflex: false,
             orphan: false,
             onShow: function (tour) {
-              var $dayCell = $('this.element');
+              var $dayCell = angular.element('this.element');
               $log.log($dayCell);
               $dayCell.click();
               $timeout(function () {
@@ -590,7 +590,7 @@
             onHide: function (tour) {},
             onHidden: function (tour) {},
             onNext: function (tour) {
-              $('.navbar-toggle').click();
+              toggleMobileMenu('close');
             },
             onPrev: function (tour) {
               //$('.navbar-toggle').click();
@@ -619,7 +619,7 @@
             onHidden: function (tour) {},
             onNext: function (tour) {},
             onPrev: function (tour) {
-              $('.navbar-toggle').click();
+              toggleMobileMenu('close');
             },
             onPause: function (tour) {},
             onResume: function (tour) {},
@@ -688,7 +688,7 @@
             reflex: false,
             orphan: false,
             onShow: function (tour) {
-              var $dayCell = $('this.element');
+              var $dayCell = angular.element('this.element');
               $log.log($dayCell);
               $dayCell.click();
               $timeout(function () {
@@ -717,7 +717,7 @@
     };
 
     function toggleMobileMenu(state) {
-      var $menuButton = $('.navbar-toggle');
+      var $menuButton = angular.element('.navbar-toggle');
       if (state === 'open') {
         if ($menuButton.hasClass('collapsed')) {
           $menuButton.click();
@@ -743,7 +743,7 @@
         tourType = 'desktop';
       }
 
-      $log.info('tourType = ' + tourType);
+      //$log.info('tourType = ' + tourType);
 
       for (var tour in tours) {
         configuredTour.push(tours[tour][tourType]);
@@ -755,7 +755,7 @@
 
   }
 
-  $log.info($window);
+  //$log.info($window);
 
   return {
     getSteps: getSteps

@@ -24,6 +24,24 @@ body {
   font-family: sans-serif;
 }
 
+/* sprite testing - not used */
+.a {
+  background: transparent url("assets/images/css/callus.png") scroll no-repeat center center;
+}
+
+.b {
+  background: transparent url("assets/images/css/corner.png") scroll no-repeat center center;
+}
+
+.c {
+  background: transparent url("assets/images/css/ing_zoomin.png") scroll no-repeat center center;
+}
+
+.d {
+  background: transparent url("assets/images/css/sun.png") scroll no-repeat center center;
+}
+/* EO sprite testing */
+
 ///
 /// {
 ///  start: 37,
@@ -82,7 +100,7 @@ footer {
   left: 0;
   width: 100%;
   .copywrite-statement,
-  .contact-link {
+  a {
     color: #333;
     display: inline-block;
   }
@@ -93,6 +111,9 @@ footer {
     margin-right: 5px;
   }
   .copywrite-statement {
+    margin-bottom: 0;
+  }
+  .list-inline {
     margin-bottom: 0;
   }
 }
@@ -426,43 +447,7 @@ input.ng-dirty.ng-invalid {
 .cal-day-past {
   background-color: #eee;
 }
-form {
-  input,
-  select,
-  textarea {
-    width: 100%;
-    border: 1px solid #ccc;
-     ::-webkit-input-placeholder {
-      margin-left: 5px;
-    }
-     :-moz-placeholder {
-      /* Firefox 18- */
-      margin-left: 5px;
-    }
-     ::-moz-placeholder {
-      /* Firefox 19+ */
-      margin-left: 5px;
-    }
-     :-ms-input-placeholder {
-      margin-left: 5px;
-    }
-  }
-  .form-group {
-    label {
-      display: block;
-    }
-  }
-}
-select {
-  height: 300;
-  option {
-    padding: 5px;
-    &:hover,
-    &:focus {
-      background-color: #eee;
-    }
-  }
-}
+
 .controls {
   padding: 10px 0 20px;
 }

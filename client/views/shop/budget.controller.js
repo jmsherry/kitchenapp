@@ -4,9 +4,9 @@
   angular.module('kitchenapp.controllers')
     .controller('BudgetCtrl', BudgetCtrl);
 
-  BudgetCtrl.$inject = ['Shopping', 'Transaction', 'Auth', '$q', 'Meals', '$log', '$scope', 'd3', 'moment', '$window', '$timeout'];
+  BudgetCtrl.$inject = ['Shopping', 'Transaction', 'Auth', '$q', 'Meals', '$log', '$scope', 'd3', 'moment', '$window', '$timeout', '$filter'];
 
-  function BudgetCtrl(Shopping, Transaction, Auth, $q, Meals, $log, $scope, d3, moment, $window, $timeout) {
+  function BudgetCtrl(Shopping, Transaction, Auth, $q, Meals, $log, $scope, d3, moment, $window, $timeout, $filter) {
 
     Auth.checkAuthorised();
 
@@ -60,7 +60,7 @@
     }
 
     $q.when($user, function (user) {
-      budget = user.budget
+      budget = user.budget;
 
       getData(vm.currentDay);
 
@@ -89,7 +89,8 @@
           xAxis: {
             axisLabel: "Day",
             tickFormat: function (d) {
-              return moment(d).format('dddd Do');
+              //return moment(d).format('dddd Do');
+              return $filter('ordinal_date')(d, 'MMMM doo');
             },
             showMaxMin: false,
             dispatch: {},
@@ -125,7 +126,8 @@
             axisLabel: "Cost",
             axisLabelDistance: -15,
             tickFormat: function (d) {
-              return '£' + d3.format(',.2f')(d);
+              //return '£' + d3.format(',.2f')(d);
+              $filter('currency')(d, 2);
             },
             dispatch: {},
             staggerLabels: false,
@@ -312,7 +314,7 @@
           },
           css: {}
         }
-      }
+      };
 
       angular.extend(vm, {
         name: 'BudgetCtrl',

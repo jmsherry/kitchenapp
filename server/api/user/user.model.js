@@ -11,7 +11,9 @@
     passwordHash: String,
     salt: String,
     budget: Number,
-    inducted: Boolean
+    inducted: {type: Boolean, default: false},
+    locale: String,
+    lang: String
   });
 
   /**

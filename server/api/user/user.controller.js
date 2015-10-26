@@ -9,6 +9,7 @@
   // var Meals = require('./../meal/meal.model');
 
   function handleError(res, err) {
+    console.log(err);
     return res.status(500).send(err);
   }
 
@@ -19,6 +20,7 @@
    * @param res
    */
   exports.create = function (req, res) {
+    req.body.email = req.body.email.toLowerCase();
     User.create(req.body, function (err, user) {
       if (err) {
         return handleError(res, err);

@@ -18,12 +18,12 @@
   module.exports = function (app) {
 
     var env = config.env;
-    var appPath;
+    var appPath = 'client';
 
     // if(env === 'production'){
     //   appPath = 'dist/client';
     // } else {
-      appPath = 'client';
+    //  appPath = 'client';
     //}
 
     app.set('view engine', 'html');

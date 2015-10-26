@@ -16,7 +16,7 @@
 
         <div class="form-group" ng-class="{ 'has-error' : contactForm.from.$invalid && !contactForm.from.$pristine }" ng-if="!vm.user || !vm.user.email">
           <label for="from">From</label>
-          <input type="email" name="from" id="from" class="form-control" placeholder="From" ng-model="vm.user.email" ng-maxlength="50" ng-required="true">
+          <input type="email" name="from" id="from" class="form-control" placeholder="From" ng-model="vm.email.email" ng-maxlength="50" ng-required="true">
           <ul ng-if="contactForm.from.$invalid && !contactForm.from.$pristine" ng-messages="contactForm.from.$error" class="help-block list-unstyled">
             <li ng-message="maxlength">Email address must be less than 50 characters.</li>
             <li ng-message="email">Not a valid email. Please check carefully and try again...</li>

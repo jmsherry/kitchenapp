@@ -4,9 +4,9 @@
   angular.module('kitchenapp.controllers')
     .controller('LoginCtrl', LoginCtrl);
 
-    LoginCtrl.$inject = ['$location', 'Auth', 'toastr', '$stateParams', '$log'];
+    LoginCtrl.$inject = ['$location', 'Auth', 'toastr', '$stateParams', '$log', '$state', '$q'];
 
-    function LoginCtrl($location, Auth, toastr, $stateParams, $log) {
+    function LoginCtrl($location, Auth, toastr, $stateParams, $log, $state, $q) {
   //console.log(arguments);
       var vm = this;
 
@@ -15,18 +15,13 @@
         name: 'LoginCtrl',
         messages: $stateParams.messages,
 
-        /**
-         * Login method
-         */
         login: function () {
-          Auth.login(vm.user)
-            .then(function () {
-              $location.path('/');
-              $log.log('User logged in: ', Auth.isLogged());
-            })
-            .catch(function (err) {
-              toastr.error('Error logging in ', err.msg);
-            });
+          var loggedIn = Auth.login(vm.user);
+          $q.when(loggedIn, function(user){
+            $state.go('home');
+          }, function(err){
+            toastr.error('Unable to log in: ' + err.status);
+          });
         }
 
       });

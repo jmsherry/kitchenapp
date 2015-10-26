@@ -1,8 +1,11 @@
+/* global module */
+
 /**
  * Scripts to be injected into the head of the document
  */
 
 module.exports = [
+  '/Users/jamessherry/sites/ka2/client/bower_components/jquery/dist/jquery.js',
   '/Users/jamessherry/sites/ka2/client/bower_components/angular/angular.js',
   '/Users/jamessherry/sites/ka2/client/bower_components/d3/d3.js',
   '/Users/jamessherry/sites/ka2/client/bower_components/nvd3/nv.d3.js',

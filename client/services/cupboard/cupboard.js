@@ -4,9 +4,9 @@
   angular.module('kitchenapp.services')
     .service('Cupboard', Cupboard);
 
-  Cupboard.$inject = ['$q', '$resource', '$state', '$log', 'Auth', 'Ingredients', 'toastr', '$', '_', 'moment', 'Utils'];
+  Cupboard.$inject = ['$q', '$resource', '$state', '$log', 'Auth', 'Ingredients', 'toastr', '_', 'moment', 'Utils'];
 
-  function Cupboard($q, $resource, $state, $log, Auth, Ingredients, toastr, $, _, moment, Utils) {
+  function Cupboard($q, $resource, $state, $log, Auth, Ingredients, toastr, _, moment, Utils) {
 
     this.deferred = $q.defer();
     var _cupboard = this.deferred.promise;
@@ -66,17 +66,7 @@
     }
 
     function errorCB(err) {
-      // if (err.status === 401) {
-      //   self.$state.go('login', {
-      //     messages: [{
-      //       service: 'Auth',
-      //       type: 'error',
-      //       msg: "Your session has expired. Please log in to continue..."
-      //     }]
-      //   });
-      // } else {
-        self.toastr.error('Error initialising cupboard service', err);
-      //}
+      self.toastr.error('Error initialising cupboard service', err);
       self.deferred.reject(err);
     }
 

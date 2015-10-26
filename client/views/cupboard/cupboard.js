@@ -6,6 +6,7 @@
       $stateProvider
         .state('cupboard', {
         	url: '/cupboard',
+          params: { messages : null },
           templateUrl: 'views/cupboard/cupboard.html',
           controller: 'CupboardCtrl',
           controllerAs: 'vm'

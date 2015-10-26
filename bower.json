@@ -42,7 +42,8 @@
     "angular-translate-loader-static-files": "~2.8.1",
     "angular-translate-storage-local": "~2.8.1",
     "angular-moment": "~0.10.3",
-    "angular-dynamic-locale": "~0.1.27"
+    "angular-dynamic-locale": "~0.1.27",
+    "angular-jwt": "~0.0.9"
   },
   "resolutions": {
     "jquery": "~2.x",

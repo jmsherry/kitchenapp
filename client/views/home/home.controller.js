@@ -4,23 +4,23 @@
   angular.module('kitchenapp.controllers')
     .controller('HomeCtrl', HomeCtrl);
 
-  HomeCtrl.$inject = ['$modal', '$log', 'Tour', 'TourSteps', 'Auth', '$q', '$', '$timeout', '$window'];
+  HomeCtrl.$inject = ['$modal', '$log', 'Tour', 'TourSteps', 'Auth', '$q', '$timeout', '$window', 'tmhDynamicLocale', '$stateParams'];
 
-  function HomeCtrl($modal, $log, Tour, TourSteps, Auth, $q, $, $timeout, $window) {
+  function HomeCtrl($modal, $log, Tour, TourSteps, Auth, $q, $timeout, $window, tmhDynamicLocale, $stateParams) {
 
     var vm = this,
       $user = Auth.getUser();
-
-
 
     $q.when($user, function (user) {
       var anonUserInducted = ($window.localStorage.getItem('inducted') === 'true');
       $log.log('USER: ', user);
       vm.user = user;
-      if (!user.inducted && !anonUserInducted) {
-        $timeout(function () {
-          $('#introVideoBtn').click();
-        });
+      if (!user.inducted) {
+        if (anonUserInducted === false) {
+          $timeout(function () {
+            angular.element('#introVideoBtn').click();
+          });
+        }
       }
     });
 
@@ -70,6 +70,10 @@
       tour.start();
     }
 
+    function changeLocale(code) {
+      tmhDynamicLocale.set(code);
+    }
+
     function introVideo() {
       $log.log('introVideo');
       $modal.open({
@@ -77,17 +81,22 @@
         controller: function ($modalInstance, $scope) {
           $scope.vm.inductUser = function inductUser() {
             var $inducted;
-            $log.log('inductUser');
-            if (vm.user && !vm.user.inducted) {
+
+            //induct the user if not already
+            if (vm.user && vm.user.inducted === false) {
               vm.user.inducted = true;
               $inducted = Auth.updateUser(vm.user);
-              $q.when($inducted, function(inducted){
-                modalInstance.close();
+              $q.when($inducted, function (inducted) {
+                $log.log('induction successfull');
+              }, function (err) {
+                $log.error('Induction failed: ', JSON.stringify(err));
               });
-            } else {
-              $modalInstance.close();
-              $window.localStorage.setItem('inducted', 'true');
             }
+
+            //close the window and make a note
+            $modalInstance.close();
+            $window.localStorage.setItem('inducted', 'true');
+
           };
           $scope.vm.user = vm.user;
         }
@@ -97,7 +106,11 @@
     angular.extend(vm, {
       name: 'HomeCtrl',
       introVideo: introVideo,
-      takeTour: takeTour
+      messages: $stateParams.messages,
+      takeTour: takeTour,
+      testDate: new Date(),
+      testAmount: 10,
+      changeLocale: changeLocale
     });
 
   }

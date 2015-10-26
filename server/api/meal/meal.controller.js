@@ -10,6 +10,7 @@
   var MealItem = require('./mealItem.model');
   var _ = require('lodash');
   var moment = require('moment');
+
   moment.createFromInputFallback = function(config) {
     // your favorite unreliable string magic, or
     config._d = new Date(config._i);
@@ -168,7 +169,9 @@
       }
 
       if (!meal) {
-        return res.status(404).json({});
+        return res.status(404).json({
+          "error": "MealNotFound"
+        });
       }
       return res.status(200).json(meal);
     });

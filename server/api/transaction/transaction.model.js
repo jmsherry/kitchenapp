@@ -7,6 +7,8 @@
 
   var TransactionSchema = new Schema({
     owner: {type: ObjectId, ref: 'User'},
+    ingredient: {type: ObjectId, ref: 'Ingredient'},
+    reservedFor: {type: ObjectId, ref: 'MealItem', default: null, null: true},
     dateAdded: { type: Date, default: Date.now },
     amount: Number,
     currentBudget: Number

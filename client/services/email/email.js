@@ -23,8 +23,7 @@
         $http.post('/api/email', {email: email})
           .then(function (res) {
             deferred.resolve(res);
-          })
-          .catch(function (err) {
+          }, function (err) {
             deferred.reject(err.data);
           });
         return deferred.promise;

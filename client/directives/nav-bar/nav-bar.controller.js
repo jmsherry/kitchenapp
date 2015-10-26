@@ -2,15 +2,19 @@
   'use strict';
 
   angular.module('kitchenapp.directives')
-    .controller('ka-navbarCtrl', ['$log', '$state', '$scope', 'Auth', '$rootScope', function ($log, $state, $scope, Auth, $rootScope) {
-      var vm = this;
+    .controller('ka-navbarCtrl', ['$log', '$state', '$scope', 'Auth', '$rootScope', '$q', function ($log, $state, $scope, Auth, $rootScope, $q) {
+      var vm = this, isLoggedIn;
 
-      vm.isLogged = Auth.isLogged();
-      $scope.$on('login', function (mass) {
-        vm.isLogged = true
+      isLoggedIn = Auth.isLoggedIn();
+      $q.when(isLoggedIn, function(res){
+        vm.isLoggedIn = res;
       });
-      $scope.$on('logout', function (mass) {
-        vm.isLogged = false
+
+      $rootScope.$on('login', function (mass) {
+        vm.isLoggedIn = true;
+      });
+      $rootScope.$on('logout', function (mass) {
+        vm.isLoggedIn = false;
       });
 
       $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {

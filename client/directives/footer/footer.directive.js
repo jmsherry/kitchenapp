@@ -4,7 +4,7 @@
   //var thisYear = ;
 
   angular.module('kitchenapp.directives')
-    .controller('KaFooterCtrl', ['$scope', '$q', '$log', '$modal', 'Email', 'Auth', 'toastr', function ($scope, $q, $log, $modal, Email, Auth, toastr) {
+    .controller('KaFooterCtrl', ['$rootScope', '$scope', '$q', '$log', '$modal', 'Email', 'Auth', 'toastr', '$translate', 'LANGUAGES', 'tmhDynamicLocale', 'LOCALES', function ($rootScope, $scope, $q, $log, $modal, Email, Auth, toastr, $translate, LANGUAGES, tmhDynamicLocale, LOCALES) {
       var vm = this,
         $user;
 
@@ -34,19 +34,70 @@
           },
           contollerAs: 'vm'
         });
+        event.preventDefault();
+        event.stopPropagation();
+      }
+
+      function reviewSettings() {
+
+        $log.log('reviewSettings fn', arguments);
+
+        $modal.open({
+          templateUrl: '/views/modals/settings-modal.html',
+          controller: function modalController($modalInstance, $scope) {
+
+            $scope.vm = {
+              languages: LANGUAGES,
+              lang: vm.currentLang,
+              locales: LOCALES,
+              locale: vm.currentLocale,
+              updateLanguage: function updateLanguage() {
+                var langKey = $scope.vm.lang;
+                $log.log('updating language to: ', langKey);
+                $translate.use(langKey);
+                $rootScope.$broadcast('langChange', {
+                  langKey: langKey
+                });
+                event.preventDefault();
+                event.stopPropagation();
+              },
+              updateLocale: function updateLocale() {
+                var localeKey = $scope.vm.locale;
+                $log.log('updating locale to: ', localeKey);
+                tmhDynamicLocale.set(localeKey);
+                $rootScope.$broadcast('localeChange', {
+                  localeKey: localeKey
+                });
+                event.preventDefault();
+                event.stopPropagation();
+              }
+            };
+
+          },
+          contollerAs: 'vm'
+        });
+        event.preventDefault();
+        event.stopPropagation();
 
       }
 
-      vm.year = new Date().getFullYear();
-      vm.email = {};
+
 
       $user = Auth.getUser();
       $q.when($user, function (user) {
         vm.user = user;
       });
 
-      vm.contact = contact;
-      vm.name = 'KaFooterCtrl';
+      angular.extend(vm, {
+        date: new Date(),
+        email: {},
+        currentLang: $translate.use(),
+        currentLocale: tmhDynamicLocale.get(),
+        contact: contact,
+        reviewSettings: reviewSettings,
+        name: 'KaFooterCtrl'
+      });
+
     }])
     .directive('kaFooter', function () {
       return {
@@ -54,8 +105,7 @@
         replace: true,
         templateUrl: 'directives/footer/footer.html',
         scope: {
-          companyName: '@',
-          companyEmail: '@'
+          companyName: '@'
         },
         controller: 'KaFooterCtrl as vm',
         bindToController: true

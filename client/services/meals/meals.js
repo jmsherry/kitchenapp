@@ -4,9 +4,9 @@
   angular.module('kitchenapp.services')
     .factory('Meals', Meals);
 
-  Meals.$inject = ['$rootScope', '$cookieStore', '$state', '$q', '$log', '$resource', 'toastr', 'Auth', 'Recipes', 'Cupboard', 'Shopping', 'Ingredients', '_', 'Utils', '$window'];
+  Meals.$inject = ['$rootScope', '$cookies', '$state', '$q', '$log', '$resource', 'toastr', 'Auth', 'Recipes', 'Cupboard', 'Shopping', 'Ingredients', '_', 'Utils', '$window'];
 
-  function Meals($rootScope, $cookieStore, $state, $q, $log, $resource, toastr, Auth, Recipes, Cupboard, Shopping, Ingredients, _, Utils, $window) {
+  function Meals($rootScope, $cookies, $state, $q, $log, $resource, toastr, Auth, Recipes, Cupboard, Shopping, Ingredients, _, Utils, $window) {
 
     var $deferred = $q.defer(),
       _meals = $deferred.promise,
@@ -21,7 +21,7 @@
         $log.log('in successCB', arguments);
 
         var completeMeals, pendingMeals, promises = [],
-          self = this,
+          //self = this,
           shoppingListItems, cupboardItems, meal, i, len = mealsList.length,
           j, lengths = [];
 
@@ -47,11 +47,10 @@
           var pointer = 0,
             sLen, cLen;
           for (i = 0; i < len; i += 1) {
-            sLen = lengths[i]['sl'];
-            cLen = lengths[i]['ci'];
+            sLen = lengths[i].sl;
+            cLen = lengths[i].ci;
             mealsList[i].ingredients.missing = fulfilled.splice(pointer, sLen);
             mealsList[i].ingredients.present = fulfilled.splice(pointer + sLen, cLen);
-            //pointer += sLen + cLen;
           }
 
           $log.log(mealsList);
@@ -75,23 +74,13 @@
 
       function errorCB(err) {
         $log.log('in Meals init errCB', arguments);
-        // if (err.status === 401) {
-        //   $state.go('login', {
-        //     messages: [{
-        //       service: 'Auth',
-        //       type: 'error',
-        //       msg: "Your session has expired. Please log in to continue..."
-        //     }]
-        //   });
-        // } else {
-          toastr.error('Failed to load meals!', 'Server Error ' + err.status + ' ' + err.data.message);
-        //}
+        toastr.error('Failed to load meals!', 'Server Error ' + err.status + ' ' + err.data.message);
         $deferred.reject(err);
       }
 
       $q.when(owner, function (ownerData) {
 
-        //setup server
+        //setup resource
         server = $resource('/api/users/:userid/meals/:itemid', {
           userid: ownerData._id,
           itemid: '@_id'
@@ -102,8 +91,8 @@
           }
         });
 
-        //setup local
-        server.query(_.bind(successCB, self), _.bind(errorCB, self));
+        //call to populate local
+        server.query(_.bind(successCB, this), _.bind(errorCB, this));
       });
 
     }
@@ -372,9 +361,9 @@
         throw new Error('Wrong type of argument (not an object) supplied to Meal.populate');
       }
 
-      missing = depopdMeal.ingredients.missing,
-        present = depopdMeal.ingredients.present,
-        plen = present.length;
+      missing = depopdMeal.ingredients.missing;
+      present = depopdMeal.ingredients.present;
+      plen = present.length;
 
       for (i = 0; i < plen; i += 1) {
         present[i] = Cupboard.getItemById(present[i]);
@@ -444,7 +433,7 @@
         var errString;
         $log.log('update errCB: ', err);
         if (err) {
-          errString = err.status + ' ' + err.data.message
+          errString = err.status + ' ' + err.data.message;
         } else {
           errString = '';
         }
@@ -482,13 +471,6 @@
           toastr.error('Error updating meal. Please contact the maintainer');
           throw new Error('Cannot match meal to update in local data');
         }
-
-        //remove the old meal
-        // if (oldMeal.isComplete) {
-        //   meals.complete.splice(Utils.collIndexOf(meals.complete, oldMeal), 1);
-        // } else {
-        //   meals.pending.splice(Utils.collIndexOf(meals.pending, oldMeal), 1);
-        // }
 
         meals[targetArray].splice(Utils.collIndexOf(meals[targetArray], oldMeal), 1);
 
@@ -536,7 +518,7 @@
         var removedLocally = self.removeLocal(meal);
         $q.when(removedLocally, function (removedMeal) {
           //toastr.success(meal.name + ' succesfully deleted!');
-          toastr.info('Updating your cupboard and shopping list...')
+          toastr.info('Updating your cupboard and shopping list...');
           Cupboard.handleMealDelete(removedMeal);
           Shopping.handleMealDelete(removedMeal);
         });

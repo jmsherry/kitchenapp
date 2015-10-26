@@ -11,17 +11,11 @@ var destination;
 
 module.exports = function () {
 
-  if (process.env.NODE_ENV === 'production'){
-    destination = gulp.dest('dist/images');
-  } else {
-    destination = gulp.src('src/images/');
-  }
-
-    return gulp.src('src/images/*')
+    return gulp.src('client/assets/images/*')
         .pipe(imagemin({
             progressive: true,
             svgoPlugins: [{removeViewBox: false}],
             use: [pngquant()]
         }))
-        .pipe(destination);
+        .pipe(gulp.dest('client/assets/images/optimised'));
 };

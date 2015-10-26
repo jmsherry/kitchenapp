@@ -4,9 +4,9 @@
   angular.module('kitchenapp.controllers')
     .controller('FoodCalendarCtrl', FoodCalendarCtrl);
 
-  FoodCalendarCtrl.$inject = ['$modal', 'Meals', 'Auth', '$log', '$q', '$', '_', 'moment', 'Utils', 'toastr', '$window', '$timeout', '$scope', '$state'];
+  FoodCalendarCtrl.$inject = ['$modal', 'Meals', 'Auth', '$log', '$q', '$', '_', 'moment', 'Utils', 'toastr', '$window', '$timeout', '$scope', '$state', '$stateParams'];
 
-  function FoodCalendarCtrl($modal, Meals, Auth, $log, $q, $, _, moment, Utils, toastr, $window, $timeout, $scope, $state) {
+  function FoodCalendarCtrl($modal, Meals, Auth, $log, $q, $, _, moment, Utils, toastr, $window, $timeout, $scope, $state, $stateParams) {
 
     Auth.checkAuthorised();
 
@@ -199,8 +199,15 @@
         $log.log('event', event);
         var meal = Object.getPrototypeOf(scheduledMeal),
           now = moment(),
-          $updatedMeal,
-          scheduledMeal;
+          $updatedMeal;
+
+        if(!scheduledMeal){
+          throw new Error('eventTimesChanged: Missing Params: scheduledMeal');
+        }
+
+        if(!newStartTime){
+          throw new Error('eventTimesChanged: Missing Params: newStartTime');
+        }
 
         //if date is in the past return and error toast.
         if (moment(newStartTime).isBefore(now, 'day')) {
@@ -228,6 +235,7 @@
         name: 'FoodCalendarCtrl',
         showModal: showModal,
         eventClicked: eventClicked,
+        messages: $stateParams.messages,
         //  eventEdited: eventEdited,
         eventDeleted: eventDeleted,
         //  timespanClick: timespanClick,

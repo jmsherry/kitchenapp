@@ -18,7 +18,7 @@
           if(!SL){
             vm.items = [];
             $log.warn('SL not correct', SL);
-            toastr.error('Error retrieving shopping list!')
+            toastr.error('Error retrieving shopping list!');
           } else {
             vm.items = SL;
           }
@@ -28,7 +28,7 @@
           if(!meals){
             vm.meals = [];
             $log.warn('Meals not correct', meals);
-            toastr.error('Error retrieving meals list!')
+            toastr.error('Error retrieving meals list!');
           } else {
             vm.meals = meals;
           }

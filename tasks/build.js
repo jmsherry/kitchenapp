@@ -26,10 +26,10 @@ var toDelete = [];
 
 module.exports = function (done) {
   runSequence(
-    ['clean:dist', 'sass'],
+    ['clean:dist', 'images'], //'sass'
     ['usemin', 'copy:dist'],
     ['scripts', 'cssmin'],
-    'images',
+    //'images',
     'rev',
     'clean:finish',
     done);

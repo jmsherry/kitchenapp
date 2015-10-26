@@ -4,9 +4,9 @@
   angular.module('kitchenapp.services')
     .service('Shopping', Shopping);
 
-  Shopping.$inject = ['$q', '$resource', 'Auth', 'Ingredients', 'toastr', 'Cupboard', '$log', '$injector', '$', '_', 'moment', 'Utils'];
+  Shopping.$inject = ['$q', '$resource', 'Auth', 'Ingredients', 'toastr', 'Cupboard', '$log', '$injector',  '_', 'moment', 'Utils'];
 
-  function Shopping($q, $resource, Auth, Ingredients, toastr, Cupboard, $log, $injector, $, _, moment, Utils) {
+  function Shopping($q, $resource, Auth, Ingredients, toastr, Cupboard, $log, $injector, _, moment, Utils) {
 
     this.deferred = $q.defer();
     var _shopping = this.deferred.promise;

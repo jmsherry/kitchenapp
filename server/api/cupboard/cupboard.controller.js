@@ -17,7 +17,7 @@
   }
 
   /**
-   * Adds a new item to the user's cupboard.
+   * Adds a new item to the user's cupboard. //you should next() the transaction at some stage after release
    *
    * @param req
    * @param res
@@ -60,7 +60,9 @@
               owner: req._params.userid,
               dateAdded: new Date().toUTCString(),
               amount: ing.price,
-              currentBudget: user.budget
+              currentBudget: user.budget,
+              reservedFor: req.body.reservedForId,
+              ingredient: req.body.ingId
             });
 
             transaction.save(function (err, item) {

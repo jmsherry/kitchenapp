@@ -4,9 +4,9 @@
   angular.module('kitchenapp.services')
     .factory('Recipes', Recipes);
 
-  Recipes.$inject = ['$rootScope', '$cookieStore', '$q', '$http', '$resource', 'toastr', '_'];
+  Recipes.$inject = ['$rootScope', '$cookies', '$q', '$http', '$resource', 'toastr', '_'];
 
-  function Recipes($rootScope, $cookieStore, $q, $http, $resource, toastr, _) {
+  function Recipes($rootScope, $cookies, $q, $http, $resource, toastr, _) {
 
     var _recipes = [],
       _resource = $resource('/api/recipes/:itemid', {

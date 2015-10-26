@@ -103,8 +103,8 @@
               $location.path('/');
             })
             .catch(function (err) {
-              if(err.errors && err.errors.email && err.errors.email.property && err.errors.email.property.type === "user defined"){
-                toastr.error('That email is already registerd with us.');
+              if(err.errors && err.errors.email && err.errors.email.properties && err.errors.email.properties.type === "user defined"){
+                toastr.error('That email is already registered with us. Please choose another...');
               }
               vm.error = err;
             });

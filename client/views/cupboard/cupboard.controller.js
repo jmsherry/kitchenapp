@@ -4,9 +4,9 @@
   angular.module('kitchenapp.controllers')
     .controller('CupboardCtrl', CupboardCtrl);
 
-  CupboardCtrl.$inject = ['Cupboard', 'Shopping', 'Auth', '$q', '$filter', 'Meals', '$modal', '$log', '_', '$'];
+  CupboardCtrl.$inject = ['Cupboard', 'Shopping', 'Auth', '$q', '$filter', 'Meals', '$modal', '$log', '_', '$stateParams'];
 
-  function CupboardCtrl(Cupboard, Shopping, Auth, $q, $filter, Meals, $modal, $log, _, $) {
+  function CupboardCtrl(Cupboard, Shopping, Auth, $q, $filter, Meals, $modal, $log, _, $stateParams) {
 
     Auth.checkAuthorised();
 
@@ -99,7 +99,7 @@
 
     function reserve(item, meal) {
       //var $reserved;
-      $log.log('reserving', arguments, this);
+      //$log.log('reserving', arguments, this);
       // $reserved = Cupboard.reserve(item, meal);
       // $q.when($reserved, function (reservedItem) {
       //   Meals.obtainItem(meal, reservedItem);
@@ -110,6 +110,7 @@
 
     angular.extend(vm, {
       name: 'CupboardCtrl',
+      messages: $stateParams.messages,
       editing: false,
       remove: remove,
       toggleEdit: toggleEdit,

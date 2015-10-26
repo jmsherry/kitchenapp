@@ -283,8 +283,8 @@
 
 
                 it('has called the Auth service and received a logged out state', function() {
-                    expect($rootScope.Auth.isLogged).toHaveBeenCalled();
-                    expect($rootScope.Auth.isLogged()).toBe(false);
+                    expect($rootScope.Auth.isLoggedIn).toHaveBeenCalled();
+                    expect($rootScope.Auth.isLoggedIn()).toBe(false);
 
                 });
 
@@ -331,8 +331,8 @@
                 }));
 
                 it('has called the Auth service and received a logged in state', function() {
-                    expect($rootScope.Auth.isLogged).toHaveBeenCalled();
-                    expect($rootScope.Auth.isLogged()).toBe(true);
+                    expect($rootScope.Auth.isLoggedIn).toHaveBeenCalled();
+                    expect($rootScope.Auth.isLoggedIn()).toBe(true);
                    // console.log(element);
                 });
 

@@ -41,7 +41,46 @@
         .constant('nv', nv)
         .constant('$', $)
         .constant('_', _)
-        .constant('Tour', Tour);
+        .constant('Tour', Tour)
+        .constant('FALLBACK_LANG', 'en-gb')
+        .constant('FALLBACK_LOCALE', 'en-gb')
+        .constant('LANGUAGES', [
+          {
+            name: "English (UK)",
+            code: "en-gb"
+          }, {
+            name: "Français (FR)",
+            code: "fr"
+          }, {
+            name: "Deutsche (DE)",
+            code: "de"
+          }
+        ]).constant('LOCALES', [
+          {
+            name: "English (UK)",
+            code: "en-gb"
+          }, {
+            name: "Français (FR)",
+            code: "fr"
+          }, {
+            name: "Deutsche (DE)",
+            code: "de"
+          }
+        ]).constant('CURRENCIES', [
+          {
+            name: "British Pound",
+            code: "en-gb",
+            rate: 1
+          }, {
+            name: "Euro",
+            code: "fr",
+            rate: 1.36
+          }, {
+            name: "Euro",
+            code: "de",
+            rate: 1.36
+          }
+        ]);
 
 
 })();

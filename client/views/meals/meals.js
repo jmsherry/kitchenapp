@@ -6,6 +6,7 @@
       $stateProvider
         .state('meals', {
         	url: '/meals',
+          params: { messages : null },
           templateUrl: 'views/meals/meals.html',
           controller: 'MealsCtrl',
           controllerAs: 'vm'

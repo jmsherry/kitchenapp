@@ -43,7 +43,7 @@
     "gulp-open": "^1.0.0",
     "gulp-plumber": "^1.0.0",
     "gulp-protractor": "^1.0.0",
-    "gulp-rev-all": "0.8.20",
+    "gulp-rev-all": "^0.8.20",
     "gulp-sass": "^2.0.4",
     "gulp-sourcemaps": "^1.5.2",
     "gulp-sprite-generator": "^0.2.3",
@@ -60,7 +60,7 @@
     "karma-firefox-launcher": "^0.1.4",
     "karma-jasmine": "^0.3.5",
     "karma-ng-html2js-preprocessor": "^0.2.0",
-    "karma-nyan-reporter": "0.2.0",
+    "karma-nyan-reporter": "^0.2.0",
     "karma-phantomjs-launcher": "^0.2.0",
     "main-bower-files": "^2.9.0",
     "merge-stream": "^1.0.0",
@@ -75,7 +75,7 @@
     "supertest": "^1.0.0"
   },
   "dependencies": {
-    "async": "^0.9.0",
+    "async": "^1.5.0",
     "body-parser": "^1.12.0",
     "chalk": "^1.0.0",
     "composable-middleware": "^0.3.0",

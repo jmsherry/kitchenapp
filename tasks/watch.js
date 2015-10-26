@@ -68,7 +68,10 @@ module.exports = function () {
     'client/animations/*.js',
     'client/filters',
     'client/filters/**/*.js',
-    '!client/filters/**/*.spec.js'
+    '!client/filters/**/*.spec.js',
+    'client/interceptors',
+    'client/interceptors/**/*.js',
+    '!client/interceptors/**/*.spec.js'
   ];
 
   var lastInjection = Date.now();
