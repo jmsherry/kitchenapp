@@ -16,16 +16,16 @@ Use `gulp` to run in development and `gulp preview` to run the optimised project
 
 To populate the database with some initial ingredients and recipes type `$ seed` (N.B. it will blow away all the data in your current collections).
 
-## Live demo
- The app is viewable live on [heroku](https://kitchenapp2.herokuapp.com/). (Please be aware the A/B testing is live on the site and that's why it may have a red heading on the first page. You can confirm this by clearing your cookies and storages, and reloading a few times).
+## Live demo - [HERE](https://kitchenapp2.herokuapp.com/)
+ The app is viewable live on heroku. (Please be aware the A/B testing is live on the site and that's why it may have a red heading on the first page. You can confirm this by clearing your cookies and storages, and reloading a few times).
 
 ### Live Testing
 Various types of testing have been used on the live app, including:
 
 * Load testing with [Loader.io](https://loader.io/)
 * Server performance testing with [newrelic](http://newrelic.com/)
-* Browser performance testing with newrelic browser
-* Geo performance testing with newrelic synthetics
+* Browser performance testing with [newrelic browser](http://newrelic.com/browser-monitoring)
+* Geo performance testing with [newrelic synthetics](http://newrelic.com/synthetics)
 * A/B testing using [Optimizely](https://app.optimizely.com)
 
 ## Disclaimer
