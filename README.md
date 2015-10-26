@@ -7,14 +7,26 @@
 [![Dependency Status](https://david-dm.org/jmsherry/kitchenapp.svg?style=flat)](https://david-dm.org/jmsherry/kitchenapp)
 [![devDependency Status](https://david-dm.org/jmsherry/kitchenapp/dev-status.svg)](https://david-dm.org/jmsherry/kitchenapp#info=devDependencies)
 
-
-Kitchenapp is a MEAN (Mongodb [with Mongoose ODM], Express js, Angular and Node) stack demo created using the bangular yeoman template.
+## App description
+Kitchenapp is a MEAN (Mongodb [with Mongoose ODM], Expressjs, Angular and Node) stack demo created using the [bangular yeoman template](https://github.com/42Zavattas/generator-bangular).
 
 Use `gulp` to run in development and `gulp preview` to run the optimised project. (NB: You will need mongodb running locally if you are running this project locally. If you get the error: ECONNREFUSED, it's likely that you've omitted to start mongo. So, [Install it](http://docs.mongodb.org/master/installation/), then open a shell window and type `mongod` into the command line. Open a second tab to run the project as above...)
 
 `gulp test` will allow you to run the tests (which are currently locked to a limited set for demo purposes) and you can specify whether to test the client or server-side code by adding the flag `--server` or `--client`. `gulp e2e` will perform protractor tests. As you can see from the badges the project uses CI service at Codeship (Travis is hooked up for practice) Coverage (istanbul) is used through gulp and reported via Code Climate.
 
 To populate the database with some initial ingredients and recipes type `$ seed` (N.B. it will blow away all the data in your current collections).
+
+## Live demo
+ The app is viewable live on [heroku](https://kitchenapp2.herokuapp.com/). (Please be aware the A/B testing is live on the site and that's why it may have a red heading on the first page. You can confirm this by clearing your cookies and storages, and reloading a few times).
+
+### Live Testing
+Various types of testing have been used on the live app, including:
+
+* Load testing with [Loader.io](https://loader.io/)
+* Server performance testing with [newrelic](http://newrelic.com/)
+* Browser performance testing with newrelic browser
+* Geo performance testing with newrelic synthetics
+* A/B testing using [Optimizely](https://app.optimizely.com)
 
 ## Disclaimer
 The app in this repository is a demo, as stated above, and it is worth mentioning that the information is fictional and the images are not my own and I hold no rights to them.
