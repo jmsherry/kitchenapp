@@ -1,3 +1,4 @@
+/* globals module */
 'use strict';
 
 module.exports = function (config) {
@@ -72,8 +73,9 @@ module.exports = function (config) {
       'services/socket/socket.service.js'
     ],
 
-    //reporters: ['progress', 'coverage'],
-    reporters: ['nyan', 'coverage'],
+    reporters: ['progress', 'coverage'],
+    //reporters: ['nyan', 'coverage'],
+    //reporters: ['progress'],
 
     //reporters: ['nyan'],
     //reporters: ['nested'],

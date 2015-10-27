@@ -116,6 +116,7 @@
 
       $urlRouterProvider.otherwise('/');
       $locationProvider.html5Mode(true);
+      $httpProvider.interceptors.push('AuthInterceptor');
 
     }])
     .run(['$rootScope', 'Auth', '$log', '$window', 'tmhDynamicLocale', 'FALLBACK_LOCALE',  function runBlock($rootScope, Auth, $log, $window, tmhDynamicLocale, FALLBACK_LOCALE) {

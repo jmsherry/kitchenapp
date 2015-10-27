@@ -11,16 +11,20 @@
     var vm = this,
       $user = Auth.getUser();
 
+      function startTour(){
+        $timeout(function () {
+          angular.element('#introVideoBtn').click();
+        });
+      }
+
     $q.when($user, function (user) {
       var anonUserInducted = ($window.localStorage.getItem('inducted') === 'true');
       $log.log('USER: ', user);
       vm.user = user;
-      if (!user.inducted) {
-        if (anonUserInducted === false) {
-          $timeout(function () {
-            angular.element('#introVideoBtn').click();
-          });
-        }
+      if (user && !user.inducted) {
+        startTour();
+      } else if(!anonUserInducted) {
+        startTour();
       }
     });
 

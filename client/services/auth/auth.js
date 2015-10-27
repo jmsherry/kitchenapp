@@ -11,14 +11,18 @@
     var deferred = $q.defer(),
     _user = deferred.promise;
 
+
+
     if ($cookies.get('token')) {
       $http.get('/api/users/me')
-        .then(function (res) {
-          $log.log('Got session for: ', res.data);
+        .then(function successCB(res) {
+          $log.log('testSession successCB: ', arguments);
           deferred.resolve(res.data);
+        }, function errCB(err) {
+          $log.error('testSession errCB', arguments);
         })
-        .catch(function (err) {
-          $log.info('Session expired', err);
+        .catch(function errCB(err) {
+          $log.error('testSession catch', arguments);
         });
     }
 
@@ -99,7 +103,7 @@
         if(usr.hasOwnProperty('email')){
           deferred.resolve(true);
         } else {
-          deferred.resolve(false);
+          deferred.reject(false);
         }
       });
       return deferred.promise;

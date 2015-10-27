@@ -4,16 +4,23 @@
   angular.module('kitchenapp.directives')
     .controller('ka-navbarCtrl', ['$log', '$state', '$scope', 'Auth', '$rootScope', '$q', function ($log, $state, $scope, Auth, $rootScope, $q) {
       var vm = this, isLoggedIn;
+      vm.isLoggedIn = false;
 
       isLoggedIn = Auth.isLoggedIn();
       $q.when(isLoggedIn, function(res){
-        vm.isLoggedIn = res;
+        $log.info('loggedIn variable returned: ', res);
+        vm.isLoggedIn = true;
+      }, function(err){
+        $log.error('logging in error: ', err);
+        vm.isLoggedIn = false;
       });
 
-      $rootScope.$on('login', function (mass) {
+      $rootScope.$on('login', function (data) {
+        $log.log('login triggered: ', data);
         vm.isLoggedIn = true;
       });
-      $rootScope.$on('logout', function (mass) {
+      $rootScope.$on('logout', function (data) {
+        $log.log('logout triggered: ', data);
         vm.isLoggedIn = false;
       });
 
@@ -32,6 +39,10 @@
           vm.ingredientState = false;
           vm.recipeState = false;
           vm.shoppingState = true;
+        } else {
+          vm.ingredientState = false;
+          vm.recipeState = false;
+          vm.shoppingState = false;
         }
       });
 

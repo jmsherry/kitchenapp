@@ -1,3 +1,4 @@
+/* globals process, require */
 'use strict';
 
 var gulp = require('gulp');
