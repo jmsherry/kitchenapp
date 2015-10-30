@@ -1,3 +1,6 @@
+/* globals browser */
+"use strict";
+
 exports.config = { // jshint ignore:line
 
   // The version is susceptible to change

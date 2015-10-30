@@ -5,7 +5,7 @@ var beautify_css = require('gulp-jsbeautify').css;
 var beautify_html = require('gulp-jsbeautify').html;
 
 module.exports = function () {
-  gulp.src(['./client/*.js', '!./client/bower_components/**/*'])
+  gulp.src(['./client/**/*.js', '!./client/bower_components/**/*'])
     .pipe(beautify({
       "indent_size": 4,
       "indent_char": " ",

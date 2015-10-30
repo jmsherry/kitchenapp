@@ -4,12 +4,17 @@
 angular.module('kitchenapp.controllers')
   .controller('IngredientsAddCtrl', IngredientsAddCtrl);
 
-IngredientsAddCtrl.$inject = ['Ingredients', '$scope'];
+IngredientsAddCtrl.$inject = ['Ingredients', '$scope', '$q'];
 
-function IngredientsAddCtrl(Ingredients) {
+function IngredientsAddCtrl(Ingredients, $q) {
 // console.log(stateMap);
 
-	var vm = this;
+	var vm = this, $ingredients = Ingredients.get();
+
+  $q.when($ingredients, function(ingredients){
+    vm.ingredients = ingredients || [];
+  });
+
 
   function handlePrice(){
     console.log('handlePrice');

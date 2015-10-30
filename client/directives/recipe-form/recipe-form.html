@@ -1,6 +1,6 @@
 <form ng-submit="vm.saveRecipe(this)" novalidate  name="recipeForm">
 
-<h1>Add a new recipe</h1>
+<h1>{{vm.title}}</h1>
 
   <div class="form-group" ng-class="{ 'has-error' : recipeForm.name.$invalid && !recipeForm.name.$pristine }">
     <label for="recipe_name">Name</label>

@@ -9,13 +9,11 @@
 
   function RecipesAddCtrl($scope, Recipes, Ingredients, $q, $log) {
 
-  	var vm = this,
-  	ingredients;
+  	var vm = this, $ingredients = Ingredients.get();
 
-  	ingredients = Ingredients.get();
-  	$q.when(ingredients, function(newData){
-  		vm.ingredients = newData;
-  	});
+    $q.when($ingredients, function(ingredients){
+      vm.ingredients = ingredients || [];
+    });
 
     function saveRecipe(childScope){
       $log.log(arguments);
@@ -29,7 +27,8 @@
 
   	angular.extend(vm, {
   	  name: 'RecipesCtrl',
-  	  saveRecipe: saveRecipe
+  	  saveRecipe: saveRecipe,
+      title: "Add a new recipe"
   	});
 
   }

@@ -4,13 +4,18 @@
   angular.module('kitchenapp.directives')
   .controller('KaRecipeFormCtrl', ['$scope', '$q', '$log', '$modal', 'Email', 'Auth', 'toastr', function ($scope, $q, $log, $modal, Email, Auth, toastr) {
     var vm = this;
-    vm.name = 'KaRecipeFormCtrl';
+    angular.extend(vm, {
+      name: 'KaRecipeFormCtrl',
+      ingredients: $scope.ingredients,
+      title: $scope.title
+    });
   }])
     .directive('addRecipeForm', function () {
       return {
         restrict: 'E',
         scope: {
-          ingredients: "="
+          ingredients: "=",
+          title: "@"
         },
         replace:true,
         templateUrl: 'directives/recipe-form/recipe-form.html',

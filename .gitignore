@@ -12,3 +12,4 @@ client/build/
 newrelic_agent.log
 npm-debug.log
 client/assets/images/optimised/
+karma.conf copy.js

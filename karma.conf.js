@@ -10,7 +10,7 @@ module.exports = function (config) {
 
     preprocessors: {
       '**/*.html': ['ng-html2js'],
-      '!(bower_components)/**/!(*.spec).js': ['coverage']
+      '!(bower_components)/**/!(*.spec, *.page).js': ['coverage']
     },
 
     ngHtml2JsPreprocessor: {
@@ -29,20 +29,20 @@ module.exports = function (config) {
     ],
 
     files: [
+      './bower_components/jquery/dist/jquery.js',
       './bower_components/angular/angular.js',
       './bower_components/d3/d3.js',
       './bower_components/nvd3/nv.d3.js',
       './bower_components/angular-nvd3/dist/angular-nvd3.min.js',
-      './bower_components/angular-mocks/angular-mocks.js',
       './bower_components/angular-animate/angular-animate.js',
+      './bower_components/angular-mocks/angular-mocks.js',
+      './bower_components/angular-aria/angular-aria.js',
       './bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
       './bower_components/moment/moment.js',
-      './bower_components/jquery/dist/jquery.js',
       './bower_components/angular-cookies/angular-cookies.js',
       './bower_components/angular-gravatar/build/angular-gravatar.js',
       './bower_components/angular-messages/angular-messages.js',
       './bower_components/angular-resource/angular-resource.js',
-      './bower_components/angular-aria/angular-aria.js',
       './bower_components/angular-sanitize/angular-sanitize.js',
       './bower_components/angular-socket-io/socket.js',
       './bower_components/angular-toastr/dist/angular-toastr.tpls.js',
@@ -50,27 +50,43 @@ module.exports = function (config) {
       './bower_components/angular-ui-grid/ui-grid.js',
       './bower_components/angular-ui-router/release/angular-ui-router.js',
       './bower_components/angular-ui-select/dist/select.js',
+      './bower_components/autofill-event/src/autofill-event.js',
       './bower_components/fastdom/index.js',
       './bower_components/interact/interact.js',
       './bower_components/lodash/lodash.js',
       './bower_components/lodash-deep/lodash-deep.js',
+      './bower_components/picturefill/dist/picturefill.js',
+      './bower_components/moment-timezone/builds/moment-timezone-with-data-2010-2020.js',
+      './bower_components/fastclick/lib/fastclick.js',
+      './bower_components/angular-translate/angular-translate.js',
+      './bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js',
+      './bower_components/angular-translate-storage-cookie/angular-translate-storage-cookie.js',
+      './bower_components/angular-moment/angular-moment.js',
+      './bower_components/angular-dynamic-locale/src/tmhDynamicLocale.js',
+      './bower_components/angular-jwt/dist/angular-jwt.js',
       './bower_components/bootstrap/dist/js/bootstrap.js',
-      './bower_components/angular-bootstrap-calendar/dist/js/angular-bootstrap-calendar-tpls.js',
       './bower_components/bootstrap-tour/build/js/bootstrap-tour.js',
       './bower_components/bootstrap-tour/build/js/bootstrap-tour-standalone.js',
+      './bower_components/angular-translate-storage-local/angular-translate-storage-local.js',
+      './bower_components/angular-bootstrap-calendar/dist/js/angular-bootstrap-calendar-tpls.js',
       'app.js',
       'constants.js',
+      'values.js',
       'views/**/*.js',
       'views/**/*.html',
       'services/**/*.js',
       'interceptors/**/*.js',
       'directives/**/*.js',
-      'directives/**/*.html'
+      'directives/**/*.html',
+      //fixtures
+      {pattern: 'languages/*.json', watched: true, served: true, included: false},
+      {pattern: 'bower_components/angular-i18n/angular-locale_*.js', watched: true, served: true, included: false}
     ],
 
     exclude: [
       'views/**/*.e2e.js',
-      'services/socket/socket.service.js'
+      'services/socket/socket.service.js',
+      'views/**/*.page.js'
     ],
 
     reporters: ['progress', 'coverage'],

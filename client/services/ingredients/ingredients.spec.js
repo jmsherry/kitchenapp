@@ -30,7 +30,7 @@
           $httpBackend = _$httpBackend_;
           $rootScope = _$rootScope_;
           Auth = _Auth_;
-          $q = _$q_
+          $q = _$q_;
       }));
 
 
@@ -51,8 +51,9 @@
 
         spyOn(Auth, "getUser").and.returnValue(userMock);
 
-        // $httpBackend.expectGET('/api/users/me').respond(userMock);
-        // $httpBackend.expectGET('/api/ingredients');
+        $httpBackend.expectGET('/languages/en-gb.json').respond({});
+        $httpBackend.expectGET('/bower_components/angular-i18n/angular-locale_en-gb.js').respond({});
+
       });
 
       afterEach(function() {

@@ -11,5 +11,6 @@
   "nonew": false,
   "strict": true,
   "undef": true,
-  "unused": true
+  "unused": true,
+  "predef": [ "module", "PROCESS", "require" ]
 }
