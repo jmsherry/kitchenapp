@@ -36,14 +36,16 @@ module.exports = function (done) {
 };
 
 gulp.task('clean:dist', function (done) {
-  del(['dist/**', '!dist', '!dist/.git{,/**}'], done);
+  del(['dist/**', '!dist', '!dist/.git{,/**}'])
+    .then(function () { done(); }).catch(done);
 });
 
 gulp.task('clean:finish', function (done) {
   del([
     '.tmp/**',
     'dist/client/app.{css,js}'
-  ].concat(toDelete), done);
+  ].concat(toDelete))
+    .then(function () { done(); }).catch(done);
 });
 
 gulp.task('copy:dist', function () {
@@ -56,7 +58,7 @@ gulp.task('copy:dist', function () {
     'client/bower_components/angular-ui-grid/*.woff'
   ], { base: './' }).pipe(gulp.dest('dist/'));
 
-  return sq({ objectMode: true }, main, assets)
+  return sq({ objectMode: true }, main, assets, uiGridFonts)
     .pipe(gulp.dest('dist/'));
 });
 
