@@ -40,6 +40,7 @@
         });
 
         it('should log you in', function(done) {
+          browser.pause();
           LoginPage.email.then(function(em) {
             console.log('em', em);
             emailInput = em[0];

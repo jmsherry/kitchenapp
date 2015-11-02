@@ -14,7 +14,7 @@ Use `gulp` to run in development and `gulp preview` to run the optimised project
 
 `gulp test` will allow you to run the tests (which are currently locked to a limited set for demo purposes) and you can specify whether to test the client or server-side code by adding the flag `--server` or `--client`. `gulp e2e` will perform protractor tests. As you can see from the badges the project uses CI service at Codeship (Travis is hooked up for practice) Coverage (istanbul) is used through gulp and reported via Code Climate.
 
-To populate the database with some initial ingredients and recipes type `$ seed` (N.B. it will blow away all the data in your current collections).
+To populate the database with some initial ingredients and recipes type `$ npm install -g node-mongo-seeds && seed` (N.B. it will blow away all the data in your current collections).
 
 ## Internationalisation and localisation
 There are controls to enable you to pick your preferred language and your current locale, in the footer bar (under settings). Changing these *should* change time/currency, etc. in various parts of the app, but the language will only change in the first content column on the homepage.

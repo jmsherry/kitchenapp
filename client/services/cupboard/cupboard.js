@@ -9,7 +9,7 @@
   function Cupboard($q, $resource, $state, $log, Auth, Ingredients, toastr, _, moment, Utils) {
 
     this.deferred = $q.defer();
-    var _cupboard = this.deferred.promise;
+    var _cupboard = this.deferred.promise, _initialised = false;
 
     this.getCupboard = function getCupboard() {
       return _cupboard;
@@ -21,6 +21,10 @@
 
     this.getOwner = function getOwner() {
       return Auth.getUser();
+    };
+
+    this.markAsInitialised = function markAsInitialised(){
+      _initialised = true;
     };
 
     this.toastr = toastr;
@@ -60,6 +64,7 @@
           var $localCp = self.deferred.resolve(fullData);
           self.$q.when($localCp, function (localCp) {
             self.$log.log('HERERE!!!!!', localCp);
+            self.markAsInitialised();
           });
         });
       });

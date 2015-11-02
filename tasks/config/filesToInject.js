@@ -4,6 +4,11 @@
  */
 
 module.exports = {
+  testDependancies: ['client/bower_components/angular-mocks/angular-mocks.js'],
+  fixtures: [
+    {pattern: 'client/languages/*.json', watched: true, served: true, included: false},
+    {pattern: 'client/bower_components/angular-i18n/angular-locale_*.js', watched: true, served: true, included: false}
+  ],
   js: [
     'client/interceptors/*.js',
     'client/app.js',

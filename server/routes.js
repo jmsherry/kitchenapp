@@ -11,33 +11,47 @@
     }
 
     function handleExpired(req, res) {
+      console.log('sessionExpired');
       res.sendStatus(401);
     }
 
     function notFound(req, res) {
-      res.status(404).end();
+      console.log('notFound');
+      res.sendStatus(404);
     }
 
+    function markAsHandled(req, res, next) {
+      req.unhandled = false;
+      console.log('marking as handled: ', res.unhandled, next);
+      next();
+    }
+
+    app.use(function (req, res, next) {
+      req.unhandled = true;
+      console.log('marking as unhandled: ', res.unhandled, next);
+      next();
+    });
+
     // API
-    app.use('/api/users', require('./api/user'));
-    app.use('/api/ingredients', require('./api/ingredient'));
-    app.use('/api/recipes', require('./api/recipe'));
-    app.use('/api/users/:userid/meals', paramFix, require('./api/meal'));
-    app.use('/api/users/:userid/shopping', paramFix, require('./api/shopping'));
-    app.use('/api/users/:userid/cupboard', paramFix, require('./api/cupboard'));
-    app.use('/api/users/:userid/purchases', paramFix, require('./api/transaction'));
+    app.use('/api/users', markAsHandled, require('./api/user'));
+    app.use('/api/ingredients', markAsHandled, require('./api/ingredient'));
+    app.use('/api/recipes', markAsHandled, require('./api/recipe'));
+    app.use('/api/users/:userid/meals', markAsHandled, paramFix, require('./api/meal'));
+    app.use('/api/users/:userid/shopping', markAsHandled, paramFix, require('./api/shopping'));
+    app.use('/api/users/:userid/cupboard', markAsHandled, paramFix, require('./api/cupboard'));
+    app.use('/api/users/:userid/purchases', markAsHandled, paramFix, require('./api/transaction'));
 
     //Accidental Routes
-    app.use('/api/users/meals', notFound);
-    app.use('/api/users/shopping', notFound);
-    app.use('/api/users/cupboard', notFound);
-    app.use('/api/users/purchases', notFound);
+    // app.use('/api/users/meals', notFound);
+    // app.use('/api/users/shopping', notFound);
+    // app.use('/api/users/cupboard', notFound);
+    // app.use('/api/users/purchases', notFound);
 
     //Email service
-    app.use('/api/email', paramFix, require('./api/email'));
+    app.use('/api/email',markAsHandled, paramFix, require('./api/email'));
 
     // Auth
-    app.use('/auth', require('./auth'));
+    app.use('/auth', markAsHandled, require('./auth'));
 
     app.route('/:url(api|app|bower_components|assets)/*')
       .get(notFound);
@@ -48,13 +62,21 @@
       res.sendFile(__dirname + '/loader.io.txt');
     });
 
+
+
+
     app.route('/*')
       .get(function (req, res) {
-        res.sendFile(
-          app.get('appPath') + '/index.html', {
-            root: config.root
-          }
-        );
+        console.log('in', req.unhandled, req.xhr);
+        if (req.unhandled && req.xhr) {
+          notFound(req, res);
+        } else {
+          res.sendFile(
+            app.get('appPath') + '/index.html', {
+              root: config.root
+            }
+          );
+        }
       });
 
   };

@@ -80,7 +80,7 @@ module.exports = function (config) {
       'directives/**/*.html',
       //fixtures
       {pattern: 'languages/*.json', watched: true, served: true, included: false},
-      {pattern: 'bower_components/angular-i18n/angular-locale_*.js', watched: true, served: true, included: false}
+      {pattern: './bower_components/angular-i18n/angular-locale_*.js', watched: true, served: true, included: false}
     ],
 
     exclude: [

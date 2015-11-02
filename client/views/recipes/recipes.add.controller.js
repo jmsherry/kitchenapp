@@ -12,11 +12,11 @@
   	var vm = this, $ingredients = Ingredients.get();
 
     $q.when($ingredients, function(ingredients){
-      vm.ingredients = ingredients || [];
+      vm.ingredients = ingredients;
     });
 
     function saveRecipe(childScope){
-      $log.log(arguments);
+      $log.log('saveRecipe', arguments);
 
       Recipes.save(vm.newRecipe);
       childScope.recipeForm.$setPristine();
@@ -27,8 +27,7 @@
 
   	angular.extend(vm, {
   	  name: 'RecipesCtrl',
-  	  saveRecipe: saveRecipe,
-      title: "Add a new recipe"
+  	  saveRecipe: saveRecipe
   	});
 
   }

@@ -21,11 +21,13 @@
       var anonUserInducted = ($window.localStorage.getItem('inducted') === 'true');
       $log.log('USER: ', user);
       vm.user = user;
+
       if (user && !user.inducted) {
         startTour();
       } else if(!anonUserInducted) {
         startTour();
       }
+
     });
 
     // Instance the tour

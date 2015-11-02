@@ -13,6 +13,7 @@
     .directive('addRecipeForm', function () {
       return {
         restrict: 'E',
+        require: '^IngredientsAddCtrl',
         scope: {
           ingredients: "=",
           title: "@"
