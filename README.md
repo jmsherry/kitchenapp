@@ -16,6 +16,8 @@ Use `gulp` to run in development and `gulp preview` to run the optimised project
 
 To populate the database with some initial ingredients and recipes type `$ npm install -g node-mongo-seeds && seed` (N.B. it will blow away all the data in your current collections).
 
+**The app is a demo and will have bugs and breaks as it was worked up from experiments. The bugs you may spot are likely known about - please check the [issues log](https://github.com/jmsherry/kitchenapp/issues) for more detail. (And hey, if you spot something then submit a bug report!)**
+
 ## Internationalisation and localisation
 There are controls to enable you to pick your preferred language and your current locale, in the footer bar (under settings). Changing these *should* change time/currency, etc. in various parts of the app, but the language will only change in the first content column on the homepage.
 
