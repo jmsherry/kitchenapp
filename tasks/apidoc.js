@@ -1,3 +1,5 @@
+"use strict";
+
 var gulp = require('gulp'),
   apidoc = require('gulp-apidoc'),
   apidoc2md = require('gulp-apidoc-to-markdown');

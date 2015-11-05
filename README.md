@@ -33,5 +33,8 @@ Various types of testing have been used on the live app, including:
 * Geo performance testing with [newrelic synthetics](http://newrelic.com/synthetics)
 * A/B testing using [Optimizely](https://app.optimizely.com)
 
+## Documentation
+Apidoc and Sassdoc are employed within the project. To get the current copy of the docs run `gulp apidoc sassdoc` and open the `index.html` files in `docs/sass` and `docs/api`.
+
 ## Disclaimer
 The app in this repository is a demo, as stated above, and it is worth mentioning that the information is fictional and the images are not my own and I hold no rights to them.
