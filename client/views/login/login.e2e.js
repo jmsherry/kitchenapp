@@ -40,7 +40,8 @@
         });
 
         it('should log you in', function(done) {
-          browser.pause();
+          //browser.pause();
+          browser.get('/login');
           LoginPage.email.then(function(em) {
             console.log('em', em);
             emailInput = em[0];
@@ -50,7 +51,6 @@
               LoginPage.submitButton.then(function(sb) {
                 console.log('sb', sb);
                 submitButton = sb[0];
-              	browser.get('/login');
               	emailInput.sendKeys('james.m.sherry@googlemail.com');
               	passwordInput.sendKeys('Lich1977');
                 submitButton.click();
@@ -62,13 +62,13 @@
         });
 
         it('should return an error if user not known', function(done) {
+          browser.get('/login');
           LoginPage.email.then(function(em) {
             emailInput = em[0];
             LoginPage.password.then(function(pw) {
               passwordInput = pw[0];
               LoginPage.submitButton.then(function(sb) {
                 submitButton = sb[0];
-                browser.get('/login');
               	emailInput.sendKeys('jamesd.m.sherry@googlemail.com');
               	passwordInput.sendKeys('Lich1977');
                 submitButton.click();
