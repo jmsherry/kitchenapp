@@ -11,7 +11,7 @@
 Kitchenapp is a MEAN (Mongodb [with Mongoose ODM], Expressjs, Angular and Node) stack demo created using the [bangular yeoman template](https://github.com/42Zavattas/generator-bangular).
 
 ## Getting started
-1. In your console run `git clone git@github.com:jmsherry/kitchenapp.git`
+1. In your console, run `git clone git@github.com:jmsherry/kitchenapp.git`
 2. Run `npm install`
 3. Use `gulp` to run in development and `gulp preview` to run the optimised project. (NB: You will need mongodb running locally if you are running this project locally. If you get the error: ECONNREFUSED, it's likely that you've omitted to start mongo. So, [Install it](http://docs.mongodb.org/master/installation/), then open a shell window and type `mongod` into the command line. Open a second tab to run the project as above...)
 
