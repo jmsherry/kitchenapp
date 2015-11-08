@@ -23,7 +23,7 @@ function AuthInterceptor($injector, $log, $cookies, $q) {
     },
     responseError: function (err) {
       var $stateService = $injector.get('$state');
-      var httpBuffer = $injector.get('httpBuffer');
+      //var httpBuffer = $injector.get('httpBuffer');
 
       if (err.status === 401) {
         $log.warn('Dealing with a 401');
@@ -32,7 +32,7 @@ function AuthInterceptor($injector, $log, $cookies, $q) {
             switch (err.status) {
             case 401:
               var deferred = $q.defer();
-              httpBuffer.append(err.config, deferred);
+              //httpBuffer.append(err.config, deferred);
               $rootScope.$broadcast('event:auth-loginRequired', err);
               return deferred.promise;
             case 403:
