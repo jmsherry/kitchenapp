@@ -53,7 +53,7 @@
     // Auth
     app.use('/auth', markAsHandled, require('./auth'));
 
-    app.route('/:url(api|app|bower_components|assets)/*')
+    app.route('/:url(api|app|bower_components|assets)/**/*')
       .get(notFound);
 
     //load testing token url
