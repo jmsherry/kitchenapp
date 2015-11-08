@@ -20,11 +20,11 @@
     var env = config.env;
     var appPath = 'client';
 
-    if(env === 'production' && process.env.HEROKU){
-      appPath = 'dist/client';
-    } else {
-     appPath = 'client';
-    }
+    // if(env === 'production' && process.env.HEROKU){
+    //   appPath = 'dist/client';
+    // } else {
+    //  appPath = 'client';
+    // }
 
     app.set('view engine', 'html');
     app.use(bodyParser.urlencoded({ extended: false }));
