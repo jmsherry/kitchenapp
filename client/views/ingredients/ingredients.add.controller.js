@@ -6,7 +6,7 @@ angular.module('kitchenapp.controllers')
 
 IngredientsAddCtrl.$inject = ['Ingredients', '$scope', '$q'];
 
-function IngredientsAddCtrl(Ingredients, $q) {
+function IngredientsAddCtrl(Ingredients, $scope, $q) {
 // console.log(stateMap);
 
 	var vm = this, $ingredients = Ingredients.get();
