@@ -20,8 +20,8 @@
     var env = config.env;
     var appPath = 'client';
 
-    // if(env === 'production' && process.env.HEROKU){
-    //   appPath = 'dist/client';
+    //if(env === 'production' && process.env.HEROKU){
+    //  appPath = 'dist/client';
     // } else {
     //  appPath = 'client';
     // }

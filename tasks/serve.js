@@ -5,7 +5,7 @@
  */
 
 var gulp       = require('gulp');
-var fs         = require('fs');
+var ripe       = require('ripe');
 var nodemon    = require('gulp-nodemon');
 var open       = require('gulp-open');
 var bsync      = require('browser-sync');
@@ -13,32 +13,9 @@ var bsync      = require('browser-sync');
 var config = require('../server/config/environment');
 
 var openOpts = {
-  url: 'http://localhost:' + config.port,
+  uri: 'http://localhost:' + config.port,
   already: false
 };
-
-function waitForExpress (cb) {
-  var id;
-
-  id = setInterval(function () {
-    fs.readFile('.bangular-refresh', 'utf-8', function (err, status) {
-      if (err) {
-        if (err.code === 'ENOENT') {
-          clearTimeout(id);
-          return fs.writeFileSync('.bangular-refresh', 'waiting');
-        }
-        throw err;
-      }
-      if (status === 'done') {
-        fs.unlink('.bangular-refresh', function (err) {
-          if (err) { throw err; }
-          clearTimeout(id);
-          cb();
-        });
-      }
-    });
-  }, 100);
-}
 
 module.exports = {
 
@@ -49,13 +26,11 @@ module.exports = {
         ignore: ['client', 'dist', 'node_modules', 'gulpfile.js']
       })
       .on('start', function () {
-        fs.writeFileSync('.bangular-refresh', 'waiting');
-
         if (!openOpts.already) {
           openOpts.already = true;
-          waitForExpress(cb);
+          ripe.wait(cb);
         } else {
-          waitForExpress(function () {
+          ripe.wait(function () {
             bsync.reload({ stream: false });
           });
         }

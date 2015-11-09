@@ -1,6 +1,6 @@
 {
 	"undefined": "localhost/kitchenapp-dev",
 	"test":"localhost/kitchenapp-test",
-	"dev": "localhost/kitchenapp-dev",
-	"prod": "localhost/kitchenapp"
+	"development": "localhost/kitchenapp-dev",
+	"production": "localhost/kitchenapp"
 }

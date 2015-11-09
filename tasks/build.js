@@ -26,10 +26,10 @@ var toDelete = [];
 
 module.exports = function (done) {
   runSequence(
-    ['clean:dist', 'images'], //'sass'
+    ['clean:dist', 'sass'],
     ['usemin', 'copy:dist'],
     ['scripts', 'cssmin'],
-    //'images',
+    'images',
     'rev',
     'clean:finish',
     done);
@@ -56,9 +56,10 @@ gulp.task('copy:dist', function () {
     'client/bower_components/angular-ui-grid/*.svg',
     'client/bower_components/angular-ui-grid/*.ttf',
     'client/bower_components/angular-ui-grid/*.woff'
-  ], { base: './' }).pipe(gulp.dest('dist/'));
+  ], { base: './' });
+  var localeFiles = gulp.src('client/bower_components/angular-i18n', { base: './' });
 
-  return sq({ objectMode: true }, main, assets, uiGridFonts)
+  return sq({ objectMode: true }, main, assets, uiGridFonts, localeFiles)
     .pipe(gulp.dest('dist/'));
 });
 

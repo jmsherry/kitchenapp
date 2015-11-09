@@ -28,7 +28,7 @@ function AuthInterceptor($injector, $log, $cookies, $q) {
       if (err.status === 401) {
         $log.warn('Dealing with a 401');
         return $q.reject(err).catch(function () {
-          if (!rejection.config.ignoreAuthModule) {
+          if (!err.config.ignoreAuthModule) {
             switch (err.status) {
             case 401:
               var deferred = $q.defer();

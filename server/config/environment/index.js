@@ -22,6 +22,6 @@
       session: process.env.SESSION_SECRET || 'secretKey'
     }
   };
-
+  
   module.exports = _.merge(all, require('./' + all.env + '.js'));
 }());

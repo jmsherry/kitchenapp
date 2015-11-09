@@ -12,5 +12,5 @@
   "strict": true,
   "undef": true,
   "unused": true,
-  "predef": [ "module", "PROCESS", "require", "console" ]
+  "predef": [ "module", "PROCESS", "require", "console", "process" ]
 }
