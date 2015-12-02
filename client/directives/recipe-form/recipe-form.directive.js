@@ -7,13 +7,13 @@
     $scope.$watch('ingredients', function(newValue){
       vm.ingredients = newValue;
     });
+    // vm.title = title;
+    // vm.ingredients = ingredients;
     angular.extend(vm, {
-      name: 'KaRecipeFormCtrl',
-      ingredients: $scope.ingredients,
-      title: $scope.title
+      name: 'KaRecipeFormCtrl'
     });
   }])
-    .directive('addRecipeForm', function () {
+    .directive('kaAddRecipeForm', function () {
       return {
         restrict: 'E',
         require: '^IngredientsAddCtrl',
