@@ -4,9 +4,9 @@
 angular.module('kitchenapp')
   .factory('AuthInterceptor', AuthInterceptor);
 
-AuthInterceptor.$inject = ['$injector', '$log', '$cookies', '$q'];
+AuthInterceptor.$inject = ['$rootScope', '$injector', '$log', '$cookies', '$q'];
 
-function AuthInterceptor($injector, $log, $cookies, $q) {
+function AuthInterceptor($rootScope, $injector, $log, $cookies, $q) {
 
   return {
     request: function (config) {
